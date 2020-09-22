@@ -651,7 +651,7 @@ function handleForm(event) {
       $("#step2>div").addClass("active");
       $('#requirements').show();
       /*  $('#requirements')[0].scrollIntoView(true); */
-      $("#customer_Name").text(`Hi ${field_firstName},Hang in there as we process your request. Expect an SMS from us within 24 to 48 hours on the status of your request.`);
+      $("#customer_Name").text(`Hi ${field_firstName}. Hang in there as we process your request. Expect an SMS from us within 24 to 48 hours on the status of your request.`);
       console.log('Data -> ', data)
     
   } else {

@@ -657,7 +657,7 @@ function handleForm(event) {
     $("#step2").addClass("active");
     $("#step2>div").addClass("active");
     $("#requirements").show();
-    $("#customer_Name").text(`Hi ${field_firstName},  Hang in there as we process your request. Expect an SMS from us within 24 to 48 hours on the status of your request.`);
+    $("#customer_Name").text(`Hi ${field_firstName}. Hang in there as we process your request. Expect an SMS from us within 24 to 48 hours on the status of your request.`);
     /* $('#requirements')[0].scrollIntoView(true); */
 
     console.log("Data -> ", data);
@@ -819,7 +819,7 @@ file1.onchange = async function (e) {
         $("#file_Upload_Tick_1").hide();
         $("#file_upload_cancle_1").show();
         $("#upload_warning").text(
-          "Your documents should only be in .jpg, pdf, or .tif formats and should not be larger than 2MB. Please re-upload in the correct format and file size to proceed. "
+          "Your documents should only be in .jpg, pdf formats and should not be larger than 2MB. Please re-upload in the correct format and file size to proceed. "
         );
         this.value = "";
     }
@@ -858,7 +858,7 @@ file1.onchange = async function (e) {
         $("#file_Upload_Tick_2").hide();
         $("#file_upload_cancle_2").show();
         $("#upload_warning").text(
-          "Your documents should only be in .jpg, pdf, or .tif formats and should not be larger than 2MB. Please re-upload in the correct format and file size to proceed. "
+          "Your documents should only be in .jpg, pdf formats and should not be larger than 2MB. Please re-upload in the correct format and file size to proceed. "
         );
         this.value = "";
     }
@@ -897,7 +897,7 @@ file1.onchange = async function (e) {
         $("#file_Upload_Tick_3").hide();
         $("#file_upload_cancle_3").show();
         $("#upload_warning").text(
-          "Your documents should only be in .jpg, pdf, or .tif formats and should not be larger than 2MB. Please re-upload in the correct format and file size to proceed. "
+          "Your documents should only be in .jpg, pdf formats and should not be larger than 2MB. Please re-upload in the correct format and file size to proceed. "
         );
         this.value = "";
     }
@@ -936,7 +936,7 @@ file1.onchange = async function (e) {
         $("#file_Upload_Tick_5").hide();
         $("#file_upload_cancle_5").show();
         $("#upload_warning").text(
-          "Your documents should only be in .jpg, pdf, or .tif formats and should not be larger than 2MB. Please re-upload in the correct format and file size to proceed. "
+          "Your documents should only be in .jpg, pdf formats and should not be larger than 2MB. Please re-upload in the correct format and file size to proceed. "
         );
         this.value = "";
     }
@@ -975,7 +975,7 @@ file6.onchange = async function (e) {
         $("#file_Upload_Tick_6").hide();
         $("#file_upload_cancle_6").show();
         $("#upload_warning_acct").text(
-          " Your documents should only be in .jpg, pdf, or .tif formats and should not be larger than 2MB. Please re-upload in the correct format and file size to proceed."
+          " Your documents should only be in .jpg, pdf formats and should not be larger than 2MB. Please re-upload in the correct format and file size to proceed."
         );
         this.value = "";
     }
