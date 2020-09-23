@@ -429,7 +429,7 @@
 															</div>
 															<div class="col-md-12 form__tags">
 																<label for="field_BeneficiaryEmailAddress">What is the Beneficiary’s email address?</label>
-																<input type="text" class="input__box" maxlength="40" id="field_BeneficiaryEmailAddress" value="" placeholder="Email Address" tabindex="13" onkeypress="removeErr(event) || checkLength(event, 40)" required />
+																<input type="text" class="input__box" maxlength="45" id="field_BeneficiaryEmailAddress" value="" placeholder="Email Address" tabindex="13" onkeypress="removeErr(event) || checkLength(event, 45)" required />
 																<div id="err_field_BeneficiaryEmailAddress" class="error"></div>
 															</div>
 															<div class="col-md-12 form__tags">
@@ -473,7 +473,7 @@
 															</div> -->
 															<div class="col-md-12 form__tags">
 																<label for="field_BeneficiaryRelationToDeceased">What is the Beneficiary’s relationship to the deceased?</label>
-																<input type="text" class="input__box" id="field_BeneficiaryRelationToDeceased" value="" placeholder="Relationship to the Deceased" tabindex="19" required />
+																<input type="text"  maxlength="50" class="input__box" id="field_BeneficiaryRelationToDeceased" value="" placeholder="Relationship to the Deceased" tabindex="19" onkeypress="removeErr(event) || checkLength(event, 50)" required />
 																<div id="err_field_BeneficiaryRelationToDeceased" class="error"></div>
 															</div>
 															<div class="col-md-12 form__tags">
@@ -2055,7 +2055,7 @@
 															</div>
 															<div class="col-md-12 form__tags">
 																<label for="field_BeneficiaryEmployerName">Name of Employer</label>
-																<input type="text" class="input__box" maxlength="250" id="field_BeneficiaryEmployerName" value="" placeholder="Name of Employer" onkeypress="return isNotNumber(event) && checkSpcialChar(event) && checkLength(event, 250)" tabindex="21"  required />
+																<input type="text" class="input__box" maxlength="250" id="field_BeneficiaryEmployerName" value="" placeholder="Name of Employer" onkeypress="return checkLength(event, 250)" tabindex="21"  required />
 																<div id="err_field_BeneficiaryEmployerName" class="error"></div>
 															</div>
 															<div class="col-md-12 form__tags">
@@ -2297,7 +2297,7 @@
 						<div class="col-md-11 offset-md-1" style="margin-top: 4rem;">
 							<p class="privacy_title">SECTION 251 OF THE INSURANCE CODE</p>
 							<p style="margin: 2rem 0 2rem 0;">Section 251 of the Insurance Code, as amended, imposes a fine not exceeding twice the amount claimed and/or imprisonment of two (2) years, or both, at the discretion of the court, to any person who presents or causes to be presented any fraudulent claim for the payment of a loss under a contract of insurance, and who fraudulently prepares, makes or subscribes any writing with intent to present or use the same, or to allow it to be presented in support of any claim.</p>
-							<p style="margin: 2rem 0;">A copy of Circular Letter No. 2016-50 may be accessed at the Insurance Commission’s website at   <a href="# www.insurance.gov.ph.">www.insurance.gov.ph.</a></p>
+							<p style="margin: 2rem 0;">A copy of Circular Letter No. 2016-50 may be accessed at the Insurance Commission’s website at   <a href="https://www.insurance.gov.ph." target="_blank">www.insurance.gov.ph.</a></p>
 						</div>
 					</div>
 				</div>
@@ -2338,8 +2338,7 @@
 						<br />
 						<div class="row">
 							<div class="col-9">
-								<p id="customer_Name" class="font-weight-normal">Hi Alex. Hang in there as we process your request. Expect an SMS from us
-                                    within 24 to 48 hours on the status of your request.</p>
+								<p id="customer_Name" class="font-weight-normal">Hi Alex. Hang in there as we process your request. Expect an SMS from us within 1 to 2 working days on the status of your request.</p>
 								<br />
 								<p class="font-weight-normal">If we need additional documents to support your request, we'll reach out to you immediately</p>
 								<br />
@@ -2358,7 +2357,7 @@
 									<br />
 									<div class="time_duration">
 										<div>Turnaround Time</div>
-										<div class="font-weight-bold">2-4 days</div>
+										<div class="font-weight-bold">1-2 working days</div>
 									</div>
 								</div>
 							</div>
@@ -2475,7 +2474,7 @@
                                                                 d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 5zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
                                                         </svg>
                                                     </div>
-                                                    <div id="upload_warning_acct" style="padding: 0 0.9rem;">
+                                                    <div id="upload_warning_acct" style="padding: 0 0.9rem; color: red;">
                                                         Warning: We detected a virus/malware
                                                         in your uploaded documents. Please
                                                         re-upload a clean, virus-free document
@@ -2769,7 +2768,7 @@
 													</div>
 													<div class="col-md-12 form__tags">
 														<label for="field_addBeneficiaryEmailAddress">What is the Beneficiary’s email address?</label>
-														<input type="text" class="input__box" maxlength="40" id="field_addBeneficiaryEmailAddress" value="" placeholder="Email Address" tabindex="12" onkeypress="removeErr(event) || checkLength(event, 40)" required />
+														<input type="text" class="input__box" maxlength="45" id="field_addBeneficiaryEmailAddress" value="" placeholder="Email Address" tabindex="12" onkeypress="removeErr(event) || checkLength(event, 45)" required />
 														<div id="err_field_addBeneficiaryEmailAddress" class="error"></div>
 													</div>
 													<div class="col-md-12 form__tags">
@@ -4392,7 +4391,7 @@
 													</div>
 													<div class="col-md-12 form__tags">
 														<label for="field_BeneficiaryEmployerName">Name of Employer</label>
-														<input type="text" maxlength="250" class="input__box" id="field_addBeneficiaryEmployerName" value="" placeholder="Name of Employer" onkeypress="return isNotNumber(event) && checkSpcialChar(event) && checkLength(event, 250)" tabindex="20"  required />
+														<input type="text" maxlength="250" class="input__box" id="field_addBeneficiaryEmployerName" value="" placeholder="Name of Employer" onkeypress="return checkLength(event, 250)" tabindex="20"  required />
 														<div id="err_field_addBeneficiaryEmployerName" class="error"></div>
 													</div>
 													<div class="col-md-12 form__tags">
@@ -4609,7 +4608,7 @@
 													<path fill-rule="evenodd" d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 5zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
 												</svg>
 											</div>
-											<div id="addBeneficiary_upload_warning" style="padding: 0 0.9rem;">Warning: We detected a virus/malware in your uploaded documents. Please re-upload a clean, virus-free document to proceed.</div>
+											<div id="addBeneficiary_upload_warning" style="padding: 0 0.9rem; color: red;">Warning: We detected a virus/malware in your uploaded documents. Please re-upload a clean, virus-free document to proceed.</div>
 										</div>
 									</div>
 								</div>
@@ -4804,7 +4803,7 @@
                                                                 d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 5zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
                                                         </svg>
                                                     </div>
-                                                    <div id="upload_warning_addBeneficiaryacct" style="padding: 0 0.9rem;">
+                                                    <div id="upload_warning_addBeneficiaryacct" style="padding: 0 0.9rem; color: red;">
                                                         Warning: We detected a virus/malware
                                                         in your uploaded documents. Please
                                                         re-upload a clean, virus-free document

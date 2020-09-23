@@ -42,7 +42,6 @@ $(document).ready(function(event){
 function futureDate(date) {
     /*   let id = evt.target.id;
       var date1 = document.getElementById(id).value; */
-    console.log(date)
     var res = date.split('-');
     var year = res[0];
     var Month = Number(res[1]);
@@ -256,13 +255,14 @@ const checkForVirus = (fileData) => {
     return fetch("https://staging.yellowmessenger.com/components/virus-scanner/scan", requestOptions);
 }
 
+/* 
 function validateEmail(emailField) {
     var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
     if (reg.test(emailField) == false) {
         return false;
     }
     return true;
-}
+} */
 
 function isNumber(evt) {
     evt = (evt) ? evt : window.event;
@@ -311,7 +311,7 @@ function checkLength(evt, max_Length) {
     var val = document.getElementById(id).value;
     var length = val.length;
     if (length >= max_Length) {
-        $(`#err_${id}`).text("Maximum " + max_Length + " character allowed!");
+        $(`#err_${id}`).text("Maximum " + max_Length + " characters allowed!");
         $(`#err_${id}`).show();
     }else {
         detection(evt);
@@ -394,11 +394,10 @@ function handleFormAddBeneficiary(event) {
     var lenaddBeneficiaryNationality = fieldCheckLength(field_addBeneficiaryNationality, 120);
     var lenaddBeneficiaryRelationToDeceased = fieldCheckLength(field_addBeneficiaryRelationToDeceased, 50);
     var lenaddBeneficiaryEmployerName = fieldCheckLength(field_addBeneficiaryEmployerName, 30)
-    var addEmail = validateEmail(field_addBeneficiaryEmailAddress);
     var ageaddBeneficiaryDOB = currentDate(field_addBeneficiaryDOB);
     var relationaddBeneficiaryRelation = checkKeyword(field_addBeneficiaryRelationToDeceased);
-    var numAddBeniEmployerName = numberValidation(field_addBeneficiaryEmployerName);
-    var specAddBeniEmployerName = specialcharacterValidation(field_addBeneficiaryEmployerName);
+   /*  var numAddBeniEmployerName = numberValidation(field_addBeneficiaryEmployerName);
+    var specAddBeniEmployerName = specialcharacterValidation(field_addBeneficiaryEmployerName); */
 
     if(ageaddBeneficiaryDOB) {
        /*  console.error(ageaddBeneficiaryDOB); */
@@ -419,7 +418,7 @@ function handleFormAddBeneficiary(event) {
         $("#err_field_addBeneficiaryFirstName").text('Field is empty');
         $("#err_field_addBeneficiaryFirstName").show();
     } else if (lenaddBeneficiaryFirstName){
-        $("#err_field_addBeneficiaryFirstName").text('Maximum 30 character allowed!');
+        $("#err_field_addBeneficiaryFirstName").text('Maximum 30 characters allowed!');
         $("#err_field_addBeneficiaryFirstName").show();
     } else if(speciAddBeniFirstName == true ){
         $("#err_field_addBeneficiaryFirstName").text('Special character is not allowed');
@@ -436,7 +435,7 @@ function handleFormAddBeneficiary(event) {
         $("#err_field_addBeneficiaryMiddleName").text('Field is empty');
         $("#err_field_addBeneficiaryMiddleName").show();
     } else if (lenaddBeneficiaryMiddleName){
-        $("#err_field_addBeneficiaryMiddleName").text('Maximum 30 character allowed!');
+        $("#err_field_addBeneficiaryMiddleName").text('Maximum 30 characters allowed!');
         $("#err_field_addBeneficiaryMiddleName").show();
     } else if(speciAddBeniMiddleName) {
         $("#err_field_addBeneficiaryMiddleName").text('Special character is not allowed');
@@ -453,7 +452,7 @@ function handleFormAddBeneficiary(event) {
         $("#err_field_addBeneficiaryLastName").text('Field is empty');
         $("#err_field_addBeneficiaryLastName").show();
     } else if (lenaddBeneficiaryLastName){
-        $("#err_field_addBeneficiaryLastName").text('Maximum 30 character allowed!');
+        $("#err_field_addBeneficiaryLastName").text('Maximum 30 characters allowed!');
         $("#err_field_addBeneficiaryLastName").show();
     }  else if (speciAddBeniLastName){
         $("#err_field_addBeneficiaryLastName").text('Special character is not allowed');
@@ -470,7 +469,7 @@ function handleFormAddBeneficiary(event) {
         $("#err_field_addBeneficiaryMobileNum").text('Field is empty');
         $("#err_field_addBeneficiaryMobileNum").show();
     }   else if(lenaddBeneficiaryMobileNum) {
-        $("#err_field_addBeneficiaryMobileNum").text('Maximum 10 character allowed');
+        $("#err_field_addBeneficiaryMobileNum").text('Maximum 10 characters allowed');
         $("#err_field_addBeneficiaryMobileNum").show();
     } else if (!numAddBeniMobile){
         $("#err_field_addBeneficiaryMobileNum").text('Only number is allowed!');
@@ -486,19 +485,15 @@ function handleFormAddBeneficiary(event) {
     if (field_addBeneficiaryEmailAddress.length === 0) {
         $("#err_field_addBeneficiaryEmailAddress").text('Field is empty');
         $("#err_field_addBeneficiaryEmailAddress").show();
-    }else if (!addEmail) {
-        $("#err_field_addBeneficiaryEmailAddress").text('Invalid Email');
-        $("#err_field_addBeneficiaryEmailAddress").show();
-    }  else {
-        $("#err_field_addBeneficiaryEmailAddress").text('');
-        $("#err_field_addBeneficiaryEmailAddress").hide();
+    }   else {
+         validateEmailAddBeneficiary(field_addBeneficiaryEmailAddress)
     }
 
     if (field_addBeneficiaryHomeAddress.length === 0) {
         $("#err_field_addBeneficiaryHomeAddress").text('Field is empty');
         $("#err_field_addBeneficiaryHomeAddress").show();
     } else if(lenaddBeneficiaryHomeAddress){
-        $("#err_field_addBeneficiaryHomeAddress").text('Maximum 250 character allowed');
+        $("#err_field_addBeneficiaryHomeAddress").text('Maximum 250 characters allowed');
         $("#err_field_addBeneficiaryHomeAddress").show();
     } else {
         $("#err_field_addBeneficiaryHomeAddress").text('');
@@ -523,7 +518,7 @@ function handleFormAddBeneficiary(event) {
         $("#err_field_addBeneficiaryPOB").text('Field is empty');
         $("#err_field_addBeneficiaryPOB").show();
     }  else if (lenaddBeneficiaryPOB) {
-        $("#err_field_addBeneficiaryPOB").text('Maximum 120 character allowed!');
+        $("#err_field_addBeneficiaryPOB").text('Maximum 120 characters allowed!');
         $("#err_field_addBeneficiaryPOB").show();
     } else {
         $("#err_field_addBeneficiaryPOB").text('');
@@ -534,7 +529,7 @@ function handleFormAddBeneficiary(event) {
         $("#err_field_addBeneficiaryNationality").text('Field is empty');
         $("#err_field_addBeneficiaryNationality").show();
     }   else if (lenaddBeneficiaryNationality) {
-        $("#err_field_addBeneficiaryNationality").text('Maximum 120 character allowed!');
+        $("#err_field_addBeneficiaryNationality").text('Maximum 120 characters allowed!');
         $("#err_field_addBeneficiaryNationality").show();
     } else {
         $("#err_field_addBeneficiaryNationality").text('');
@@ -553,7 +548,7 @@ function handleFormAddBeneficiary(event) {
         $("#err_field_addBeneficiaryRelationToDeceased").text('Field is empty');
         $("#err_field_addBeneficiaryRelationToDeceased").show();
     }  else if (lenaddBeneficiaryRelationToDeceased) {
-        $("#err_field_addBeneficiaryRelationToDeceased").text('Maximum 50 character allowed!');
+        $("#err_field_addBeneficiaryRelationToDeceased").text('Maximum 50 characters allowed!');
         $("#err_field_addBeneficiaryRelationToDeceased").show();
     } else {
         $("#err_field_addBeneficiaryRelationToDeceased").text('');
@@ -571,14 +566,8 @@ function handleFormAddBeneficiary(event) {
     if (field_addBeneficiaryEmployerName.length === 0){
         $("#err_field_addBeneficiaryEmployerName").text('Field is empty');
         $("#err_field_addBeneficiaryEmployerName").show();
-    }  else if(specAddBeniEmployerName) {
-        $("#err_field_addBeneficiaryEmployerName").text('Special character is not allowed');
-        $("#err_field_addBeneficiaryEmployerName").show();
-    } else if (numAddBeniEmployerName) {
-        $("#err_field_addBeneficiaryEmployerName").text('Number is not allowed');
-        $("#err_field_addBeneficiaryEmployerName").show();
-    } else if (lenaddBeneficiaryEmployerName){
-        $("#err_field_addBeneficiaryEmployerName").text('Maximum 250 character allowed!');
+    }else if (lenaddBeneficiaryEmployerName){
+        $("#err_field_addBeneficiaryEmployerName").text('Maximum 250 characters allowed!');
         $("#err_field_addBeneficiaryEmployerName").show();
     }  else {
         $("#err_field_addBeneficiaryEmployerName").text('');
@@ -609,7 +598,7 @@ function handleFormAddBeneficiary(event) {
         $("#err_field_addBeneficiaryPEP").show();
     }
 
-    if (field_addBeneficiaryFirstName.length !== 0 && field_addBeneficiaryMiddleName.length !== 0 && field_addBeneficiaryLastName.length !== 0 && field_addBeneficiaryMobileNum.length == 10 && field_addBeneficiaryEmailAddress.length !== 0 && field_addBeneficiaryHomeAddress.length !== 0 && field_addBeneficiaryDOB.length !== 0 && field_addBeneficiaryPOB.length !== 0 && field_addBeneficiaryNationality.length !== 0 && field_addBeneficiarySex.length !== 0 && field_addBeneficiaryRelationToDeceased.length !== 0 && field_addBeneficiaryOccupation.length !== 0 && $('#invalidCheck_basicAddBeneficiary').is(':checked') && $('#invalidCheck_privacyAddBeneficiary').is(':checked') && (addEmail == true) && (numAddBeniFirstName== false) && (speciAddBeniFirstName == false ) && (numAddBeniMiddleName == false) && (speciAddBeniMiddleName == false) && (numAddBeniLastName == false) && (speciAddBeniLastName == false) && (numAddBeniMobile == true) && (futaddBeneficiaryDOB == true) && (futExisaddtBeneficiaryDOB == true)&& ($('#field_addBeneficiaryinlineRadio1').is(':checked') || $('#field_addBeneficiaryinlineRadio2').is(':checked'))  && (specAddBeniEmployerName == false) && (numAddBeniEmployerName == false)) {
+    if (field_addBeneficiaryFirstName.length !== 0 && field_addBeneficiaryMiddleName.length !== 0 && field_addBeneficiaryLastName.length !== 0 && field_addBeneficiaryMobileNum.length == 10 && field_addBeneficiaryEmailAddress.length !== 0 && field_addBeneficiaryHomeAddress.length !== 0 && field_addBeneficiaryDOB.length !== 0 && field_addBeneficiaryPOB.length !== 0 && field_addBeneficiaryNationality.length !== 0 && field_addBeneficiarySex.length !== 0 && field_addBeneficiaryRelationToDeceased.length !== 0 && field_addBeneficiaryOccupation.length !== 0 && $('#invalidCheck_basicAddBeneficiary').is(':checked') && $('#invalidCheck_privacyAddBeneficiary').is(':checked') && validateEmailAddBeneficiary(field_addBeneficiaryEmailAddress)  && (numAddBeniFirstName== false) && (speciAddBeniFirstName == false ) && (numAddBeniMiddleName == false) && (speciAddBeniMiddleName == false) && (numAddBeniLastName == false) && (speciAddBeniLastName == false) && (numAddBeniMobile == true) && (futaddBeneficiaryDOB == true) && (futExisaddtBeneficiaryDOB == true)&& ($('#field_addBeneficiaryinlineRadio1').is(':checked') || $('#field_addBeneficiaryinlineRadio2').is(':checked')) ) {
         
         const data = {
             field_addBeneficiaryFirstName,
@@ -677,6 +666,34 @@ function onlyNumberValidate(input) {
     }
 } 
 
+function process(date){
+   var parts = date.split("-");
+    if(parts[2].length == 4)
+    {
+         return new Date(parts[2], parts[1] - 1, parts[0]);
+    }
+    else{
+        return new Date(parts[0], parts[1] - 1, parts[2]);
+    }
+}
+
+//comparing two dates
+function compareFun(DOB, DOID){    
+  if((DOB.length != 0) && (DOID.length != 0))
+  {
+      if(process(DOB) <= process(DOID)){  
+          return true;
+
+        }else{
+            return false;
+        }
+  }
+  else{
+    return false;
+  }
+}
+
+
 
 function handleForm(event) {
     event.preventDefault();
@@ -714,8 +731,8 @@ function handleForm(event) {
     var numBeniMiddleName = numberValidation(field_BeneficiaryMiddleName);
     var speciBeniLastName = specialcharacterValidation(field_BeneficiaryLastName);
     var numBeniLastName = numberValidation(field_BeneficiaryLastName);
-    var numEmployerName = numberValidation(field_BeneficiaryEmployerName);
-    var specEmployerName = specialcharacterValidation(field_BeneficiaryEmployerName);
+   /*  var numEmployerName = numberValidation(field_BeneficiaryEmployerName);
+    var specEmployerName = specialcharacterValidation(field_BeneficiaryEmployerName); */
     var specSuffix = false;
     var numSuffix = false;
     var lenLastNameSuffix = false;
@@ -725,6 +742,7 @@ function handleForm(event) {
     numSuffix = numberValidation(field_lastName_Suffix)
     lenLastNameSuffix = fieldCheckLength(field_lastName_Suffix, 3);
     }
+    var comapareDates = compareFun(field_DOB, field_DOID);
 
     var lenFirstName = fieldCheckLength(field_firstName, 30);
     var lenMiddleName = fieldCheckLength(field_middleName, 30);
@@ -735,10 +753,9 @@ function handleForm(event) {
     var lenMobileNum = fieldCheckLength(field_BeneficiaryMobileNum, 10);
     var lenBeneficiaryHomeAddress = fieldCheckLength(field_BeneficiaryHomeAddress, 250);
     var lenBeneficiaryPOB = fieldCheckLength(field_BeneficiaryPOB, 120);
-    var lenBeneficiaryNationality = fieldCheckLength(field_BeneficiaryNationality, 50)
-    var lenBeneficiaryRelationToDeceased = fieldCheckLength(field_BeneficiaryRelationToDeceased, 120)
+    var lenBeneficiaryNationality = fieldCheckLength(field_BeneficiaryNationality, 120)
+    var lenBeneficiaryRelationToDeceased = fieldCheckLength(field_BeneficiaryRelationToDeceased, 50)
     var lenBeneficiaryEmployerName = fieldCheckLength(field_BeneficiaryEmployerName, 30)
-    var email = validateEmail(field_BeneficiaryEmailAddress);
     var checkDOb = currentDate(field_BeneficiaryDOB);
     var relationKeyword = checkKeyword(field_BeneficiaryRelationToDeceased);
     
@@ -778,8 +795,8 @@ function handleForm(event) {
     if (field_firstName.length === 0) {
         $("#err_field_firstName").text('Field is empty');
         $("#err_field_firstName").show();
-    }   else if (lenFirstName) {
-        $("#err_field_firstName").text('Maximum 30 character allowed!');
+    }  else if (lenFirstName) {
+        $("#err_field_firstName").text('Maximum 30 characters allowed!');
         $("#err_field_firstName").show();
     } else if(specFirstName == true ){
         $("#err_field_firstName").text('Special character is not allowed');
@@ -796,7 +813,7 @@ function handleForm(event) {
         $("#err_field_middleName").text('Field is empty');
         $("#err_field_middleName").show();
     }   else if (lenMiddleName) {
-        $("#err_field_middleName").text('Maximum 30 character allowed!');
+        $("#err_field_middleName").text('Maximum 30 characters allowed!');
         $("#err_field_middleName").show();
     }  else if(specMiddleName) {
         $("#err_field_middleName").text('Special character is not allowed');
@@ -813,7 +830,7 @@ function handleForm(event) {
         $("#err_field_lastName").text('Field is empty');
         $("#err_field_lastName").show();
     }   else if (lenLastName) {
-        $("#err_field_lastName").text('Maximum 30 character allowed!');
+        $("#err_field_lastName").text('Maximum 30 characters allowed!');
         $("#err_field_lastName").show();
     }   else if (specLastName){
         $("#err_field_lastName").text('Special character is not allowed');
@@ -831,7 +848,7 @@ function handleForm(event) {
         $("#err_field_lastName_Suffix").text('');
         $("#err_field_lastName_Suffix").hide();
     }else if(lenLastNameSuffix){
-        $("#err_field_lastName_Suffix").text('Maximum 3 character allowed!');
+        $("#err_field_lastName_Suffix").text('Maximum 3 characters allowed!');
         $("#err_field_lastName_Suffix").show();
     }   else if (specSuffix) {
         $("#err_field_lastName_Suffix").text('Special character is not allowed');
@@ -864,6 +881,9 @@ function handleForm(event) {
     }  else if (!futDOID) {
         $("#err_field_DOID").text('Future date is  not Accepted!');
         $("#err_field_DOID").show();
+    } else if(!comapareDates){
+        $("#err_field_DOID").text('Insured\'s death date can not be smaller than DOB');
+        $("#err_field_DOID").show();
     } else {
         $("#err_field_DOID").text('');
         $("#err_field_DOID").hide();
@@ -881,7 +901,7 @@ function handleForm(event) {
         $("#err_field_BeneficiaryFirstName").text('Field is empty');
         $("#err_field_BeneficiaryFirstName").show();
     } else if(lenBeneficiaryFirstName){
-        $("#err_field_BeneficiaryFirstName").text('Maximum 30 character allowed!');
+        $("#err_field_BeneficiaryFirstName").text('Maximum 30 characters allowed!');
         $("#err_field_BeneficiaryFirstName").show();
     }  else if(speciBeniFirstName == true ){
         $("#err_field_BeneficiaryFirstName").text('Special character is not allowed');
@@ -898,7 +918,7 @@ function handleForm(event) {
         $("#err_field_BeneficiaryMiddleName").text('Field is empty');
         $("#err_field_BeneficiaryMiddleName").show();
     }   else if(lenBeneficiaryMiddleName){
-        $("#err_field_BeneficiaryMiddleName").text('Maximum 30 character allowed!');
+        $("#err_field_BeneficiaryMiddleName").text('Maximum 30 characters allowed!');
         $("#err_field_BeneficiaryMiddleName").show();
     }   else if(speciBeniMiddleName == true ){
         $("#err_field_BeneficiaryMiddleName").text('Special character is not allowed');
@@ -915,7 +935,7 @@ function handleForm(event) {
         $("#err_field_BeneficiaryLastName").text('Field is empty');
         $("#err_field_BeneficiaryLastName").show();
     }   else if(lenBeneficiaryLastName){
-        $("#err_field_BeneficiaryLastName").text('Maximum 30 character allowed!');
+        $("#err_field_BeneficiaryLastName").text('Maximum 30 characters allowed!');
         $("#err_field_BeneficiaryLastName").show();
     }   else if(speciBeniLastName == true ){
         $("#err_field_BeneficiaryLastName").text('Special character is not allowed');
@@ -932,7 +952,7 @@ function handleForm(event) {
         $("#err_field_BeneficiaryMobileNum").text('Field is empty');
         $("#err_field_BeneficiaryMobileNum").show();
     }   else if (lenMobileNum){
-        $("#err_field_BeneficiaryMobileNum").text('Maximum 10 character allowed!');
+        $("#err_field_BeneficiaryMobileNum").text('Maximum 10 characters allowed!');
         $("#err_field_BeneficiaryMobileNum").show();
     } else if (!numberMobile){
         $("#err_field_BeneficiaryMobileNum").text('Only number is allowed!');
@@ -948,19 +968,15 @@ function handleForm(event) {
     if (field_BeneficiaryEmailAddress.length === 0) {
         $("#err_field_BeneficiaryEmailAddress").text('Field is empty');
         $("#err_field_BeneficiaryEmailAddress").show();
-    } else if (!email) {
-        $("#err_field_BeneficiaryEmailAddress").text('Invalid Email');
-        $("#err_field_BeneficiaryEmailAddress").show();
-    } else {
-        $("#err_field_BeneficiaryEmailAddress").text('');
-        $("#err_field_BeneficiaryEmailAddress").hide();
+    }else {
+        validateEmail(field_BeneficiaryEmailAddress)
     }
 
     if (field_BeneficiaryHomeAddress.length === 0) {
         $("#err_field_BeneficiaryHomeAddress").text('Field is empty');
         $("#err_field_BeneficiaryHomeAddress").show();
     } else if (lenBeneficiaryHomeAddress) {
-        $("#err_field_BeneficiaryHomeAddress").text('Maximum 250 character allowed!');
+        $("#err_field_BeneficiaryHomeAddress").text('Maximum 250 characters allowed!');
         $("#err_field_BeneficiaryHomeAddress").show();
     } else {
         $("#err_field_BeneficiaryHomeAddress").text('');
@@ -985,7 +1001,7 @@ function handleForm(event) {
         $("#err_field_BeneficiaryPOB").text('Field is empty');
         $("#err_field_BeneficiaryPOB").show();
     }   else if(lenBeneficiaryPOB) {
-        $("#err_field_BeneficiaryPOB").text('Maximum 120 character allowed!');
+        $("#err_field_BeneficiaryPOB").text('Maximum 120 characters allowed!');
         $("#err_field_BeneficiaryPOB").show();
     } else {
         $("#err_field_BeneficiaryPOB").text('');
@@ -996,7 +1012,7 @@ function handleForm(event) {
         $("#err_field_BeneficiaryNationality").text('Field is empty');
         $("#err_field_BeneficiaryNationality").show();
     }   else if(lenBeneficiaryNationality) {
-        $("#err_field_BeneficiaryNationality").text('Maximum 50 character allowed!');
+        $("#err_field_BeneficiaryNationality").text('Maximum 120 characters allowed!');
         $("#err_field_BeneficiaryNationality").show();
     }  else {
         $("#err_field_BeneficiaryNationality").text('');
@@ -1023,7 +1039,7 @@ function handleForm(event) {
         $("#err_field_BeneficiaryRelationToDeceased").text('Field is empty');
         $("#err_field_BeneficiaryRelationToDeceased").show();
     } else if(lenBeneficiaryRelationToDeceased) {
-        $("#err_field_BeneficiaryRelationToDeceased").text('Maximum 120 character allowed!');
+        $("#err_field_BeneficiaryRelationToDeceased").text('Maximum 50 characters allowed!');
         $("#err_field_BeneficiaryRelationToDeceased").show();
     } else {
         $("#err_field_BeneficiaryRelationToDeceased").text('');
@@ -1033,14 +1049,14 @@ function handleForm(event) {
     if(field_BeneficiaryEmployerName.length === 0){
         $("#err_field_BeneficiaryEmployerName").text('Field is empty');
         $("#err_field_BeneficiaryEmployerName").show();
-    }  else if(specEmployerName ) {
+    }/*   else if(specEmployerName ) {
         $("#err_field_BeneficiaryEmployerName").text('Special character is not allowed');
         $("#err_field_BeneficiaryEmployerName").show();
     } else if (numEmployerName ) {
         $("#err_field_BeneficiaryEmployerName").text('Number is not allowed');
         $("#err_field_BeneficiaryEmployerName").show();
-    }  else if (lenBeneficiaryEmployerName){
-        $("#err_field_BeneficiaryEmployerName").text('Maximum 250 character allowed!');
+    }   */else if (lenBeneficiaryEmployerName){
+        $("#err_field_BeneficiaryEmployerName").text('Maximum 250 characters allowed!');
         $("#err_field_BeneficiaryEmployerName").show();
     } else {
         $("#err_field_BeneficiaryEmployerName").text('');
@@ -1071,7 +1087,7 @@ function handleForm(event) {
         $("#err_field_BeneficiaryPEP").show();
     }
 
-    if (field_firstName.length !== 0 && field_middleName.length !== 0 && field_lastName.length !== 0 && field_DOB.length !== 0 && field_DOID.length !== 0 && field_NatureLoss.length !== 0 && field_BeneficiaryFirstName.length !== 0 && field_BeneficiaryMiddleName.length !== 0 && field_BeneficiaryLastName.length !== 0 && field_BeneficiaryMobileNum.length == 10 && field_BeneficiaryEmailAddress.length !== 0 && field_BeneficiaryHomeAddress.length !== 0 && field_BeneficiaryDOB.length !== 0 && field_BeneficiaryPOB.length !== 0 && field_BeneficiaryNationality.length !== 0 && field_BeneficiarySex.length !== 0 && field_BeneficiaryRelationToDeceased.length !== 0 && field_BenificiaryOccupation.length !== 0 && $('#invalidCheck_basic').is(':checked') && $('#invalidCheck_privacy').is(':checked') && (email == true) && (specFirstName == false)  && (specMiddleName == false)  && (specLastName == false) && (numFirstName == false)  && (numMiddleName == false) && (numLastName == false) && (speciBeniFirstName == false) && (numBeniFirstName == false) && (numberMobile == true) && (speciBeniMiddleName == false) && (numBeniMiddleName == false) && (speciBeniLastName == false) && (numBeniLastName == false) && (futDOB  == true) && (futExistDOB  == true) && (futDOID == true) && (numSuffix == false) && (specSuffix == false) && ($('#inlineRadio1').is(':checked') || $('#inlineRadio2').is(':checked')) && (numEmployerName == false) && (specEmployerName == false) ) {
+    if (field_firstName.length !== 0 && field_middleName.length !== 0 && field_lastName.length !== 0 && field_DOB.length !== 0 && field_DOID.length !== 0 && field_NatureLoss.length !== 0 && field_BeneficiaryFirstName.length !== 0 && field_BeneficiaryMiddleName.length !== 0 && field_BeneficiaryLastName.length !== 0 && field_BeneficiaryMobileNum.length == 10 && field_BeneficiaryEmailAddress.length !== 0 && field_BeneficiaryHomeAddress.length !== 0 && field_BeneficiaryDOB.length !== 0 && field_BeneficiaryPOB.length !== 0 && field_BeneficiaryNationality.length !== 0 && field_BeneficiarySex.length !== 0 && field_BeneficiaryRelationToDeceased.length !== 0 && field_BenificiaryOccupation.length !== 0 && $('#invalidCheck_basic').is(':checked') && $('#invalidCheck_privacy').is(':checked') && validateEmail(field_BeneficiaryEmailAddress) && (specFirstName == false)  && (specMiddleName == false)  && (specLastName == false) && (numFirstName == false)  && (numMiddleName == false) && (numLastName == false) && (speciBeniFirstName == false) && (numBeniFirstName == false) && (numberMobile == true) && (speciBeniMiddleName == false) && (numBeniMiddleName == false) && (speciBeniLastName == false) && (numBeniLastName == false) && (futDOB  == true) && (futExistDOB  == true) && (futDOID == true) && (numSuffix == false) && (specSuffix == false) && ($('#inlineRadio1').is(':checked') || $('#inlineRadio2').is(':checked')) && (comapareDates == true)) {
         
     
             const data = {
@@ -1107,7 +1123,7 @@ function handleForm(event) {
             $('#form_wrapper').hide();
             $('#death_data_privacy').hide();
             $('#payment').show();
-            $("#customer_Name").text(`Hi ${field_firstName}. Hang in there as we process your request. Expect an SMS from us within 24 to 48 hours on the status of your request.`);
+            $("#customer_Name").text(`Hi ${field_firstName}. Hang in there as we process your request. Expect an SMS from us within 1 to 2 working days on the status of your request.`);
             console.log('Data -> ', data)
     
     }else {
@@ -2116,7 +2132,7 @@ function handleAccountInfo(event) {
         $("#err_field_AccountName").show();
         $('#popUp').modal('show'); 
     } else if (lenAccountName){
-        $("#err_field_AccountName").text('Maximum 90 character allowed!');
+        $("#err_field_AccountName").text('Maximum 90 characters allowed!');
         $("#err_field_AccountName").show();
         $('#popUp').modal('show'); 
     } else if (speCharAccountName) {
@@ -2137,7 +2153,7 @@ function handleAccountInfo(event) {
         $("#err_field_AccountNumber").show();
         $('#popUp').modal('show'); 
     } else if(lenAccountNumber) {
-        $("#err_field_AccountNumber").text('Maximum 20 character allowed!');
+        $("#err_field_AccountNumber").text('Maximum 20 characters allowed!');
         $("#err_field_AccountNumber").show();
         $('#popUp').modal('show'); 
     } else if((!numAccountNumber) || (specAccountNumber)) {
@@ -2163,7 +2179,7 @@ function handleAccountInfo(event) {
         $("#err_field_Branch").show();
         $('#popUp').modal('show'); 
     }  else if(lenBranch) {
-        $("#err_field_Branch").text('Maximum 50 character allowed');
+        $("#err_field_Branch").text('Maximum 50 characters allowed');
         $("#err_field_Branch").show();
         $('#popUp').modal('show'); 
     }  else {
@@ -2220,7 +2236,7 @@ function addBenificiaryAccountInfo(event) {
         $("#err_field_addBenificiaryAccountName").show();
         $('#popUp').modal('show'); 
     } else if (lenAccountName){
-        $("#err_field_addBenificiaryAccountName").text('Maximum 90 character allowed!');
+        $("#err_field_addBenificiaryAccountName").text('Maximum 90 characters allowed!');
         $("#err_field_addBenificiaryAccountName").show();
         $('#popUp').modal('show'); 
     } else if (speCharAccountName) {
@@ -2241,7 +2257,7 @@ function addBenificiaryAccountInfo(event) {
         $("#err_field_addBenificiaryAccountNumber").show();
         $('#popUp').modal('show'); 
     } else if(lenAccountNumber) {
-        $("#err_field_addBenificiaryAccountNumber").text('Maximum 20 character allowed!');
+        $("#err_field_addBenificiaryAccountNumber").text('Maximum 20 characters allowed!');
         $("#err_field_addBenificiaryAccountNumber").show();
         $('#popUp').modal('show'); 
     } else if((!numAccountNumber) || (specAccountNumber)) {
@@ -2267,7 +2283,7 @@ function addBenificiaryAccountInfo(event) {
         $("#err_field_addBeneficiaryBranch").show();
         $('#popUp').modal('show'); 
     }  else if(lenBranch) {
-        $("#err_field_addBeneficiaryBranch").text('Maximum 50 character allowed');
+        $("#err_field_addBeneficiaryBranch").text('Maximum 50 characters allowed');
         $("#err_field_addBeneficiaryBranch").show();
         $('#popUp').modal('show'); 
     }  else {
@@ -2348,7 +2364,6 @@ function addBeneficiaryPickup() {
     $("#addBeneficiaryPickUp").show();
     $("#step2").addClass("active");
     $("#step2>div").addClass("active");
-    $("#step2").addClass("done");
 }
 
 function goBack() {
@@ -2381,4 +2396,117 @@ function pickup_Bpi() {
 
 function openlink() {
     window.open("https://www.google.com/maps/search/bpi+branch+locator/@14.6079731,120.9860096,14z/data=!3m1!4b1");
+}
+
+
+function validateEmailAddBeneficiary(my_email)
+{
+var ind0=my_email.indexOf("@");
+var my_username=my_email.slice(0,ind0);
+var ind=my_email.indexOf("@");
+var my_domain=my_email.substr((ind+1));
+var ind3 = my_domain.indexOf(".");
+var my_final_domain = my_domain.slice(0,ind3);
+var ind1=my_domain.indexOf(".");
+var my_extension=my_domain.slice((ind1+1),my_domain.length);
+
+var usernamesize = stringlength(my_username,2,30);
+var domainsize = stringlength(my_final_domain,2,10);
+var extension = stringlength(my_extension,2,3);
+    
+
+ var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+  if (reg.test(my_email) == false) {
+    $("#err_field_addBeneficiaryEmailAddress").text('Invalid Email');
+    $("#err_field_addBeneficiaryEmailAddress").show();
+    return false;
+  }else{
+    if(!usernamesize)
+        {
+            $("#err_field_addBeneficiaryEmailAddress").text('UserName should have minimum 2 and maximum 30 character');
+            $("#err_field_addBeneficiaryEmailAddress").show();
+            return false;
+        }else if(!domainsize)
+        {
+            $("#err_field_addBeneficiaryEmailAddress").text('Domain should have minimum 2 and maximum 10 character');
+            $("#err_field_addBeneficiaryEmailAddress").show();
+            return false;
+        }else if(!extension)
+        {
+            $("#err_field_addBeneficiaryEmailAddress").text('Extension should have minimum 2 and maximum 3 characters');
+            $("#err_field_addBeneficiaryEmailAddress").show();
+            return false;
+        }else {
+          $("#err_field_addBeneficiaryEmailAddress").text('');
+          $("#err_field_addBeneficiaryEmailAddress").hide();
+          return true;
+        }
+
+  }
+  
+} 
+
+
+function validateEmail(my_email)
+{
+var ind0=my_email.indexOf("@");
+var my_username=my_email.slice(0,ind0);
+var ind=my_email.indexOf("@");
+var my_domain=my_email.substr((ind+1));
+var ind3 = my_domain.indexOf(".");
+var my_final_domain = my_domain.slice(0,ind3);
+var ind1=my_domain.indexOf(".");
+var my_extension=my_domain.slice((ind1+1),my_domain.length);
+
+var usernamesize = stringlength(my_username,2,30);
+var domainsize = stringlength(my_final_domain,2,10);
+var extension = stringlength(my_extension,2,3);
+    
+
+ var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+  if (reg.test(my_email) == false) {
+    $("#err_field_BeneficiaryEmailAddress").text('Invalid Email');
+    $("#err_field_BeneficiaryEmailAddress").show();
+    return false;
+  }else{
+    if(!usernamesize)
+        {
+            $("#err_field_BeneficiaryEmailAddress").text('UserName should have minimum 2 and maximum 30 character');
+            $("#err_field_BeneficiaryEmailAddress").show();
+            return false;
+        }else if(!domainsize)
+        {
+            $("#err_field_BeneficiaryEmailAddress").text('Domain should have minimum 2 and maximum 10 character');
+            $("#err_field_BeneficiaryEmailAddress").show();
+            return false;
+        }else if(!extension)
+        {
+            $("#err_field_BeneficiaryEmailAddress").text('Extension should have minimum 2 and maximum 3 characters');
+            $("#err_field_BeneficiaryEmailAddress").show();
+            return false;
+        }else {
+          $("#err_field_BeneficiaryEmailAddress").text('');
+          $("#err_field_BeneficiaryEmailAddress").hide();
+          return true;
+        }
+
+  }
+  
+}
+
+
+function stringlength(inputtxt, minlength, maxlength)
+{ 
+var field = inputtxt; 
+var mnlen = minlength;
+var mxlen = maxlength;
+
+if(field.length<mnlen || field.length> mxlen)
+{ 
+return false;
+}
+else
+{ 
+return true;
+}
 }

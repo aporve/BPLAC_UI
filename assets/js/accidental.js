@@ -57,88 +57,30 @@ $(document).ready(function (event) {
 
 /* Check Date should not be in future */
 function futureDate(date) {
-  /*   let id = evt.target.id;
-    var date1 = document.getElementById(id).value; */
-  console.log(date)
-  var res = date.split('-');
-  var year = res[0];
-  var Month = Number(res[1]);
-  var day = res[2];
   var today = new Date();
   var dd = String(today.getDate()).padStart(2, '0');
-  var mm = Number(String(today.getMonth() + 1).padStart(2, '0')); //January is 0!
+  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
   var yyyy = today.getFullYear();
-  /* This is for safari, not good way to handle */
-  if (day.length == 4) {
-
-    if (day < yyyy) {
-      return true;
-    } else if (day > yyyy)
+  var systemdate = dd + "-" + mm +"-" + yyyy;
+  if(date.length != 0)
+  {
+    if(process(date) > process(systemdate))
     {
-      return false
+      return false;
     }
-    else {
-      if (day = yyyy)
-      {
-         if(Month < mm) {
-              return true;
-          }
-          else if(Month == mm)
-              {
-                  if(year <= dd)
-              {
-                return true;
-              }else{
-                return false;
-              }
-          }
-        else {
-        return false;
-      }
-        
-      }
-      else{
-        return false;
-    }
-
-    }
-      
-  } else {
-    if (year < yyyy) {
+    else{
       return true;
-    } else if (year > yyyy)
-    {
-      return false
     }
-    else {
-      if (year == yyyy)
-      {
-         if(Month < mm) {
-              return true;
-          }
-          else if (Month == mm)
-          {
-              if(day <= dd)
-              {        
-                return true;
-              }else{      
-                return false;
-              }
-          }else{
-              return false;
-          }
-      } else {
-        return false;
-      }
-    }
+  }
+  else{
+    return false;
   }
 }
 
 
+
 function futureDateDOB(date) {
-/*   let id = evt.target.id;
-  var date1 = document.getElementById(id).value; */
-console.log("This is date" + date)
+/*   let id = evt.target.id;*/
 var res = date.split('-');
 var year = res[0];
 var Month = res[1];
@@ -148,8 +90,8 @@ var dd = String(today.getDate()).padStart(2, '0');
 var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
 var yyyy = today.getFullYear();
 
-console.log("Logged-In Date:" + day, Month, year)
-console.log("System Date:" + dd, mm, yyyy)
+// console.log("Logged-In Date:" + day, Month, year)
+// console.log("System Date:" + dd, mm, yyyy)
 
 /* This is for safari, not good way to handle */
 if (day.length == 4) {
@@ -274,6 +216,9 @@ listCheckBox.onchange = function () {
     })
 } */
 
+
+
+/* 
 function validateEmail(emailField) {
   var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
   if (reg.test(emailField) == false) {
@@ -285,7 +230,7 @@ function validateEmail(emailField) {
   $("#err_field_emailAddress").hide();
   return true;
 }
-
+ */
 function isNumber(evt) {
   evt = (evt) ? evt : window.event;
   var charCode = (evt.which) ? evt.which : evt.keyCode;
@@ -344,16 +289,24 @@ function specialcharacterValidation(input) {
 }
 
 function checkLength(evt, max_Length) {
-    let id = evt.target.id;
-    var val = document.getElementById(id).value;
-    var length = val.length;
-    if (length >= max_Length) {
-        $(`#err_${id}`).text("Maximum " + max_Length + " character allowed!");
-        $(`#err_${id}`).show();
-    }else {
-        detection(evt);
-    }
-    
+  let id = evt.target.id;
+  var val = document.getElementById(id).value;
+  var length = val.length;
+  if (length >= max_Length) {
+    $(`#err_${id}`).text("Maximum " + max_Length + " characters allowed!");
+    $(`#err_${id}`).show();
+  } else {
+    detection(evt);
+  }
+}
+
+function fieldCheckLength(field, maxLength) {
+  var length = field.length;
+  if (length > maxLength) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 function detection(evt) {
@@ -410,6 +363,110 @@ function fieldCheckLength(field, maxLength) {
   }
 }
 
+function checkActualTime(field2_TOA, field3_DOA) {
+  var today = new Date();
+  var currentYear = today.getFullYear();
+  var currentMonth = today.getMonth() + 1;
+  var currentDate = today.getDate();
+  var CurrentHour = today.getHours();
+  var CurrentMinute = today.getMinutes();
+
+  var UserEnterDate = field3_DOA.split("-");
+  var userYear = UserEnterDate[0];
+  var userMonth = UserEnterDate[1];
+  var userDay = UserEnterDate[2];
+  var istimeMatched = false;
+
+  var UserTime = field2_TOA.split(":");
+  var userEnterHours = UserTime[0];
+  var userEnterMinute = UserTime[1];
+
+  if (userDay.length == 4) {
+    if (UserTime.length != 0) {
+      var minSplit = userEnterMinute.split(" ");
+      userEnterMinute = minSplit[0];
+      var userAmPm = minSplit[1];
+      var isAmPm = userAmPm == "am" ? "am" : "pm";
+      if (isAmPm == "pm") {
+        userEnterHours = (userEnterHours % 12) + 12;
+      } else {
+        userEnterHours = userEnterHours % 12;
+      }
+    }
+  }
+
+  if (field2_TOA.length != 0 && field3_DOA.length != 0) {
+    /* This is for safari, not good way to handle */
+    if (userDay.length == 4) {
+      if (
+        userDay == currentYear &&
+        userMonth == currentMonth &&
+        userYear == currentDate
+      ) {
+        istimeMatched = true;
+      } else {
+        return true;
+      }
+    } else {
+      if (
+        userYear == currentYear &&
+        userMonth == currentMonth &&
+        userDay == currentDate
+      ) {
+        istimeMatched = true;
+      } else {
+        return true;
+      }
+    }
+    if (istimeMatched == true) {
+      if (userEnterHours > CurrentHour) {
+        return false;
+      } else if (userEnterHours < CurrentHour) {
+        return true;
+      } else if (userEnterHours == CurrentHour) {
+        if (userEnterMinute <= CurrentMinute) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+}
+
+
+function process(date){
+   var parts = date.split("-");
+    if(parts[2].length == 4)  // it is for safari
+    {                   //day     , mm          , yyyy
+         return new Date(parts[2], parts[1] - 1, parts[0]);
+    }
+    else{                 //yyyy     , mm          , dd
+        return new Date(parts[0], parts[1] - 1, parts[2]);
+    }
+}
+
+
+function compareFun(DOB, DOA){
+  if((DOB.length != 0) && (DOA.length != 0))
+  {
+  if(process(DOB) <= process(DOA)){  
+      return true;
+      
+    }else{
+        return false;
+    }
+  }
+  else{
+    return false;
+  }
+}
+
+
 function handleForm(event) {
   event.preventDefault();
   var field_firstName = $("#field_firstName").val();
@@ -425,6 +482,9 @@ function handleForm(event) {
   var field_TOA = $("#field_TOA").val();
   var field_POA = $("#field_POA").val();
 
+
+  var comapareDates = compareFun(field_DOB, field_DOA);
+  
   InsuredInformation["FirstName"] = field_firstName;
   InsuredInformation["MiddleName"] = field_firstName;
   InsuredInformation["LastName"] = field_firstName;
@@ -447,11 +507,9 @@ function handleForm(event) {
   var numMiddleName = numberValidation(field_middleName)
   var numLastName = numberValidation(field_lastName);
   var numMobile = onlyNumberValidate(field_mobileNum);
-  /* Future Date and Current Date Validation */
-  
-    var specLastNameSuffix = false;
-    var numLastNameSuffix = false;
-    var lenLastNameSuffix = false;
+  var specLastNameSuffix = false;
+  var numLastNameSuffix = false;
+  var lenLastNameSuffix = false;
 
     if(field_lastName_Suffix  != 0) {
     specLastNameSuffix = specialcharacterValidation(field_lastName_Suffix);
@@ -459,19 +517,34 @@ function handleForm(event) {
     lenLastNameSuffix = fieldCheckLength(field_lastName_Suffix, 3);
     }
 
+  var lenFirstName = fieldCheckLength(field_firstName, 30);
+  var lenMiddleName = fieldCheckLength(field_middleName, 30);
+  var leninjury = fieldCheckLength(field_injury, 500);
+  var lenLastName = fieldCheckLength(field_lastName, 30);
+  var lenMobileNum = fieldCheckLength(field_mobileNum, 10);
+  var lenHomeAddress = fieldCheckLength(field_homeAddress, 250);
+  var lenPOA = fieldCheckLength(field_POA, 120);
 
   if(field_DOB.length !== 0) {
     var futDOB = futureDate(field_DOB);
     var futExistDOB = futureDateDOB(field_DOB);
   }
-
-  if(field_DOA.length !== 0) {
-    var futDOA = futureDate(field_DOA);
+  var timeCompare= false;
+  var futDOA = false;
+    
+  if(field_DOA.length != 0) {
+    futDOA = futureDate(field_DOA);
+    if(field_TOA.length != 0)
+    {
+      timeCompare = checkActualTime(field_TOA,field_DOA);
+    }
   }
-
-
+    
   if (field_firstName.length === 0) {
     $("#err_field_firstName").text('Field is empty');
+    $("#err_field_firstName").show();
+  } else if (lenFirstName) {
+    $("#err_field_firstName").text("Maximum 30 characters allowed!");
     $("#err_field_firstName").show();
   } else if (specFirstName == true) {
     $("#err_field_firstName").text('Special character is not allowed');
@@ -487,6 +560,9 @@ function handleForm(event) {
   if (field_middleName.length === 0) {
     $("#err_field_middleName").text('Field is empty');
     $("#err_field_middleName").show();
+  } else if (lenMiddleName) {
+    $("#err_field_middleName").text("Maximum 30 characters allowed!");
+    $("#err_field_middleName").show();
   } else if (specMiddleName) {
     $("#err_field_middleName").text('Special character is not allowed');
     $("#err_field_middleName").show();
@@ -501,6 +577,9 @@ function handleForm(event) {
   if (field_injury.length === 0) {
     $("#err_field_injury").text('Field is empty');
     $("#err_field_injury").show();
+  } else if (leninjury) {
+    $("#err_field_injury").text("Maximum 500 characters allowed!");
+    $("#err_field_injury").show();
   } else {
     $("#err_field_injury").text('');
     $("#err_field_injury").hide();
@@ -508,6 +587,9 @@ function handleForm(event) {
 
   if (field_lastName.length === 0) {
     $("#err_field_lastName").text('Field is empty');
+    $("#err_field_lastName").show();
+  } else if (lenLastName) {
+    $("#err_field_lastName").text("Maximum 30 characters allowed!");
     $("#err_field_lastName").show();
   } else if (specLastName) {
     $("#err_field_lastName").text('Special character is not allowed');
@@ -524,7 +606,7 @@ function handleForm(event) {
     $("#err_field_lastName_Suffix").text('');
     $("#err_field_lastName_Suffix").hide();
   } else if (lenLastNameSuffix){
-    $("#err_field_lastName_Suffix").text('Maximum 3 character allowed');
+    $("#err_field_lastName_Suffix").text('Maximum 3 characters allowed');
     $("#err_field_lastName_Suffix").show();
   } else if (specLastNameSuffix){
     $("#err_field_lastName_Suffix").text('Special character is not allowed');
@@ -546,7 +628,10 @@ function handleForm(event) {
   } else if(!futExistDOB){
     $("#err_field_DOB").text('Current date is  not Applicable!');
     $("#err_field_DOB").show();
-  } else {
+  } else if (!comapareDates) {
+      $("#err_field_DOB").text('Insured DOB can not be greater than accident date');
+    $("#err_field_DOB").show();
+  }  else {
     $("#err_field_DOB").text('');
     $("#err_field_DOB").hide();
   }
@@ -554,6 +639,9 @@ function handleForm(event) {
     if (field_mobileNum.length === 0) {
         $("#err_field_mobileNum").text('Field is empty');
         $("#err_field_mobileNum").show();
+  } else if (lenMobileNum) {
+    $("#err_field_mobileNum").text("Maximum 10 characters allowed!");
+    $("#err_field_mobileNum").show();
     } else if (!numMobile) {
         $("#err_field_mobileNum").text('Only number is allowed!');
         $("#err_field_mobileNum").show();
@@ -575,6 +663,9 @@ function handleForm(event) {
   if (field_homeAddress.length === 0) {
     $("#err_field_homeAddress").text('Field is empty');
     $("#err_field_homeAddress").show();
+  } else if (lenHomeAddress) {
+    $("#err_field_homeAddress").text("Maximum 250 characters allowed!");
+    $("#err_field_homeAddress").show();
   } else {
     $("#err_field_homeAddress").text('');
     $("#err_field_homeAddress").hide();
@@ -594,13 +685,20 @@ function handleForm(event) {
   if (field_TOA.length === 0) {
     $("#err_field_TOA").text('Field is empty');
     $("#err_field_TOA").show();
-  } else {
+  } 
+  else if (timeCompare == false) {
+      $("#err_field_TOA").text('Time can not be greater than current time');
+    $("#err_field_TOA").show();
+  }else {
     $("#err_field_TOA").text('');
     $("#err_field_TOA").hide();
   }
 
   if (field_POA.length === 0) {
     $("#err_field_POA").text('Field is empty');
+    $("#err_field_POA").show();
+  } else if (lenPOA) {
+    $("#err_field_POA").text("Maximum 120 characters allowed!");
     $("#err_field_POA").show();
   } else {
     $("#err_field_POA").text('');
@@ -623,25 +721,60 @@ function handleForm(event) {
     $("#err_invalidCheck_privacy").hide();
   }
 
-  if (field_firstName.length !== 0 && field_middleName.length !== 0 && field_injury.length !== 0 && field_lastName.length !== 0 && field_DOB.length !== 0 && field_mobileNum.length == 10 && field_emailAddress.length !== 0 && field_homeAddress.length !== 0 && field_DOA.length !== 0 && field_TOA.length !== 0 && field_POA.length !== 0 && $('#invalidCheck_basic').is(':checked') && $('#invalidCheck_privacy').is(':checked') && validateEmail(field_emailAddress) && (specFirstName == false) && (specMiddleName == false) && (specLastName == false) && (numFirstName == false) && (numMiddleName == false) && (numLastName == false) && (numMobile == true) && (specLastNameSuffix == false) && (numLastNameSuffix == false)) {
-
-      const data = {
-        field_firstName,
-        field_middleName,
-        field_injury,
-        field_lastName,
-        field_lastName_Suffix,
-        field_DOB,
-        country_code: $("select#inlineFormCustomSelect option").filter(":selected").val(),
-        field_mobileNum,
-        field_emailAddress,
-        field_homeAddress,
-        field_DOA,
-        field_TOA,
-        field_POA,
-        basic_checkbox: $('#invalidCheck_basic').is(':checked'),
-        privacy_checkbox: $('#invalidCheck_privacy').is(':checked')
-      }
+  if (
+    field_firstName.length !== 0 &&
+    field_middleName.length !== 0 &&
+    field_injury.length !== 0 &&
+    field_lastName.length !== 0 &&
+    field_DOB.length !== 0 &&
+    field_mobileNum.length == 10 &&
+    field_emailAddress.length !== 0 &&
+    field_homeAddress.length !== 0 &&
+    field_DOA.length !== 0 &&
+    field_TOA.length !== 0 &&
+    field_POA.length !== 0 &&
+    $("#invalidCheck_basic").is(":checked") &&
+    $("#invalidCheck_privacy").is(":checked") &&
+    validateEmail(field_emailAddress) &&
+    specFirstName == false &&
+    specMiddleName == false &&
+    specLastName == false &&
+    numFirstName == false &&
+    numMiddleName == false &&
+    numLastName == false &&
+    numMobile == true &&
+    specLastNameSuffix == false &&
+    numLastNameSuffix == false &&
+    (comapareDates == true) && 
+    (timeCompare == true) && 
+    (futDOA == true) &&
+    lenLastNameSuffix ==false &&
+    lenFirstName == false && 
+    lenMiddleName == false && 
+    leninjury == false && 
+    lenMobileNum == false && 
+    lenHomeAddress == false && 
+    lenPOA == false
+  ) {
+    const data = {
+      field_firstName,
+      field_middleName,
+      field_injury,
+      field_lastName,
+      field_lastName_Suffix,
+      field_DOB,
+      country_code: $("select#inlineFormCustomSelect option")
+        .filter(":selected")
+        .val(),
+      field_mobileNum,
+      field_emailAddress,
+      field_homeAddress,
+      field_DOA,
+      field_TOA,
+      field_POA,
+      basic_checkbox: $("#invalidCheck_basic").is(":checked"),
+      privacy_checkbox: $("#invalidCheck_privacy").is(":checked"),
+    };
 
       $('#form_wrapper').hide();
       $('#stepper_intro').hide();
@@ -651,7 +784,7 @@ function handleForm(event) {
       $("#step2>div").addClass("active");
       $('#requirements').show();
       /*  $('#requirements')[0].scrollIntoView(true); */
-      $("#customer_Name").text(`Hi ${field_firstName}. Hang in there as we process your request. Expect an SMS from us within 24 to 48 hours on the status of your request.`);
+      $("#customer_Name").text(`Hi ${field_firstName}. Hang in there as we process your request. Expect an SMS from us within 1 to 2 working days on the status of your request.`);
       console.log('Data -> ', data)
     
   } else {
@@ -1141,7 +1274,7 @@ function buttonSubmitClicked(event) {
 
   $("#step2").addClass("active");
   $("#step2>div").addClass("active");
-  $("#step2").addClass("done");
+  /* $("#step2").addClass("done"); */
   $('#requirements').hide();
   $('#payment').show();
   /*   $('#payment')[0].scrollIntoView(true); */
@@ -1162,11 +1295,16 @@ function handleAccountInfo(event) {
   var numAccountName = numberValidation(field_AccountName);
   var specAccountNumber = specialcharacterValidation(field_AccountNumber);
   var numAccountNumber = onlyNumberValidate(field_AccountNumber);
-  var specCharBRANCH = specialcharacterValidation(field_Branch);
-  var numBranch = numberValidation(field_Branch);
+
+  var lenAccountName = fieldCheckLength(field_AccountName, 90);
+  var lenAccountNumber =  fieldCheckLength(field_AccountNumber, 20);
+  var lenBranch = fieldCheckLength(field_Branch, 50);
 
   if (field_AccountName.length === 0) {
     $("#err_field_AccountName").text('Field is empty');
+    $("#err_field_AccountName").show();
+  } else if (lenAccountName) {
+    $("#err_field_AccountName").text("Maximum 90 characters allowed!");
     $("#err_field_AccountName").show();
   } else if (speCharAccountName) {
     $("#err_field_AccountName").text('special character is not allowed');
@@ -1182,8 +1320,11 @@ function handleAccountInfo(event) {
   if (field_AccountNumber.length === 0) {
     $("#err_field_AccountNumber").text('Field is empty');
     $("#err_field_AccountNumber").show();
-  } else if ((!numAccountNumber) || (specAccountNumber)) {
-    $("#err_field_AccountNumber").text('Only number is allowed');
+  } else if (lenAccountNumber) {
+    $("#err_field_AccountNumber").text("Maximum 20 characters allowed!");
+    $("#err_field_AccountNumber").show();
+  } else if (!numAccountNumber || specAccountNumber) {
+    $("#err_field_AccountNumber").text("Only number is allowed");
     $("#err_field_AccountNumber").show();
   } else {
     $("#err_field_AccountNumber").text('');
@@ -1201,14 +1342,11 @@ function handleAccountInfo(event) {
   if (field_Branch.length === 0) {
     $("#err_field_Branch").text('Field is empty');
     $("#err_field_Branch").show();
-  }/*  else if (specCharBRANCH) {
-    $("#err_field_Branch").text('special character is not allowed');
+  } else if (lenBranch) {
+    $("#err_field_Branch").text("Maximum 50 characters allowed!");
     $("#err_field_Branch").show();
-  } else if (numBranch) {
-    $("#err_field_Branch").text('Number not allowed');
-    $("#err_field_Branch").show();
-  }  */else {
-    $("#err_field_Branch").text('');
+  } else {
+    $("#err_field_Branch").text("");
     $("#err_field_Branch").hide();
   }
 
@@ -1233,7 +1371,10 @@ function handleAccountInfo(event) {
     file6.length !== 0 &&
     speCharAccountName == false &&
     numAccountName == false &&
-    numAccountNumber == true &&
+    numAccountNumber == true && 
+    lenAccountName == false && 
+    lenAccountNumber == false && 
+    lenBranch == false &&
     file6.value &&
     !$("#file_Upload_Tick_6").is(":hidden")
   ) {
@@ -1269,6 +1410,7 @@ function handleAccountInfo(event) {
         }
       })
     }), '*');
+    $("#step2").addClass("done");
     $("#step3").addClass("active");
     $("#step3>div").addClass("active");
     $("#step3").addClass("done");
@@ -1286,8 +1428,8 @@ function handleAccountInfo(event) {
 function bankTranfer() {
   $('#payment').hide();
   $('#account_details').show();
-  $("#step3").addClass("active");
-  $("#step3>div").addClass("active");
+  $("#step2").addClass("active");
+  $("#step2>div").addClass("active");
 }
 
 function pickUp() {
@@ -1296,12 +1438,12 @@ function pickUp() {
   $("#pickUp").show();
   $("#step2").addClass("active");
   $("#step2>div").addClass("active");
-  $("#step2").addClass("done");
 }
 
 function pickup_Bpi() {
   $("#pickUp").hide();
   $('#process_confirmation').show();
+  $("#step2").addClass("done");
   $("#step3").addClass("active");
   $("#step3>div").addClass("active");
   $("#step3").addClass("done");
@@ -1325,8 +1467,7 @@ function handleAddBankInfo(event) {
   var speCharAddAccountName = specialcharacterValidation(field_AccountName1);
   var numAddAccountName = numberValidation(field_AccountName1);
   var numAddAccountNumber = onlyNumberValidate(field_AccountNumber1);
-  var specCharAddBRANCH = specialcharacterValidation(field_Branch1);
-  var numAddBranch = numberValidation(field_Branch1);
+ 
 
   if (field_AccountName1.length === 0) {
     $("#err_field_AccountName1").text('Field is empty');
@@ -1409,4 +1550,70 @@ function handleAddBankInfo(event) {
 
 function openlink() {
   window.open("https://www.google.com/maps/search/bpi+branch+locator/@14.6079731,120.9860096,14z/data=!3m1!4b1");
+}
+
+
+
+function validateEmail(my_email)
+{
+var ind0=my_email.indexOf("@");
+var my_username=my_email.slice(0,ind0);
+var ind=my_email.indexOf("@");
+var my_domain=my_email.substr((ind+1));
+var ind3 = my_domain.indexOf(".");
+var my_final_domain = my_domain.slice(0,ind3);
+var ind1=my_domain.indexOf(".");
+var my_extension=my_domain.slice((ind1+1),my_domain.length);
+
+var usernamesize = stringlength(my_username,2,30);
+var domainsize = stringlength(my_final_domain,2,10);
+var extension = stringlength(my_extension,2,3);
+    
+
+ var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+  if (reg.test(my_email) == false) {
+    $("#err_field_emailAddress").text('Invalid Email');
+    $("#err_field_emailAddress").show();
+    return false;
+  }else{
+    if(!usernamesize)
+        {
+            $("#err_field_emailAddress").text('UserName should have minimum 2 and maximum 30 character');
+            $("#err_field_emailAddress").show();
+            return false;
+        }else if(!domainsize)
+        {
+            $("#err_field_emailAddress").text('Domain should have minimum 2 and maximum 10 character');
+            $("#err_field_emailAddress").show();
+            return false;
+        }else if(!extension)
+        {
+            $("#err_field_emailAddress").text('Extension should have minimum 2 and maximum 3 characters');
+            $("#err_field_emailAddress").show();
+            return false;
+        }else {
+          $("#err_field_emailAddress").text('');
+          $("#err_field_emailAddress").hide();
+          return true;
+        }
+
+  }
+  
+}
+
+
+function stringlength(inputtxt, minlength, maxlength)
+{ 
+var field = inputtxt; 
+var mnlen = minlength;
+var mxlen = maxlength;
+
+if(field.length<mnlen || field.length> mxlen)
+{ 
+return false;
+}
+else
+{ 
+return true;
+}
 }

@@ -37,7 +37,6 @@ $(document).ready(function(event){
 function futureDate(date) {
     /*   let id = evt.target.id;
       var date1 = document.getElementById(id).value; */
-    console.log(date)
     var res = date.split('-');
     var year = res[0];
     var Month = Number(res[1]);
@@ -116,7 +115,6 @@ function futureDate(date) {
   function futureDateDOB(date) {
   /*   let id = evt.target.id;
     var date1 = document.getElementById(id).value; */
-  console.log("This is date" + date)
   var res = date.split('-');
   var year = res[0];
   var Month = res[1];
@@ -126,8 +124,8 @@ function futureDate(date) {
   var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
   var yyyy = today.getFullYear();
   
-  console.log("Logged-In Date:" + day, Month, year)
-  console.log("System Date:" + dd, mm, yyyy)
+//   console.log("Logged-In Date:" + day, Month, year)
+//   console.log("System Date:" + dd, mm, yyyy)
   
   /* This is for safari, not good way to handle */
   if (day.length == 4) {
@@ -249,7 +247,7 @@ listCheckBox.onchange = function () {
     })
 }
  */
-
+/* 
  function validateEmail(emailField) {
     var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
     if (reg.test(emailField) == false) {
@@ -260,7 +258,7 @@ listCheckBox.onchange = function () {
     $("#err_field_emailAddress").text('');
     $("#err_field_emailAddress").hide();
     return true;
-}
+} */
 
 function isNumber(evt) {
     evt = (evt) ? evt : window.event;
@@ -327,7 +325,7 @@ function checkLength(evt, max_Length) {
     var val = document.getElementById(id).value;
     var length = val.length;
     if (length >= max_Length) {
-        $(`#err_${id}`).text("Maximum " + max_Length + " character allowed!");
+        $(`#err_${id}`).text("Maximum " + max_Length + " characters allowed!");
         $(`#err_${id}`).show();
     }else {
         detection(evt);
@@ -389,6 +387,62 @@ function fieldCheckLength(field, maxLength) {
         return false;
     }
   }
+
+function process(date){
+   var parts = date.split("-");
+    if(parts[2].length == 4)
+    {
+         return new Date(parts[2], parts[1] - 1, parts[0]);
+    }
+    else{
+        return new Date(parts[0], parts[1] - 1, parts[2]);
+    }
+}
+
+//function passing all dates
+function checkDob(dob, date1, date2, date3)
+{
+    if(process(dob) <= process(date1))// && (process(dob) >= process(date2)) && (process(dob) >= process(date3)))       
+    {
+        if(process(dob) <= process(date2))
+        {   
+            if(process(dob) <= process(date3))
+            {   
+                if(process(date1) <= process(date2))
+                {
+                    if(process(date1) <= process(date3))
+                    { 
+                        if(process(date3) <= process(date2))
+                        {
+                            return 1;
+                        }
+                        else{
+                            return 2;
+                        }
+                    }
+                    else{
+                        return 3;
+                    }
+                }
+                else{
+                    return 4;
+                }
+                
+            }
+            else{
+                return 5;
+            }
+        }
+        else{
+            return 6;
+        }
+    }
+    else{
+        return 7;
+    }
+    return 
+}
+
 
 function handleForm(event) {
     event.preventDefault();
@@ -492,7 +546,7 @@ function handleForm(event) {
       $("#err_field_lastName_Suffix").text('');
       $("#err_field_lastName_Suffix").hide();
     } else if (lenLastNameSuffix){
-        $("#err_field_lastName_Suffix").text('Maximum 3 character allowed');
+        $("#err_field_lastName_Suffix").text('Maximum 3 characters allowed!');
         $("#err_field_lastName_Suffix").show();
     } else if (specLastNameSuffix){
         $("#err_field_lastName_Suffix").text('Special character is not allowed');
@@ -598,6 +652,45 @@ function handleForm(event) {
         $("#err_invalidCheck_privacy").hide();
     }
 
+    var comparingDob = 0;
+    if((field_DOB.length != 0) && (field_DOA.length != 0) && (field_TOA.length != 0) && (field_POA.length != 0))
+    {
+        comparingDob = checkDob(field_DOB, field_DOA, field_TOA, field_POA);
+            if(comparingDob == 0){
+                /*nothing to do*/
+        }else
+            if(comparingDob == 1){
+                /*nothing to do*/
+            }else
+                if(comparingDob == 2){
+                    $("#err_field_TOA").text('Root cause date can not be lesser than doctor visit date');
+                                        $("#err_field_TOA").show();
+
+                }else
+                    if(comparingDob == 3){
+                        $("#err_field_POA").text('Doctor visit Date can not be lesser than symptom date');
+                                        $("#err_field_POA").show();
+
+                    }else
+                        if(comparingDob == 4){
+                            $("#err_field_TOA").text('Root cause date can not be lesser than symptom date');
+                                        $("#err_field_TOA").show();
+
+                        }else
+                            if(comparingDob == 5){
+                                        $("#err_field_POA").text('Doctor visit date can not be lesser than DOB');
+                                        $("#err_field_POA").show();
+
+                            }else
+                                if(comparingDob == 6){
+                                        $("#err_field_TOA").text('Root cause date can not be lesser than DOB');
+                                        $("#err_field_TOA").show();
+                                }else
+                                    if(comparingDob == 7){
+                                        $("#err_field_DOA").text('Symptom date can not be lesser than DOB');
+                                        $("#err_field_DOA").show();
+                                    }else{}
+    }
   if (
     field_firstName.length !== 0 &&
     field_middleName.length !== 0 &&
@@ -626,7 +719,8 @@ function handleForm(event) {
     (futPOA == true) &&
     (futTOA == true)  && 
     (specLastNameSuffix == false) && 
-    (numLastNameSuffix == false)
+    (numLastNameSuffix == false) &&
+    (comparingDob == 1)
   ) {
     const data = {
       field_firstName,
@@ -657,7 +751,7 @@ function handleForm(event) {
     $("#step2").addClass("active");
     $("#step2>div").addClass("active");
     $("#requirements").show();
-    $("#customer_Name").text(`Hi ${field_firstName}. Hang in there as we process your request. Expect an SMS from us within 24 to 48 hours on the status of your request.`);
+    $("#customer_Name").text(`Hi ${field_firstName}. Hang in there as we process your request. Expect an SMS from us within 1 to 2 working days on the status of your request.`);
     /* $('#requirements')[0].scrollIntoView(true); */
 
     console.log("Data -> ", data);
@@ -1033,7 +1127,6 @@ function buttonSubmitClicked(event) {
 
     $("#step2").addClass("active");
     $("#step2>div").addClass("active");
-    $("#step2").addClass("done");
     $('#requirements').hide();
     $('#payment').show();
     /* $('#payment')[0].scrollIntoView(true); */
@@ -1118,6 +1211,7 @@ function handleAccountInfo(event) {
             field_Currency: $("select#from_currency option").filter(":selected").val(),
             upload_file_6: file6.value
         }
+        $("#step2").addClass("done");
         $("#step3").addClass("active");
         $("#step3>div").addClass("active");
         $("#step3").addClass("done");
@@ -1133,8 +1227,8 @@ function handleAccountInfo(event) {
 function bankTranfer() {
     $('#payment').hide();
     $('#account_details').show();
-    $("#step3").addClass("active");
-    $("#step3>div").addClass("active");
+    $("#step2").addClass("active");
+    $("#step2>div").addClass("active");
 }
 
 function pickUp() {
@@ -1143,12 +1237,12 @@ function pickUp() {
     $("#pickUp").show();
     $("#step2").addClass("active");
     $("#step2>div").addClass("active");
-    $("#step2").addClass("done");
 }
 
 function pickup_Bpi() {
     $("#pickUp").hide();
     $('#process_confirmation').show();
+    $("#step2").addClass("done");
     $("#step3").addClass("active");
     $("#step3>div").addClass("active");
     $("#step3").addClass("done");
@@ -1157,4 +1251,70 @@ function pickup_Bpi() {
   
 function openlink() {
     window.open("https://www.google.com/maps/search/bpi+branch+locator/@14.6079731,120.9860096,14z/data=!3m1!4b1");
+}
+
+
+
+function validateEmail(my_email)
+{
+var ind0=my_email.indexOf("@");
+var my_username=my_email.slice(0,ind0);
+var ind=my_email.indexOf("@");
+var my_domain=my_email.substr((ind+1));
+var ind3 = my_domain.indexOf(".");
+var my_final_domain = my_domain.slice(0,ind3);
+var ind1=my_domain.indexOf(".");
+var my_extension=my_domain.slice((ind1+1),my_domain.length);
+
+var usernamesize = stringlength(my_username,2,30);
+var domainsize = stringlength(my_final_domain,2,10);
+var extension = stringlength(my_extension,2,3);
+    
+
+ var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+  if (reg.test(my_email) == false) {
+    $("#err_field_emailAddress").text('Invalid Email');
+    $("#err_field_emailAddress").show();
+    return false;
+  }else{
+    if(!usernamesize)
+        {
+            $("#err_field_emailAddress").text('UserName should have minimum 2 and maximum 30 character');
+            $("#err_field_emailAddress").show();
+            return false;
+        }else if(!domainsize)
+        {
+            $("#err_field_emailAddress").text('Domain should have minimum 2 and maximum 10 character');
+            $("#err_field_emailAddress").show();
+            return false;
+        }else if(!extension)
+        {
+            $("#err_field_emailAddress").text('Extension should have minimum 2 and maximum 3 characters');
+            $("#err_field_emailAddress").show();
+            return false;
+        }else {
+          $("#err_field_emailAddress").text('');
+          $("#err_field_emailAddress").hide();
+          return true;
+        }
+
+  }
+  
+}
+
+
+function stringlength(inputtxt, minlength, maxlength)
+{ 
+var field = inputtxt; 
+var mnlen = minlength;
+var mxlen = maxlength;
+
+if(field.length<mnlen || field.length> mxlen)
+{ 
+return false;
+}
+else
+{ 
+return true;
+}
 }
