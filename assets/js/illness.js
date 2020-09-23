@@ -845,13 +845,13 @@ const fileCheck = (file,button, pageid) => {
     if (this.width < 400 && this.height < 400) {
         if(pageid == 1) {
             $(`#warning_parent`).show();
-            $("#upload_warning").text("Sorry, we noticed that your uploaded documents are unreadable. Please reupload a clearer copy of your documents to proceed.");
+            $("#upload_warning").text("Sorry, we noticed that your uploaded documents are unreadable. Please re-upload a clearer copy of your documents to proceed.");
             console.log("Image is bad");
         }
 
         if(pageid == 2) {
             $('#warning_parent_acct').show();
-            $("#upload_warning_acct").text("Sorry, we noticed that your uploaded documents are unreadable. Please reupload a clearer copy of your documents to proceed.");
+            $("#upload_warning_acct").text("Sorry, we noticed that your uploaded documents are unreadable. Please re-upload a clearer copy of your documents to proceed.");
             console.log("Image is bad");
         }
      

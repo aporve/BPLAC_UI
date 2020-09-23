@@ -869,17 +869,17 @@ const fileCheck = (file, button, pageid) => {
     if (this.width < 400 && this.height < 400) {
     if(pageid == 1){
       $(`#warning_parent`).show();
-      $("#upload_warning").text("Sorry, we noticed that your uploaded documents are unreadable. Please reupload a clearer copy of your documents to proceed.");
+      $("#upload_warning").text("Sorry, we noticed that your uploaded documents are unreadable. Please re-upload a clearer copy of your documents to proceed.");
     }
     if (pageid == 2){
       $("#warning_parent_acct").show();
-      $("#upload_warning_acct").text("Sorry, we noticed that your uploaded documents are unreadable. Please reupload a clearer copy of your documents to proceed.");
+      $("#upload_warning_acct").text("Sorry, we noticed that your uploaded documents are unreadable. Please re-upload a clearer copy of your documents to proceed.");
     }
    
       $(`#file_loader_icon_${button}`).hide();
       $(`#file_Upload_Tick_${button}`).hide();
       $(`#file_upload_cancle_${button}`).show();
-      $("#upload_warning").text("Sorry, we noticed that your uploaded documents are unreadable. Please reupload a clearer copy of your documents to proceed.");
+      $("#upload_warning").text("Sorry, we noticed that your uploaded documents are unreadable. Please re-upload a clearer copy of your documents to proceed.");
       console.log("Image is bad");
     } else {
       console.log("This is right JPG");
