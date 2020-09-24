@@ -16,6 +16,11 @@ var file6 = document.getElementById('proof_BAO');
 $('#privacy_consent_1').prop('checked', true);
 $('#privacy_consent_2').prop('checked', true);
 
+let url = new URL(window.location.href);
+let referenceNumber = url.searchParams.get('refNumber');
+let uid = url.searchParams.get('sender');
+let botId = url.searchParams.get('botId');
+
 form.addEventListener('submit', handleForm);
 form_Bank.addEventListener('submit', handleAccountInfo);
 
