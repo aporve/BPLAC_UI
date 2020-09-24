@@ -151,6 +151,28 @@ function setCountryCode() {
   });
 }
 
+/**
+ * 
+ * New function
+ * instead of giving a PDF the as result
+ * you will be getting the cdn link to the file in the bot
+ */
+const handleFileUpload = (formData, fileName) => {
+  console.log("file upload new");
+  var myHeaders = new Headers();
+
+  var requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    body: formData,
+    redirect: 'follow'
+  };
+  fetch(`https://app.yellowmessenger.com/api/chat/upload-file?bot=${botId}&uid=${fileName}`, requestOptions)
+    .then(response => response.text())
+    .then(result => console.log(result))
+    .catch(error => console.log('error', error));
+}
+
 const getBuffer = file => new Promise((resolve, reject) => {
   const reader = new FileReader();
   reader.readAsArrayBuffer(file);
