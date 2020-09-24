@@ -1517,6 +1517,7 @@ function bankTranfer() {
 }
 
 function pickUp() {
+  let filesObject = {};
   filesObject["FolderName"] = `/home/accounts/Claims/${referenceNumber}`
   filesObject["FileList"] = filesList;
 
