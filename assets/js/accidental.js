@@ -847,7 +847,7 @@ function handleForm(event) {
     $("#step2>div").addClass("active");
     $('#requirements').show();
     /*  $('#requirements')[0].scrollIntoView(true); */
-      $("#customer_Name").text(`Hi ${field_firstName}, Hang in there as we are now processing your request. Kindly expect an SMS update from us within 1 to 2 working days on the status of your request.`);
+      $("#customer_Name").text(`Hi ${field_firstName}. Hang in there as we process your request. Expect an SMS from us within 1 to 2 WD on the status of your request.`);
     console.log('Data -> ', data)
 
     InsuredInformation["FirstName"] = field_firstName;
@@ -1581,7 +1581,7 @@ function handleAccountInfo(event) {
     $("#step2").addClass("done");
     $("#step3").addClass("active");
     $("#step3>div").addClass("active");
-    $("#step3").addClass("done");
+    /* $("#step3").addClass("done"); */
     $("#account_details").hide();
     $("#process_confirmation").show();
     console.log("Data -> ", data);
@@ -1636,7 +1636,7 @@ function pickup_Bpi() {
   $("#step2").addClass("done");
   $("#step3").addClass("active");
   $("#step3>div").addClass("active");
-  $("#step3").addClass("done");
+ /*  $("#step3").addClass("done"); */
 }
 
 function addBank(event) {
