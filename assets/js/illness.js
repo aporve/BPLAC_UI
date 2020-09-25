@@ -1299,6 +1299,35 @@ function handleAccountInfo(event) {
         $('#account_details').hide();
         $('#process_confirmation').show();
         console.log('Data -> ', data)
+
+        BankDetails["BankName"] = field_Bank;
+        BankDetails["BankBranch"] = field_Branch;
+        BankDetails["AccountName"] = field_AccountName;
+        BankDetails["AccountNumber"] = field_AccountNumber;
+        BankDetails["AccountCurrency"] = $("select#from_currency option").filter(":selected").val();
+    
+        let filesObject = {};
+        filesObject["FolderName"] = `/home/accounts/Claims/${referenceNumber}`
+        filesObject["FileList"] = filesList;
+    
+        // filesMap["Accident"] = accident
+        finalPayload["BasicInformation"] = basicInformation;
+        finalPayload["InsuredInformation"] = InsuredInformation;
+        finalPayload["BankDetails"] = BankDetails;
+        finalPayload["FileList"] = filesObject;
+        finalPayload["stageThree"] = true;
+        finalPayload["referenceNumber"] = referenceNumber;
+    
+        console.log("FPB : ")
+        console.log(finalPayload)
+        window.parent.postMessage(JSON.stringify({
+          event_code: 'ym-client-event', data: JSON.stringify({
+            event: {
+              code: "finalEvent",
+              data: JSON.stringify(finalPayload)
+            }
+          })
+        }), '*');
     } else {
         $('#popUp').modal('show');
     }
