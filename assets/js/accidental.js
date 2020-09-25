@@ -15,14 +15,13 @@ var file5 = document.getElementById('file_Upload_5');
 var file6 = document.getElementById('proof_BAO');
 var file7 = document.getElementById('proof_addBAO');
 
-
-$('#privacy_consent_1').prop('checked', true);
-$('#privacy_consent_2').prop('checked', true);
-
 let url = new URL(window.location.href);
 let referenceNumber = url.searchParams.get('refNumber');
 let uid = url.searchParams.get('sender');
 let botId = url.searchParams.get('botId');
+
+$('#privacy_consent_1').prop('checked', true);
+$('#privacy_consent_2').prop('checked', true);
 
 var form_addBank = document.getElementById("addbank_form");
 form_addBank.addEventListener('submit', handleAddBankInfo);
@@ -151,6 +150,46 @@ function setCountryCode() {
   });
 }
 
+
+/**
+ * Code refactor for this function
+ * instead of sending list of file as input, for final list of files, send the form data with all the files in it
+ * Along with that, send the file name that needs to be saved.
+ */
+const handleImageUpload = (formData, fileName) => {
+  // const files = event.target.files
+  // const formData = new FormData()
+  fetch('https://staging.yellowmessenger.com/components/tataAia/upload', {
+    method: 'POST',
+    body: formData
+  })
+    .then((response) => response.json())
+    .then(response => {
+      console.log(response)
+      var decoded = atob(response.data);
+      var saveByteArray = function (data, name) {
+        var a = document.createElement("a");
+        document.body.appendChild(a);
+        a.style = "display: none";
+        var blob = new Blob(data, { type: "application/pdf" }),
+          url = window.URL.createObjectURL(blob);
+        a.href = url;
+        a.download = name;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      };
+      var byteNumbers = Array(decoded.length);
+      for (i = 0; i < decoded.length; i++) {
+        byteNumbers[i] = decoded.charCodeAt(i);
+      }
+      var byteArray = new Uint8Array(byteNumbers);
+      saveByteArray([byteArray], fileName + ".pdf");
+    })
+    .catch(error => {
+      console.log(error)
+    })
+}
+
 /**
  * 
  * New function
@@ -172,7 +211,6 @@ const handleFileUpload = (formData, fileName) => {
     .then(result => console.log(result))
     .catch(error => console.log('error', error));
 }
-
 const getBuffer = file => new Promise((resolve, reject) => {
   const reader = new FileReader();
   reader.readAsArrayBuffer(file);
@@ -809,9 +847,37 @@ function handleForm(event) {
     $("#step2>div").addClass("active");
     $('#requirements').show();
     /*  $('#requirements')[0].scrollIntoView(true); */
-    $("#customer_Name").text(`Hi ${field_firstName}. Hang in there as we process your request. Expect an SMS from us within 1 to 2 working days on the status of your request.`);
+      $("#customer_Name").text(`Hi ${field_firstName}, Hang in there as we are now processing your request. Kindly expect an SMS update from us within 1 to 2 working days on the status of your request.`);
     console.log('Data -> ', data)
 
+    InsuredInformation["FirstName"] = field_firstName;
+    InsuredInformation["MiddleName"] = field_middleName;
+    InsuredInformation["LastName"] = field_lastName;
+    InsuredInformation["Suffix"] = field_lastName_Suffix;
+    InsuredInformation["DateOfBirth"] = field_DOB;
+    InsuredInformation["CountryCode"] = $("select#inlineFormCustomSelect option").filter(":selected").val();
+    InsuredInformation["PhoneNumber"] = field_mobileNum;
+    InsuredInformation["EmailAddress"] = field_emailAddress;
+    InsuredInformation["HomeAddress"] = field_homeAddress;
+    InsuredInformation["InjuryDetails"] = field_injury;
+    InsuredInformation["AccidentDate"] = field_DOA;
+    InsuredInformation["AccidentTime"] = field_TOA;
+    InsuredInformation["AccidentPlace"] = field_POA;
+
+    let stageOneData = {
+      stageOne: true,
+      type: "Accident",
+      referenceNumber: referenceNumber,
+      data: InsuredInformation
+    }
+    window.parent.postMessage(JSON.stringify({
+      event_code: 'ym-client-event', data: JSON.stringify({
+        event: {
+          code: "personalinfo",
+          data: JSON.stringify(stageOneData)
+        }
+      })
+    }), '*');
   } else {
     $('#popUp').modal('show');
   }
@@ -841,13 +907,13 @@ const proceedScan = async (fileObj, button, pageid) => {
         if (pageid == 1) {
           $("#warning_parent").show();
           $("#upload_warning").text(
-            "We detected a virus/malware in your uploaded documents. Please re-upload clean, virus-free documents to proceed."
+            "Warning : We detected a virus/malware in your uploaded documents. Please re-upload a clean, virus-free document to proceed."
           );
         }
         if (pageid == 2) {
           $("#warning_parent_acct").show();
           $("#upload_warning_acct").text(
-            "We detected a virus/malware in your uploaded documents. Please re-upload clean, virus-free documents to proceed."
+            "Warning : We detected a virus/malware in your uploaded documents. Please re-upload a clean, virus-free document to proceed."
           );
         }
 
@@ -894,17 +960,17 @@ const fileCheck = (file, button, pageid) => {
     if (this.width < 400 && this.height < 400) {
       if (pageid == 1) {
         $(`#warning_parent`).show();
-        $("#upload_warning").text("Sorry, we noticed that your uploaded documents are unreadable. Please re-upload a clearer copy of your documents to proceed.");
+        $("#upload_warning").text("We noticed that your uploaded documents are unclear and unreadable.Please re-upload a clearer copy of your document to proceed.");
       }
       if (pageid == 2) {
         $("#warning_parent_acct").show();
-        $("#upload_warning_acct").text("Sorry, we noticed that your uploaded documents are unreadable. Please re-upload a clearer copy of your documents to proceed.");
+        $("#upload_warning_acct").text("We noticed that your uploaded documents are unclear and unreadable.Please re-upload a clearer copy of your document to proceed.");
       }
 
       $(`#file_loader_icon_${button}`).hide();
       $(`#file_Upload_Tick_${button}`).hide();
       $(`#file_upload_cancle_${button}`).show();
-      $("#upload_warning").text("Sorry, we noticed that your uploaded documents are unreadable. Please re-upload a clearer copy of your documents to proceed.");
+      $("#upload_warning").text("We noticed that your uploaded documents are unclear and unreadable.Please re-upload a clearer copy of your document to proceed.");
       console.log("Image is bad");
     } else {
       console.log("This is right JPG");
@@ -961,12 +1027,14 @@ file1.onchange = async function (e) {
         const formData = new FormData()
         formData.append('file', file, fileName + `.${ext}`);
         handleFileUpload(formData, fileName);
+
       } else {
         $("#warning_parent").show();
         $("#file_loader_icon_1").hide();
         $("#file_Upload_Tick_1").hide();
         $("#file_upload_cancle_1").show();
-        $("#upload_warning").text("The file size of your documents should not be larger than 2MB. Please re-upload the correct file size to proceed."
+        $("#upload_warning").text(
+          "You may only upload documents not exceeding 2MB in file size to proceed. Please re-upload the correct file size to proceed."
         );
       }
       break;
@@ -1001,6 +1069,7 @@ file2.onchange = async function (e) {
         else {
           proceedScan(file, buttonNum, pageId);
         }
+
         let fileName = referenceNumber + "_" + docType + "_" + tranType;
 
         let accident = {};
@@ -1021,7 +1090,7 @@ file2.onchange = async function (e) {
         $("#file_Upload_Tick_2").hide();
         $("#file_upload_cancle_2").show();
         $("#upload_warning").text(
-          "The file size of your documents should not be larger than 2MB. Please re-upload the correct file size to proceed."
+          "You may only upload documents not exceeding 2MB in file size to proceed. Please re-upload the correct file size to proceed."
         );
       }
       break;
@@ -1038,7 +1107,7 @@ file2.onchange = async function (e) {
 
 file3.onchange = async function (e) {
   docType = "LIDC034";
-  tranType = "APS";
+  tranType = "APSF";
   $("#file_upload_cancle_3").hide();
   $("#file_Upload_Tick_3").hide();
   var ext = this.value.match(/\.([^\.]+)$/)[1];
@@ -1076,7 +1145,7 @@ file3.onchange = async function (e) {
         $("#file_Upload_Tick_3").hide();
         $("#file_upload_cancle_3").show();
         $("#upload_warning").text(
-          "The file size of your documents should not be larger than 2MB. Please re-upload the correct file size to proceed."
+          "You may only upload documents not exceeding 2MB in file size to proceed. Please re-upload the correct file size to proceed."
         );
       }
       break;
@@ -1092,8 +1161,8 @@ file3.onchange = async function (e) {
 };
 
 file4.onchange = async function (e) {
-  docType = "LIDC037";
-  tranType = "SOA";
+  docType = "LIDC036";
+  tranType = "PIR";
   $("#file_upload_cancle_4").hide();
   $("#file_Upload_Tick_4").hide();
   var ext = this.value.match(/\.([^\.]+)$/)[1];
@@ -1132,7 +1201,7 @@ file4.onchange = async function (e) {
         $("#file_Upload_Tick_4").hide();
         $("#file_upload_cancle_4").show();
         $("#upload_warning").text(
-          "The file size of your documents should not be larger than 2MB. Please re-upload the correct file size to proceed."
+          "You may only upload documents not exceeding 2MB in file size to proceed. Please re-upload the correct file size to proceed."
         );
       }
       break;
@@ -1148,6 +1217,8 @@ file4.onchange = async function (e) {
 };
 
 file5.onchange = async function (e) {
+  docType = "LIDC035";
+  tranType = "MR";
   $("#file_upload_cancle_5").hide();
   $("#file_Upload_Tick_5").hide();
   var ext = this.value.match(/\.([^\.]+)$/)[1];
@@ -1165,17 +1236,29 @@ file5.onchange = async function (e) {
         else {
           proceedScan(file, buttonNum, pageId);
         }
-        file1Buffer = await getBuffer(file);
-        console.log("file buffer : ")
-        console.log(file1Buffer);
-        filesMap["file5"] = file1Buffer;
+
+        let fileName = referenceNumber + "_" + docType + "_" + tranType;
+
+        let accident = {};
+        accident[docType] = {
+          "Filename": `${fileName}.pdf`,
+          "DocType": "PDF",
+          "DocTypeCode": docType,
+          "DocumentDescription": "Police or Narration Report"
+        }
+
+        filesList.push(accident);
+
+        const formData = new FormData()
+        formData.append('file', file, fileName + `.${ext}`)
+        handleFileUpload(formData, fileName);
       } else {
         $("#warning_parent").show();
         $("#file_loader_icon_5").hide();
         $("#file_Upload_Tick_5").hide();
         $("#file_upload_cancle_5").show();
         $("#upload_warning").text(
-          "The file size of your documents should not be larger than 2MB. Please re-upload the correct file size to proceed."
+          "You may only upload documents not exceeding 2MB in file size to proceed. Please re-upload the correct file size to proceed."
         );
       }
       break;
@@ -1218,7 +1301,7 @@ file6.onchange = async function (e) {
         $("#file_Upload_Tick_6").hide();
         $("#file_upload_cancle_6").show();
         $("#upload_warning_acct").text(
-          "The file size of your documents should not be larger than 2MB. Please re-upload the correct file size to proceed."
+          "You may only upload documents not exceeding 2MB in file size to proceed. Please re-upload the correct file size to proceed."
         );
       }
       break;
@@ -1260,7 +1343,7 @@ file7.onchange = async function (e) {
         $("#file_Upload_Tick_7").hide();
         $("#file_upload_cancle_7").show();
         $("#upload_warning").text(
-          "The file size of your documents should not be larger than 2MB. Please re-upload the correct file size to proceed."
+          "You may only upload documents not exceeding 2MB in file size to proceed. Please re-upload the correct file size to proceed."
         );
       }
       break;
@@ -1321,7 +1404,7 @@ function buttonSubmitClicked(event) {
   }
 
   if (!$('#upload_invalidCheck_2').is(':checked')) {
-    $("#upload_warning").text('Please don’t forget to tick the box to confirm the accuracy of your submitted documents.');
+    $("#upload_warning").text('Please don’t forget to tick the box is certify the accuracy of the documents submitted');
     $("#warning_parent").show();
     $('#popUp').modal('show');
     return;
@@ -1476,6 +1559,7 @@ function handleAccountInfo(event) {
     filesObject["FolderName"] = `/home/accounts/Claims/${referenceNumber}`
     filesObject["FileList"] = filesList;
 
+    // filesMap["Accident"] = accident
     finalPayload["BasicInformation"] = basicInformation;
     finalPayload["InsuredInformation"] = InsuredInformation;
     finalPayload["BankDetails"] = BankDetails;
