@@ -179,6 +179,7 @@ function disableFutureDates() {
     var maxDate = year + '-' + month + '-' + day;
     $('#field_DOID').attr('max', maxDate);
     $('#field_addBeneficiaryDOB').attr('max', maxDate);
+    $('#field_BeneficiaryDOB').attr('max', maxDate);
 }
 
 function disableFutureDatesDOB() {
@@ -193,7 +194,6 @@ function disableFutureDatesDOB() {
       day = '0' + day.toString();
     var maxDate = year + '-' + month + '-' + dobDate;
     $('#field_DOB').attr('max', maxDate);
-    $('#field_BeneficiaryDOB').attr('max', maxDate);
    /*  $('#field_addBeneficiaryDOB').attr('max', maxDate); */
   }
   
@@ -788,7 +788,7 @@ function handleForm(event) {
 
     if(field_BeneficiaryDOB.length !== 0) {
         var futBeneficiaryDOB = futureDate(field_BeneficiaryDOB);
-        var futExistBeneficiaryDOB = futureDateDOB(field_BeneficiaryDOB);
+       /*  var futExistBeneficiaryDOB = futureDateDOB(field_BeneficiaryDOB); */
     }
 
     var field_NatureOfLoss = $("select#nature_Loss option").filter(":selected").val()
@@ -1006,10 +1006,7 @@ function handleForm(event) {
     } else if(!futBeneficiaryDOB){
         $("#err_field_BeneficiaryDOB").text('Future date is  not Accepted!');
         $("#err_field_BeneficiaryDOB").show();
-    } else if(!futExistBeneficiaryDOB){
-        $("#err_field_BeneficiaryDOB").text('Current date is  not Applicable!');
-        $("#err_field_BeneficiaryDOB").show();
-    }  else {
+    } else {
         $("#err_field_BeneficiaryDOB").text('');
         $("#err_field_BeneficiaryDOB").hide();
     }
@@ -1120,7 +1117,7 @@ function handleForm(event) {
         $("#err_field_BeneficiaryPEP").show();
     }
 
-    if (field_firstName.length !== 0 && field_middleName.length !== 0 && field_lastName.length !== 0 && field_DOB.length !== 0 && field_DOID.length !== 0 && field_NatureLoss.length !== 0 && field_BeneficiaryFirstName.length !== 0 && field_BeneficiaryMiddleName.length !== 0 && field_BeneficiaryLastName.length !== 0 && field_BeneficiaryMobileNum.length == 10 && field_BeneficiaryEmailAddress.length !== 0 && field_BeneficiaryHomeAddress.length !== 0 && field_BeneficiaryDOB.length !== 0 && field_BeneficiaryPOB.length !== 0 && field_BeneficiaryNationality.length !== 0 && field_BeneficiarySex.length !== 0 && field_BeneficiaryRelationToDeceased.length !== 0 && field_BenificiaryOccupation.length !== 0 && field_BeneficiaryEmployerName.length !== 0 && $('#invalidCheck_basic').is(':checked') && $('#invalidCheck_privacy').is(':checked') && validateEmail(field_BeneficiaryEmailAddress) && (specFirstName == false)  && (specMiddleName == false)  && (specLastName == false) && (numFirstName == false)  && (numMiddleName == false) && (numLastName == false) && (speciBeniFirstName == false) && (numBeniFirstName == false) && (numberMobile == true) && (speciBeniMiddleName == false) && (numBeniMiddleName == false) && (speciBeniLastName == false) && (numBeniLastName == false) && (futDOB  == true) && (futExistDOB  == true) && (futDOID == true) && (numSuffix == false) && (specSuffix == false) && field_Beneficiary_relatives1.length !== 0 && field_Beneficiary_relatives2.length !== 0 && (comapareDates == true) && (futExistBeneficiaryDOB == true)) {
+    if (field_firstName.length !== 0 && field_middleName.length !== 0 && field_lastName.length !== 0 && field_DOB.length !== 0 && field_DOID.length !== 0 && field_NatureLoss.length !== 0 && field_BeneficiaryFirstName.length !== 0 && field_BeneficiaryMiddleName.length !== 0 && field_BeneficiaryLastName.length !== 0 && field_BeneficiaryMobileNum.length == 10 && field_BeneficiaryEmailAddress.length !== 0 && field_BeneficiaryHomeAddress.length !== 0 && field_BeneficiaryDOB.length !== 0 && field_BeneficiaryPOB.length !== 0 && field_BeneficiaryNationality.length !== 0 && field_BeneficiarySex.length !== 0 && field_BeneficiaryRelationToDeceased.length !== 0 && field_BenificiaryOccupation.length !== 0 && field_BeneficiaryEmployerName.length !== 0 && $('#invalidCheck_basic').is(':checked') && $('#invalidCheck_privacy').is(':checked') && validateEmail(field_BeneficiaryEmailAddress) && (specFirstName == false)  && (specMiddleName == false)  && (specLastName == false) && (numFirstName == false)  && (numMiddleName == false) && (numLastName == false) && (speciBeniFirstName == false) && (numBeniFirstName == false) && (numberMobile == true) && (speciBeniMiddleName == false) && (numBeniMiddleName == false) && (speciBeniLastName == false) && (numBeniLastName == false) && (futDOB  == true) && (futExistDOB  == true) && (futDOID == true) && (numSuffix == false) && (specSuffix == false) && field_Beneficiary_relatives1.length !== 0 && field_Beneficiary_relatives2.length !== 0 && (comapareDates == true) ) {
         
     
             const data = {
