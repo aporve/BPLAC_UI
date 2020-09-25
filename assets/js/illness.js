@@ -24,6 +24,22 @@ let botId = url.searchParams.get('botId');
 form.addEventListener('submit', handleForm);
 form_Bank.addEventListener('submit', handleAccountInfo);
 
+let finalPayload = {};
+let accidentPayload = {};
+let basicInformation = {};
+let InsuredInformation = {};
+let BeneficiaryList = {};
+let PaymentOption = {};
+let BankDetails = {};
+let FilesInformation = {};
+let filesList = [];
+let filesMap = {};
+let claimType, causeOfLoss, govIdFront, govIdBack, apsFile, narrationReport, officialReceipts;
+let file1Buffer, file2Buffer, file3Buffer, file4Buffer, file5Buffer, file6Buffer, file7Buffer, file8Buffer;
+basicInformation["CompanyCode"] = "PAL/BPLAC";
+basicInformation["Claim Type "] = "LIVING";
+basicInformation["CauseOfLoss"] = "Accident";
+
 /* document.addEventListener('DOMContentLoaded', function () {
     stepperFormEl = document.querySelector('#stepperForm')
     stepperForm = new Stepper(stepperFormEl, {
