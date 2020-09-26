@@ -1731,7 +1731,7 @@ function handleAddBankInfo(event) {
 
     $("#step3").addClass("active");
     $("#step3>div").addClass("active");
-    $("#step3").addClass("done");
+    /* $("#step3").addClass("done"); */
     $('#account_details1').hide();
     $('#process_confirmation').show();
     console.log('bank data -> ', data)
@@ -1799,4 +1799,31 @@ function stringlength(inputtxt, minlength, maxlength) {
   else {
     return true;
   }
+}
+
+
+function goBack() {
+  console.log('go back!!!');
+  $("#step2").removeClass("active");
+  $("#step2>div").removeClass("active");
+  $("#step2").removeClass("done");
+  $('#requirements').hide();
+  $('#form_wrapper').show();
+  /* $('#form_wrapper')[0].scrollIntoView(true); */
+}
+
+function goBackPickup(){
+  $("#step3").removeClass("done");
+    $('#pickUp').hide();
+    $('#requirements').show();
+}
+
+function goBack1() {
+  console.log('go back!!!');
+    $("#step3").removeClass("done");
+    $('#account_details').hide();
+    $('#requirements').show();
+  
+ 
+  /* $('#form_wrapper')[0].scrollIntoView(true); */
 }
