@@ -927,6 +927,7 @@ const proceedScan = async (fileObj, button, pageid) => {
         $(`#file_loader_icon_${button}`).hide();
         $(`#file_Upload_Tick_${button}`).show();
         $(`#file_upload_cancle_${button}`).hide();
+        $('#upload_feedback_label').hide();
         return;
       }
     })
@@ -1521,6 +1522,9 @@ function handleAccountInfo(event) {
   if (!file6.value) {
     $('#upload_feedback_label').show();
     $('#upload_feedback_label').text('Please upload your Bank Account Ownership');
+  }else{
+    $('#upload_feedback_label').hide();
+    $('#upload_feedback_label').text('');
   }
 
   if (

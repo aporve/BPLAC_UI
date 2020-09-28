@@ -1267,6 +1267,8 @@ const proceedScan = async (fileObj, button, pageid) => {
         $(`#file_loader_icon_${button}`).hide();
         $(`#file_Upload_Tick_${button}`).show();
         $(`#file_upload_cancle_${button}`).hide();
+        $('#upload_feedback_label').hide();
+        $('#upload_feedback_label8').hide();
         return;
       }
     })
