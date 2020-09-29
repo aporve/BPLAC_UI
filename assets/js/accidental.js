@@ -1583,8 +1583,8 @@ function handleAccountInfo(event) {
     }), '*');
 
     $("#step2").addClass("done");
-    $("#step3").addClass("active");
-    $("#step3>div").addClass("active");
+   /*  $("#step3").addClass("active"); */
+  /*   $("#step3>div").addClass("active"); */
     /* $("#step3").addClass("done"); */
     $("#account_details").hide();
     $("#process_confirmation").show();
@@ -1638,8 +1638,8 @@ function pickup_Bpi() {
   $("#pickUp").hide();
   $('#process_confirmation').show();
   $("#step2").addClass("done");
-  $("#step3").addClass("active");
-  $("#step3>div").addClass("active");
+  /* $("#step3").addClass("active"); */
+ /*  $("#step3>div").addClass("active"); */
  /*  $("#step3").addClass("done"); */
 }
 
@@ -1733,8 +1733,8 @@ function handleAddBankInfo(event) {
       upload_file_6: file7.value
     }
 
-    $("#step3").addClass("active");
-    $("#step3>div").addClass("active");
+    /* $("#step3").addClass("active"); */
+    /* $("#step3>div").addClass("active"); */
     /* $("#step3").addClass("done"); */
     $('#account_details1').hide();
     $('#process_confirmation').show();

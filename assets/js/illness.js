@@ -873,13 +873,13 @@ const fileCheck = (file, button, pageid) => {
         if (this.width < 400 && this.height < 400) {
             if (pageid == 1) {
                 $(`#warning_parent`).show();
-                $("#upload_warning").text("Sorry, we noticed that your uploaded documents are unreadable. Please re-upload a clearer copy of your documents to proceed.");
+                $("#upload_warning").text("We noticed that your uploaded documents are unclear and unreadable.Please re-upload a clearer copy of your document to proceed.");
                 console.log("Image is bad");
             }
 
             if (pageid == 2) {
                 $('#warning_parent_acct').show();
-                $("#upload_warning_acct").text("Sorry, we noticed that your uploaded documents are unreadable. Please re-upload a clearer copy of your documents to proceed.");
+                $("#upload_warning_acct").text("We noticed that your uploaded documents are unclear and unreadable.Please re-upload a clearer copy of your document to proceed.");
                 console.log("Image is bad");
             }
 
@@ -950,7 +950,7 @@ file1.onchange = async function (e) {
                 $("#file_Upload_Tick_1").hide();
                 $("#file_upload_cancle_1").show();
                 $("#upload_warning").text(
-                    "The file size of your documents should not be larger than 2MB. Please re-upload the correct file size to proceed."
+                    "You may only upload documents not exceeding 2MB in file size to proceed. Please re-upload the correct file size to proceed."
                 );
             }
             break;
@@ -959,7 +959,7 @@ file1.onchange = async function (e) {
             $("#file_Upload_Tick_1").hide();
             $("#file_upload_cancle_1").show();
             $("#upload_warning").text(
-                "Your documents should only be in .jpg, pdf formats and should not be larger than 2MB. Please re-upload in the correct format and file size to proceed. "
+                "You may only upload documents that are in .jpg, .pdf formats and must not exceed 2MB in file size. Please re-upload in the correct format and file size to proceed. "
             );
             this.value = "";
     }
@@ -1007,7 +1007,7 @@ file2.onchange = async function (e) {
                 $("#file_Upload_Tick_2").hide();
                 $("#file_upload_cancle_2").show();
                 $("#upload_warning").text(
-                    "The file size of your documents should not be larger than 2MB. Please re-upload the correct file size to proceed."
+                    "You may only upload documents not exceeding 2MB in file size to proceed. Please re-upload the correct file size to proceed."
                 );
             }
             break;
@@ -1016,7 +1016,7 @@ file2.onchange = async function (e) {
             $("#file_Upload_Tick_2").hide();
             $("#file_upload_cancle_2").show();
             $("#upload_warning").text(
-                "Your documents should only be in .jpg, pdf formats and should not be larger than 2MB. Please re-upload in the correct format and file size to proceed. "
+                "You may only upload documents that are in .jpg, .pdf formats and must not exceed 2MB in file size. Please re-upload in the correct format and file size to proceed. "
             );
             this.value = "";
     }
@@ -1063,7 +1063,7 @@ file3.onchange = async function (e) {
                 $("#file_Upload_Tick_3").hide();
                 $("#file_upload_cancle_3").show();
                 $("#upload_warning").text(
-                    "The file size of your documents should not be larger than 2MB. Please re-upload the correct file size to proceed."
+                    "You may only upload documents not exceeding 2MB in file size to proceed. Please re-upload the correct file size to proceed."
                 );
             }
             break;
@@ -1072,7 +1072,7 @@ file3.onchange = async function (e) {
             $("#file_Upload_Tick_3").hide();
             $("#file_upload_cancle_3").show();
             $("#upload_warning").text(
-                "Your documents should only be in .jpg, pdf formats and should not be larger than 2MB. Please re-upload in the correct format and file size to proceed. "
+                "You may only upload documents that are in .jpg, .pdf formats and must not exceed 2MB in file size. Please re-upload in the correct format and file size to proceed. "
             );
             this.value = "";
     }
@@ -1119,7 +1119,7 @@ file5.onchange = async function (e) {
                 $("#file_Upload_Tick_5").hide();
                 $("#file_upload_cancle_5").show();
                 $("#upload_warning").text(
-                    "The file size of your documents should not be larger than 2MB. Please re-upload the correct file size to proceed."
+                    "You may only upload documents not exceeding 2MB in file size to proceed. Please re-upload the correct file size to proceed."
                 );
             }
             break;
@@ -1128,7 +1128,7 @@ file5.onchange = async function (e) {
             $("#file_Upload_Tick_5").hide();
             $("#file_upload_cancle_5").show();
             $("#upload_warning").text(
-                "Your documents should only be in .jpg, pdf formats and should not be larger than 2MB. Please re-upload in the correct format and file size to proceed. "
+                "You may only upload documents that are in .jpg, .pdf formats and must not exceed 2MB in file size. Please re-upload in the correct format and file size to proceed. "
             );
             this.value = "";
     }
@@ -1158,7 +1158,7 @@ file6.onchange = async function (e) {
                 $("#file_Upload_Tick_6").hide();
                 $("#file_upload_cancle_6").show();
                 $("#upload_warning_acct").text(
-                    "The file size of your documents should not be larger than 2MB. Please re-upload the correct file size to proceed."
+                    "You may only upload documents not exceeding 2MB in file size to proceed. Please re-upload the correct file size to proceed."
                 );
             }
             break;
@@ -1167,7 +1167,7 @@ file6.onchange = async function (e) {
             $("#file_Upload_Tick_6").hide();
             $("#file_upload_cancle_6").show();
             $("#upload_warning_acct").text(
-                " Your documents should only be in .jpg, pdf formats and should not be larger than 2MB. Please re-upload in the correct format and file size to proceed."
+                " You may only upload documents that are in .jpg, .pdf formats and must not exceed 2MB in file size. Please re-upload in the correct format and file size to proceed."
             );
             this.value = "";
     }
@@ -1310,8 +1310,8 @@ function handleAccountInfo(event) {
             upload_file_6: file6.value
         }
         $("#step2").addClass("done");
-        $("#step3").addClass("active");
-        $("#step3>div").addClass("active");
+      /*   $("#step3").addClass("active");
+        $("#step3>div").addClass("active"); */
         /* $("#step3").addClass("done"); */
         $('#account_details').hide();
         $('#process_confirmation').show();
@@ -1370,8 +1370,8 @@ function pickup_Bpi() {
     $("#pickUp").hide();
     $('#process_confirmation').show();
     $("#step2").addClass("done");
-    $("#step3").addClass("active");
-    $("#step3>div").addClass("active");
+   /*  $("#step3").addClass("active");
+    $("#step3>div").addClass("active"); */
    /*  $("#step3").addClass("done"); */
   }
 
