@@ -884,13 +884,13 @@ const proceedScan = async (fileObj, button, pageid) => {
                 if (pageid == 1) {
                     $("#warning_parent").show();
                     $("#upload_warning").text(
-                        "We detected a virus/malware in your uploaded documents. Please re-upload clean, virus-free documents to proceed."
+                        "Warning : We detected a virus/malware in your uploaded documents. Please re-upload a clean, virus-free document to proceed."
                     );
                 }
                 if (pageid == 2) {
                     $("#warning_parent_acct").show();
                     $("#upload_warning_acct").text(
-                        "We detected a virus/malware in your uploaded documents. Please re-upload clean, virus-free documents to proceed."
+                        "Warning : We detected a virus/malware in your uploaded documents. Please re-upload a clean, virus-free document to proceed."
                     );
                 }
 

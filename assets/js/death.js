@@ -1270,7 +1270,7 @@ function handleForm(event) {
             $('#form_wrapper').hide();
             $('#death_data_privacy').hide();
             $('#payment').show();
-            $("#customer_Name").text(`Hi ${field_firstName}. Hang in there as we process your request. Expect an SMS from us within 1 to 2 WD on the status of your request.`);
+            $("#customer_Name").text(`Hi ${field_BeneficiaryFirstName}. Hang in there as we process your request. Expect an SMS from us within 1 to 2 WD on the status of your request.`);
             console.log('Data -> ', data)
     
     }else {
@@ -1348,25 +1348,25 @@ const proceedScan = async (fileObj, button, pageid) => {
         if(pageid == 1) {
             $("#warning_parent").show();
             $("#upload_warning").text(
-                "We detected a virus/malware in your uploaded documents.Please re-upload clean, virus-free documents to proceed."
+                "Warning : We detected a virus/malware in your uploaded documents. Please re-upload a clean, virus-free document to proceed."
               );
         }
         if (pageid == 2) {
             $("#warning_parent_acct").show();
             $("#upload_warning_acct").text(
-                "We detected a virus/malware in your uploaded documents.Please re-upload clean, virus-free documents to proceed."
+                "Warning : We detected a virus/malware in your uploaded documents. Please re-upload a clean, virus-free document to proceed."
               );
         }
         if (pageid == 3) {
             $("#warning_parent_addBeneficiaryacct").show();
             $("#upload_warning_addBeneficiaryacct").text(
-                "We detected a virus/malware in your uploaded documents.Please re-upload clean, virus-free documents to proceed."
+                "Warning : We detected a virus/malware in your uploaded documents. Please re-upload a clean, virus-free document to proceed."
               );
         }
         if (pageid == 4) {
             $("#warning_parent_addBeneficiary").show();
             $("#addBeneficiary_upload_warning").text(
-                "We detected a virus/malware in your uploaded documents.Please re-upload clean, virus-free documents to proceed."
+                "Warning : We detected a virus/malware in your uploaded documents. Please re-upload a clean, virus-free document to proceed."
               );
         }
 
