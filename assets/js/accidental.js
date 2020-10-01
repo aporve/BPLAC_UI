@@ -1661,6 +1661,9 @@ function handleAccountInfo(event) {
    /*  $("#step3").addClass("active"); */
   /*   $("#step3>div").addClass("active"); */
     /* $("#step3").addClass("done"); */
+    $("#step3_circle").addClass("md-step-step3-circle ");
+    $("#step3_span").addClass("md-step3-span");
+    $("#step3_reference").addClass("md-step3-span")
     $("#account_details").hide();
     $("#process_confirmation").show();
     console.log("Data -> ", data);
@@ -1713,8 +1716,11 @@ function pickup_Bpi() {
   $("#pickUp").hide();
   $('#process_confirmation').show();
   $("#step2").addClass("done");
-  /* $("#step3").addClass("active"); */
- /*  $("#step3>div").addClass("active"); */
+  $("#step3_circle").addClass("md-step-step3-circle ");
+  $("#step3_span").addClass("md-step3-span");
+  $("#step3_reference").addClass("md-step3-span")
+ /*  $("#step3").addClass("active");
+  $("#step3>div").addClass("active"); */
  /*  $("#step3").addClass("done"); */
 }
 
@@ -1807,9 +1813,11 @@ function handleAddBankInfo(event) {
       field_Currency1: $("select#from_currency1 option").filter(":selected").val(),
       upload_file_6: file7.value
     }
-
-    /* $("#step3").addClass("active"); */
-    /* $("#step3>div").addClass("active"); */
+    $("#step3_circle").addClass("md-step-step3-circle ");
+    $("#step3_span").addClass("md-step3-span");
+    $("#step3_reference").addClass("md-step3-span")
+    /* $("#step3").addClass("active");
+    $("#step3>div").addClass("active"); */
     /* $("#step3").addClass("done"); */
     $('#account_details1').hide();
     $('#process_confirmation').show();

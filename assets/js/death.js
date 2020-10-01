@@ -2429,6 +2429,9 @@ function buttonSubmitClicked(event) {
     myDisable()
     timer().then(async () => {
         $("#step2").addClass("done");
+            $("#step3_circle").addClass("md-step-step3-circle ");
+            $("#step3_span").addClass("md-step3-span");
+            $("#step3_reference").addClass("md-step3-span")
         /*  $("#step3").addClass("active");
          $("#step3>div").addClass("active"); */
         /*  $("#step3").addClass("done"); */
@@ -2512,6 +2515,9 @@ function addBeneficiaryButtonClicked(event) {
     myDisable2()
     timer2().then(async () => {
         $("#step2").addClass("done");
+    $("#step3_circle").addClass("md-step-step3-circle ");
+    $("#step3_span").addClass("md-step3-span");
+    $("#step3_reference").addClass("md-step3-span")
         /*  $("#step3").addClass("active");
          $("#step3>div").addClass("active"); */
         /*  $("#step3").addClass("done"); */
@@ -2831,6 +2837,9 @@ function pickup_Bpi() {
 function addBeneficiaryPickup_Bpi() {
     $("#addBeneficiaryPickUp").hide();
     $('#addBeneficiaryRequirements').show();
+   /*  $("#step3_circle").addClass("md-step-step3-circle ");
+    $("#step3_span").addClass("md-step3-span");
+    $("#step3_reference").addClass("md-step3-span") */
     /* $('#process_confirmation').show(); */
     /*  $("#step3").addClass("active");
      $("#step3>div").addClass("active"); */
