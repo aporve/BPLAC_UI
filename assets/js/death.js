@@ -778,6 +778,8 @@ function handleFormAddBeneficiary(event) {
             field_addBeneficiaryNationality,
             field_addBeneficiarySex,
             field_addBeneficiaryRelationToDeceased,
+            field_addBeneficiary_relatives1,
+            field_add_Beneficiary_add_relatives2,
             country_code: $("select#field_addBeneficiaryMobileNumberSelect option").filter(":selected").val(),
             basic_checkbox: $('#invalidCheck_basicAddBeneficiary').is(':checked'),
             privacy_checkbox: $('#invalidCheck_privacyAddBeneficiary').is(':checked')
@@ -802,7 +804,7 @@ function handleFormAddBeneficiary(event) {
             beneficiary["PayoutOption"] = "CTA"
         BeneficiaryList.push(beneficiary);
 
-        dataReset("field_addBeneficiaryFirstName", "field_addBeneficiaryMiddleName", "field_addBeneficiaryLastName", "field_addBeneficiaryMobileNum", "field_addBeneficiaryEmailAddress", "field_addBeneficiaryHomeAddress", "field_addBeneficiaryDOB", "field_addBeneficiaryPOB", "field_addBeneficiaryNationality", "field_addBeneficiarySex", "field_addBeneficiaryRelationToDeceased", "field_addBeneficiaryEmployerName", "field_addBeneficiaryOccupation");
+        dataReset("field_addBeneficiaryFirstName", "field_addBeneficiaryMiddleName", "field_addBeneficiaryLastName", "field_addBeneficiaryMobileNum", "field_addBeneficiaryEmailAddress", "field_addBeneficiaryHomeAddress", "field_addBeneficiaryDOB", "field_addBeneficiaryPOB", "field_addBeneficiaryNationality", "field_addBeneficiarySex", "field_addBeneficiaryRelationToDeceased", "field_addBeneficiaryEmployerName", "field_addBeneficiaryOccupation", "field_addBeneficiary_relatives1", "field_add_Beneficiary_add_relatives2");
         uploadDataReset();
         // $('#stepper_intro').hide();
         $('#death_data_privacy').hide();
