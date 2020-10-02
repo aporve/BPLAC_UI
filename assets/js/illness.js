@@ -245,15 +245,18 @@ function disableFutureDatesDOB() {
     var dtToday = new Date();
     var month = dtToday.getMonth() + 1;
     var day = dtToday.getDate();
-    var dobDate = day - 1;
+    var dobdate = day-1
     var year = dtToday.getFullYear();
     if (month < 10)
-        month = '0' + month.toString();
+      month = '0' + month.toString();
     if (day < 10)
-        day = '0' + day.toString();
-    var maxDate = year + '-' + month + '-' + dobDate;
+      day = '0' + day.toString();
+    var maxDate = year + '-' + month + '-' + dobdate;
+    if( day <= 10) {
+        maxDate = year + '-' + month + '-' + '0'+ dobdate;
+    } 
     $('#field_DOB').attr('max', maxDate);
-}
+  }
 
 
 
