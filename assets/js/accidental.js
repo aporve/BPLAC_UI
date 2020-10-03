@@ -20,6 +20,8 @@ let referenceNumber = url.searchParams.get('refNumber');
 let uid = url.searchParams.get('sender');
 let botId = url.searchParams.get('botId');
 
+var currSeconds = 0; 
+
 $('#privacy_consent_1').prop('checked', true);
 $('#privacy_consent_2').prop('checked', true);
 
@@ -130,7 +132,23 @@ $(document).ready(function (event) {
   disableFutureDates();
   disableFutureDatesDOB();
   setCountryCode();
+  let idleInterval = setInterval(timerIncrement, 1000); 
+  $(this).mousemove(resetTimer); 
+  $(this).keypress(resetTimer); 
+
 });
+
+function resetTimer() { 
+  currSeconds = 0; 
+} 
+
+function timerIncrement() { 
+  currSeconds = currSeconds + 1; 
+  if(currSeconds == 1800) {
+      window.open('http://www.philamlife.com', '_blank');
+  }
+} 
+
 
 
 /* Check Date should not be in future */

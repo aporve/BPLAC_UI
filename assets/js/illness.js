@@ -4,6 +4,8 @@ var stepper4
 var stepperForm
 var stepperFormEl */
 
+var currSeconds = 0; 
+
 var form = document.getElementById("illness__form");
 var form_Bank = document.getElementById("bank_form");
 var listCheckBox = document.querySelector('#illness_upload_invalidCheck_1');
@@ -119,7 +121,23 @@ $(document).ready(function (event) {
     disableFutureDates();
     disableFutureDatesDOB();
     setCountryCode();
+    let idleInterval = setInterval(timerIncrement, 1000); 
+    $(this).mousemove(resetTimer); 
+    $(this).keypress(resetTimer); 
 });
+
+
+function resetTimer() { 
+    currSeconds = 0; 
+  } 
+  
+  function timerIncrement() { 
+    currSeconds = currSeconds + 1; 
+    if(currSeconds == 1800) {
+      window.open('http://www.philamlife.com', '_blank');
+    }
+  } 
+  
 
 /* Check Date should not be in future */
 function futureDate(date) {
