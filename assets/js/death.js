@@ -106,8 +106,8 @@ function myDisable() {
     document.getElementById("addBeneficiary1").style.cursor = "no-drop";
     document.getElementById("upload_invalidCheck_2").disabled = true;
     document.getElementById("upload_invalidCheck_2").style.cursor = "no-drop";
-    /*  document.getElementById("link_Beneficiary").style.pointerEvents = "none";
-     document.getElementById("link2_Beneficiary").style.pointerEvents = "none"; */
+    document.getElementById("goBack1").style.pointerEvents = "none";
+    document.getElementById("goBack1").style.pointerEvents = "none";
     document.getElementById("form_Beneficiary").style.cursor = "no-drop";
 }
 
@@ -146,6 +146,8 @@ function myDisable2() {
     document.getElementById("file_Upload_12").style.cursor = "no-drop";
     document.getElementById("addBeneficiary_submit").disabled = true;
     document.getElementById("addBeneficiary_submit").style.cursor = "no-drop";
+    document.getElementById("goBack3").style.pointerEvents = "none";
+    document.getElementById("goBack3").style.pointerEvents = "none";
 
     /*   document.getElementById("upload_invalidCheck_2").disabled = true;
       document.getElementById("upload_invalidCheck_2").style.cursor = "no-drop"; 
