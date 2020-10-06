@@ -3428,6 +3428,12 @@ function pickUp() {
 }
 
 function addBeneficiaryPickup() {
+    
+    let index = BeneficiaryList.findIndex(ele => ele["BeneficiaryNo"] == (beneficiaryCount.toString()))
+    let benObject = BeneficiaryList[index]
+    benObject["PayoutOption"] = "PUA";
+    BeneficiaryList[index] = benObject;
+
     trackaddBenificiary = 1;
     if (buttonCount == 1){
         trackaddBenificiary1 = trackaddBenificiary;
