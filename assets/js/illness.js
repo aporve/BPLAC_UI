@@ -4,7 +4,7 @@ var stepper4
 var stepperForm
 var stepperFormEl */
 
-var currSeconds = 0; 
+var currSeconds = 0;
 
 var form = document.getElementById("illness__form");
 var form_Bank = document.getElementById("bank_form");
@@ -41,6 +41,7 @@ let file1Buffer, file2Buffer, file3Buffer, file4Buffer, file5Buffer, file6Buffer
 basicInformation["CompanyCode"] = "PAL/BPLAC";
 basicInformation["Claim Type "] = "LIVING";
 basicInformation["CauseOfLoss"] = "Accident";
+basicInformation["WebReferenceNumber"] = referenceNumber;
 
 /* document.addEventListener('DOMContentLoaded', function () {
     stepperFormEl = document.querySelector('#stepperForm')
@@ -52,9 +53,9 @@ basicInformation["CauseOfLoss"] = "Accident";
 function myDisable() {
     document.getElementById("submit9").disabled = true;
     document.getElementById("submit9").style.cursor = "no-drop";
-    document.getElementById("field_AccountName"). disabled = true; 
+    document.getElementById("field_AccountName").disabled = true;
     document.getElementById("field_AccountName").style.cursor = "no-drop";
-    document.getElementById("field_AccountNumber").disabled = true;  
+    document.getElementById("field_AccountNumber").disabled = true;
     document.getElementById("field_AccountNumber").style.cursor = "no-drop";
     document.getElementById("field_Bank").disabled = true;
     document.getElementById("field_Bank").style.cursor = "no-drop";
@@ -67,77 +68,77 @@ function myDisable() {
     document.getElementById("back_btn1").style.cursor = "no-drop";
     document.getElementById("back_btn1").style.pointerEvents = "none";
     document.getElementById("bank_form").style.cursor = "no-drop";
-  }
+}
 
 function timer() {
-    var random = Math.floor(Math.random() * 5) + 1  
+    var random = Math.floor(Math.random() * 5) + 1
     return new Promise((resolve, reject) => {
-      var i=0
-      let cleartime = setInterval(() => {
-       i = random + i;
-       renderProgress(i)
-       if(i == 99){
-        i = 100;
-        renderProgress(i)
-       }
-       if(i == 100 )  {
-     
-          console.log("cleartime");
-          clearTimeout(cleartime);
-          resolve("cleartime")
-      }
-    //  i++;
-     }, 500);
+        var i = 0
+        let cleartime = setInterval(() => {
+            i = random + i;
+            renderProgress(i)
+            if (i == 99) {
+                i = 100;
+                renderProgress(i)
+            }
+            if (i == 100) {
+
+                console.log("cleartime");
+                clearTimeout(cleartime);
+                resolve("cleartime")
+            }
+            //  i++;
+        }, 500);
     })
-  }
-  
-  function renderProgress(progress) {
+}
+
+function renderProgress(progress) {
     progress = Math.floor(progress);
-    if(progress<25){
-        var angle = -90 + (progress/100)*360;
-        $(".animate-0-25-b").css("transform","rotate("+angle+"deg)");
+    if (progress < 25) {
+        var angle = -90 + (progress / 100) * 360;
+        $(".animate-0-25-b").css("transform", "rotate(" + angle + "deg)");
     }
-    else if(progress>=25 && progress<50){
-        var angle = -90 + ((progress-25)/100)*360;
-        $(".animate-0-25-b").css("transform","rotate(0deg)");
-        $(".animate-25-50-b").css("transform","rotate("+angle+"deg)");
+    else if (progress >= 25 && progress < 50) {
+        var angle = -90 + ((progress - 25) / 100) * 360;
+        $(".animate-0-25-b").css("transform", "rotate(0deg)");
+        $(".animate-25-50-b").css("transform", "rotate(" + angle + "deg)");
     }
-    else if(progress>=50 && progress<75){
-        var angle = -90 + ((progress-50)/100)*360;
-        $(".animate-25-50-b, .animate-0-25-b").css("transform","rotate(0deg)");
-        $(".animate-50-75-b").css("transform","rotate("+angle+"deg)");
+    else if (progress >= 50 && progress < 75) {
+        var angle = -90 + ((progress - 50) / 100) * 360;
+        $(".animate-25-50-b, .animate-0-25-b").css("transform", "rotate(0deg)");
+        $(".animate-50-75-b").css("transform", "rotate(" + angle + "deg)");
     }
-    else if(progress>=75 && progress<=100){
-        var angle = -90 + ((progress-75)/100)*360;
+    else if (progress >= 75 && progress <= 100) {
+        var angle = -90 + ((progress - 75) / 100) * 360;
         $(".animate-50-75-b, .animate-25-50-b, .animate-0-25-b")
-                                            .css("transform","rotate(0deg)");
-        $(".animate-75-100-b").css("transform","rotate("+angle+"deg)");
+            .css("transform", "rotate(0deg)");
+        $(".animate-75-100-b").css("transform", "rotate(" + angle + "deg)");
     }
-    $(".text").html(progress+"%");
-  }
-  
+    $(".text").html(progress + "%");
+}
+
 
 $(document).ready(function (event) {
     disableFutureDates();
     disableFutureDatesDOB();
     setCountryCode();
-    let idleInterval = setInterval(timerIncrement, 1000); 
-    $(this).mousemove(resetTimer); 
-    $(this).keypress(resetTimer); 
+    let idleInterval = setInterval(timerIncrement, 1000);
+    $(this).mousemove(resetTimer);
+    $(this).keypress(resetTimer);
 });
 
 
-function resetTimer() { 
-    currSeconds = 0; 
-  } 
-  
-  function timerIncrement() { 
-    currSeconds = currSeconds + 1; 
-    if(currSeconds == 1800) {
-      window.open('http://www.philamlife.com', '_blank');
+function resetTimer() {
+    currSeconds = 0;
+}
+
+function timerIncrement() {
+    currSeconds = currSeconds + 1;
+    if (currSeconds == 1800) {
+        window.open('http://www.philamlife.com', '_blank');
     }
-  } 
-  
+}
+
 
 /* Check Date should not be in future */
 function futureDate(date) {
@@ -263,18 +264,18 @@ function disableFutureDatesDOB() {
     var dtToday = new Date();
     var month = dtToday.getMonth() + 1;
     var day = dtToday.getDate();
-    var dobdate = day-1
+    var dobdate = day - 1
     var year = dtToday.getFullYear();
     if (month < 10)
-      month = '0' + month.toString();
+        month = '0' + month.toString();
     if (day < 10)
-      day = '0' + day.toString();
+        day = '0' + day.toString();
     var maxDate = year + '-' + month + '-' + dobdate;
-    if( day <= 10) {
-        maxDate = year + '-' + month + '-' + '0'+ dobdate;
-    } 
+    if (day <= 10) {
+        maxDate = year + '-' + month + '-' + '0' + dobdate;
+    }
     $('#field_DOB').attr('max', maxDate);
-  }
+}
 
 
 
@@ -866,10 +867,39 @@ function handleForm(event) {
         $("#step2").addClass("active");
         $("#step2>div").addClass("active");
         $("#requirements").show();
-    $("#customer_Name").text(`Hi ${field_firstName}. Hang in there as we process your request. Expect an SMS from us within 1 to 2 WD on the status of your request.`);
+        $("#customer_Name").text(`Hi ${field_firstName}. Hang in there as we process your request. Expect an SMS from us within 1 to 2 WD on the status of your request.`);
         /* $('#requirements')[0].scrollIntoView(true); */
 
         console.log("Data -> ", data);
+
+        InsuredInformation["FirstName"] = field_firstName;
+        InsuredInformation["MiddleName"] = field_middleName;
+        InsuredInformation["LastName"] = field_lastName;
+        InsuredInformation["Suffix"] = field_lastName_Suffix;
+        InsuredInformation["DateOfBirth"] = field_DOB.split('-')[2] + "/" + field_DOB.split('-')[1] + "/" + field_DOB.split('-')[0];
+        InsuredInformation["CountryCode"] = $("select#inlineFormCustomSelect option").filter(":selected").val();
+        InsuredInformation["PhoneNumber"] = field_mobileNum;
+        InsuredInformation["EmailAddress"] = field_emailAddress;
+        InsuredInformation["HomeAddress"] = field_homeAddress;
+        InsuredInformation["DateOfSymtomps"] = field_DOA.split('-')[2] + "/" + field_DOA.split('-')[1] + "/" + field_DOA.split('-')[0];;
+        InsuredInformation["RootCauseDate"] = field_TOA.split('-')[2] + "/" + field_TOA.split('-')[1] + "/" + field_TOA.split('-')[0];;
+        InsuredInformation["DoctorVisitDate"] = field_POA.split('-')[2] + "/" + field_POA.split('-')[1] + "/" + field_POA.split('-')[0];;
+        InsuredInformation["medicalConsultation"] = field_MedicalConsultation;
+
+        let stageOneData = {
+            stageOne: true,
+            type: "Accident",
+            referenceNumber: referenceNumber,
+            data: InsuredInformation
+        }
+        window.parent.postMessage(JSON.stringify({
+            event_code: 'ym-client-event', data: JSON.stringify({
+                event: {
+                    code: "personalinfo",
+                    data: JSON.stringify(stageOneData)
+                }
+            })
+        }), '*');
     } else {
         $("#popUp").modal("show");
     }
@@ -1398,47 +1428,51 @@ function handleAccountInfo(event) {
             upload_file_6: file6.value
         }
         myDisable()
-        timer().then( async () => { 
-        $("#step2").addClass("done");
-        $("#step3_circle").addClass("md-step-step3-circle ");
-        $("#step3_span").addClass("md-step3-span");
-        $("#step3_reference").addClass("md-step3-span")
-        /* $("#step3").addClass("active");
-        $("#step3>div").addClass("active");
-        $("#step3").addClass("done"); */ 
-        $('#account_details').hide();
-        $('#process_confirmation').show();
-        console.log('Data -> ', data)
+        timer().then(async () => {
+            $("#step2").addClass("done");
+            $("#step3_circle").addClass("md-step-step3-circle ");
+            $("#step3_span").addClass("md-step3-span");
+            $("#step3_reference").addClass("md-step3-span")
+            /* $("#step3").addClass("active");
+            $("#step3>div").addClass("active");
+            $("#step3").addClass("done"); */
+            $('#account_details').hide();
+            $('#process_confirmation').show();
+            console.log('Data -> ', data)
 
-        BankDetails["BankName"] = field_Bank;
-        BankDetails["BankBranch"] = field_Branch;
-        BankDetails["AccountName"] = field_AccountName;
-        BankDetails["AccountNumber"] = field_AccountNumber;
-        BankDetails["AccountCurrency"] = $("select#from_currency option").filter(":selected").val();
-    
-        let filesObject = {};
-        filesObject["FolderName"] = `/home/accounts/Claims/${referenceNumber}`
-        filesObject["FileList"] = filesList;
-    
-        // filesMap["Accident"] = accident
-        finalPayload["BasicInformation"] = basicInformation;
-        finalPayload["InsuredInformation"] = InsuredInformation;
-        finalPayload["BankDetails"] = BankDetails;
-        finalPayload["FileList"] = filesObject;
-        finalPayload["stageThree"] = true;
-        finalPayload["referenceNumber"] = referenceNumber;
-    
-        console.log("FPB : ")
-        console.log(finalPayload)
-        window.parent.postMessage(JSON.stringify({
-          event_code: 'ym-client-event', data: JSON.stringify({
-            event: {
-              code: "finalEvent",
-              data: JSON.stringify(finalPayload)
-            }
-          })
-        }), '*');
-    }); 
+            BankDetails["BeneficiaryNo"] = 1;
+            BankDetails["BankName"] = field_Bank;
+            BankDetails["BankBranch"] = field_Branch;
+            BankDetails["AccountName"] = field_AccountName;
+            BankDetails["AccountNumber"] = field_AccountNumber;
+            BankDetails["AccountCurrency"] = $("select#from_currency option").filter(":selected").val();
+
+            let BankDetailsList = [];
+            BankDetailsList.push(BankDetails);
+
+            let filesObject = {};
+            filesObject["FolderName"] = `/home/accounts/Claims/${referenceNumber}`
+            filesObject["FileList"] = filesList;
+
+            // filesMap["Accident"] = accident
+            finalPayload["BasicInformation"] = basicInformation;
+            finalPayload["InsuredInformation"] = InsuredInformation;
+            finalPayload["BankDetailsList"] = BankDetailsList;
+            finalPayload["FileList"] = filesObject;
+            finalPayload["stageThree"] = true;
+            finalPayload["referenceNumber"] = referenceNumber;
+
+            console.log("FPB : ")
+            console.log(finalPayload)
+            window.parent.postMessage(JSON.stringify({
+                event_code: 'ym-client-event', data: JSON.stringify({
+                    event: {
+                        code: "finalEvent",
+                        data: JSON.stringify(finalPayload)
+                    }
+                })
+            }), '*');
+        });
     } else {
         $('#popUp').modal('show');
     }
@@ -1453,6 +1487,30 @@ function bankTranfer() {
 }
 
 function pickUp() {
+    let filesObject = {};
+    filesObject["FolderName"] = `/home/accounts/Claims/${referenceNumber}`
+    filesObject["FileList"] = filesList;
+    let BankDetailsList = [];
+    BankDetailsList.push(BankDetails);
+
+    // filesMap["Accident"] = accident
+    finalPayload["BasicInformation"] = basicInformation;
+    finalPayload["InsuredInformation"] = InsuredInformation;
+    finalPayload["BankDetails"] = BankDetailsList;
+    finalPayload["FileList"] = filesObject;
+    finalPayload["stageThree"] = true;
+    finalPayload["referenceNumber"] = referenceNumber;
+
+    console.log("pick up payload : ")
+    console.log(finalPayload)
+    window.parent.postMessage(JSON.stringify({
+        event_code: 'ym-client-event', data: JSON.stringify({
+            event: {
+                code: "finalEvent",
+                data: JSON.stringify(finalPayload)
+            }
+        })
+    }), '*');
     $('#payment').hide();
     /*   $('#process_confirmation').show(); */
     $("#pickUp").show();
@@ -1470,7 +1528,7 @@ function pickup_Bpi() {
     /* $("#step3").addClass("active");
     $("#step3>div").addClass("active");
     $("#step3").addClass("done"); */
-  }
+}
 
 
 function openlink() {
@@ -1546,24 +1604,24 @@ function goBack() {
     $('#requirements').hide();
     $('#form_wrapper').show();
     /* $('#form_wrapper')[0].scrollIntoView(true); */
-  }
-  
-  function goBackPickup() {
+}
+
+function goBackPickup() {
     console.log('go back!!!');
     $("#step3").removeClass("active");
-    $("#step3>div").removeClass("active"); 
-   /*  $("#step3").removeClass("done"); */
+    $("#step3>div").removeClass("active");
+    /*  $("#step3").removeClass("done"); */
     $('#pickUp').hide();
     $('#requirements').show();
-  }
+}
 
-  
+
 function goBack1() {
     console.log('go back!!!');
     $("#step3").removeClass("active");
-    $("#step3>div").removeClass("active"); 
-   /*  $("#step3").removeClass("done"); */
+    $("#step3>div").removeClass("active");
+    /*  $("#step3").removeClass("done"); */
     $('#account_details').hide();
     $('#requirements').show();
     /* $('#form_wrapper')[0].scrollIntoView(true); */
-  }
+}
