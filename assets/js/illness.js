@@ -134,7 +134,8 @@ function resetTimer() {
 
 function timerIncrement() {
     currSeconds = currSeconds + 1;
-    if (currSeconds == 1800) {
+    console.log(currSeconds)
+    if (currSeconds == 20) {
         window.top.location = 'https://www.bpi-philam.com'
     }
 }
