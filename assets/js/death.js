@@ -57,7 +57,7 @@ let filesList = [];
 let beneficiaryCount = 1;
 let docType, tranType;
 basicInformation["WebReferenceNumber"] = referenceNumber;
-basicInformation["CompanyCode"] = "PAL";
+basicInformation["CompanyCode"] = "BPLAC";
 basicInformation["ClaimType"] = "Death";
 
 form.addEventListener('submit', handleForm);
@@ -834,7 +834,7 @@ function handleFormAddBeneficiary(event) {
             beneficiary["Nationality"] = field_addBeneficiaryNationality,
             beneficiary["Sex"] = field_addBeneficiarySex,
             beneficiary["Relationship"] = field_addBeneficiaryRelationToDeceased,
-            beneficiary["DocumentFolder"] = `/home/accounts/Claims/${referenceNumber}`,
+            beneficiary["DocumentFolder"] = `/D:/CLAIMS/${referenceNumber}`,
             beneficiary["PayoutOption"] = "CTA"
         BeneficiaryList.push(beneficiary);
 
@@ -1402,7 +1402,7 @@ function handleForm(event) {
             beneficiary["Nationality"] = field_BeneficiaryNationality,
             beneficiary["Sex"] = $("select#field_BeneficiarySex option").filter(":selected").val(),
             beneficiary["Relationship"] = field_BeneficiaryRelationToDeceased,
-            beneficiary["DocumentFolder"] = `/home/accounts/Claims/${referenceNumber}`,
+            beneficiary["DocumentFolder"] = `/D:/CLAIMS/${referenceNumber}`,
             beneficiary["PayoutOption"] = "CTA",
             beneficiary["GovernmentOfficial"] = $("select#field_Beneficiary_relatives1 option").filter(":selected").val(),
             beneficiary["GovernmentOfficialRelative"] = $("select#field_Beneficiary_relatives2 option").filter(":selected").val(),
@@ -2952,7 +2952,7 @@ function buttonSubmitClicked(event) {
         });
 
         let FilesInformation = {};
-        FilesInformation["FolderName"] = `/home/accounts/Claims/${referenceNumber}`
+        FilesInformation["FolderName"] = `/D:/CLAIMS/${referenceNumber}`
         FilesInformation["FileList"] = filesList;
 
         finalPayload["BasicInformation"] = basicInformation;
@@ -3042,7 +3042,7 @@ function addBeneficiaryButtonClicked(event) {
             console.log('upload data --> ', upload_data);
         });
         let FilesInformation = {};
-        FilesInformation["FolderName"] = `/home/accounts/Claims/${referenceNumber}`
+        FilesInformation["FolderName"] = `/D:/CLAIMS/${referenceNumber}`
         FilesInformation["FileList"] = filesList;
 
         finalPayload["BasicInformation"] = basicInformation;
