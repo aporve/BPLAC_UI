@@ -825,7 +825,7 @@ function handleFormAddBeneficiary(event) {
             beneficiary["FirstName"] = field_addBeneficiaryFirstName,
             beneficiary["MiddleName"] = field_addBeneficiaryMiddleName,
             beneficiary["LastName"] = field_addBeneficiaryLastName,
-            beneficiary["DateOfBirth"] = field_addBeneficiaryDOB.split('-')[2]+"/"+field_addBeneficiaryDOB.split('-')[1]+"/"+field_addBeneficiaryDOB.split('-')[0],
+            beneficiary["DateOfBirth"] = field_addBeneficiaryDOB.split('-')[1]+"/"+field_addBeneficiaryDOB.split('-')[2]+"/"+field_addBeneficiaryDOB.split('-')[0],
             beneficiary["CountryCode"] = $("select#field_addBeneficiaryMobileNumberSelect option").filter(":selected").val(),
             beneficiary["PhoneNumber"] = field_addBeneficiaryMobileNum,
             beneficiary["EmailAddress"] = field_addBeneficiaryEmailAddress,
@@ -1382,8 +1382,8 @@ function handleForm(event) {
         InsuredInformation["MiddleName"] = field_middleName;
         InsuredInformation["LastName"] = field_lastName;
         InsuredInformation["Suffix"] = field_lastName_Suffix;
-        InsuredInformation["DateOfBirth"] = field_DOB.split('-')[2]+"/"+field_DOB.split('-')[1]+"/"+field_DOB.split('-')[0];
-        InsuredInformation["InsuredsDeath"] = field_DOID.split('-')[2]+"/"+field_DOID.split('-')[1]+"/"+field_DOID.split('-')[0];
+        InsuredInformation["DateOfBirth"] = field_DOB.split('-')[1]+"/"+field_DOB.split('-')[2]+"/"+field_DOB.split('-')[0];
+        InsuredInformation["InsuredsDeath"] = field_DOID.split('-')[1]+"/"+field_DOID.split('-')[2]+"/"+field_DOID.split('-')[0];
 
         basicInformation["CauseOfLoss"] = field_NatureLoss;
 
@@ -1393,7 +1393,7 @@ function handleForm(event) {
             beneficiary["FirstName"] = field_BeneficiaryFirstName,
             beneficiary["MiddleName"] = field_BeneficiaryMiddleName,
             beneficiary["LastName"] = field_BeneficiaryLastName,
-            beneficiary["DateOfBirth"] = field_BeneficiaryDOB.split('-')[2]+"/"+field_BeneficiaryDOB.split('-')[1]+"/"+field_BeneficiaryDOB.split('-')[0],
+            beneficiary["DateOfBirth"] = field_BeneficiaryDOB.split('-')[1]+"/"+field_BeneficiaryDOB.split('-')[2]+"/"+field_BeneficiaryDOB.split('-')[0],
             beneficiary["CountryCode"] = $("select#field_BeneficiaryMobileNumberSelect option").filter(":selected").val(),
             beneficiary["PhoneNumber"] = field_BeneficiaryMobileNum,
             beneficiary["EmailAddress"] = field_BeneficiaryEmailAddress,
