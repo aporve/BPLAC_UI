@@ -661,10 +661,10 @@ function handleForm(event) {
     lenLastNameSuffix = fieldCheckLength(field_lastName_Suffix, 3);
   }
 
-  var lenFirstName = fieldCheckLength(field_firstName, 30);
-  var lenMiddleName = fieldCheckLength(field_middleName, 30);
+  var lenFirstName = fieldCheckLength(field_firstName, 25);
+  var lenMiddleName = fieldCheckLength(field_middleName, 25);
   var leninjury = fieldCheckLength(field_injury, 500);
-  var lenLastName = fieldCheckLength(field_lastName, 30);
+  var lenLastName = fieldCheckLength(field_lastName, 25);
   var lenMobileNum = fieldCheckLength(field_mobileNum, 10);
   var lenHomeAddress = fieldCheckLength(field_homeAddress, 250);
   var lenPOA = fieldCheckLength(field_POA, 120);
