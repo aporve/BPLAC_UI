@@ -821,7 +821,7 @@ function handleFormAddBeneficiary(event) {
 
         let beneficiary = {};
 
-        beneficiary["BeneficiaryNo"] = beneficiaryCount,
+        beneficiary["BeneficiaryNo"] = beneficiaryCount.toString(),
             beneficiary["FirstName"] = field_addBeneficiaryFirstName,
             beneficiary["MiddleName"] = field_addBeneficiaryMiddleName,
             beneficiary["LastName"] = field_addBeneficiaryLastName,
@@ -829,7 +829,7 @@ function handleFormAddBeneficiary(event) {
             beneficiary["CountryCode"] = $("select#field_addBeneficiaryMobileNumberSelect option").filter(":selected").val(),
             beneficiary["PhoneNumber"] = field_addBeneficiaryMobileNum,
             beneficiary["EmailAddress"] = field_addBeneficiaryEmailAddress,
-            beneficiary["HomeAddress"] = field_BeneficiaryHomeAddress,
+            beneficiary["HomeAddress"] = field_addBeneficiaryHomeAddress,
             beneficiary["PlaceOfBirth"] = field_addBeneficiaryPOB,
             beneficiary["Nationality"] = field_addBeneficiaryNationality,
             beneficiary["Sex"] = field_addBeneficiarySex,
@@ -1389,7 +1389,7 @@ function handleForm(event) {
 
         let beneficiary = {};
 
-        beneficiary["BeneficiaryNo"] = beneficiaryCount,
+        beneficiary["BeneficiaryNo"] = beneficiaryCount.toString(),
             beneficiary["FirstName"] = field_BeneficiaryFirstName,
             beneficiary["MiddleName"] = field_BeneficiaryMiddleName,
             beneficiary["LastName"] = field_BeneficiaryLastName,
@@ -1404,6 +1404,7 @@ function handleForm(event) {
             beneficiary["Relationship"] = field_BeneficiaryRelationToDeceased,
             beneficiary["DocumentFolder"] = `/D:/CLAIMS/${referenceNumber}`,
             beneficiary["PayoutOption"] = "CTA",
+            beneficiary["Employer"] = lenBeneficiaryEmployerName,
             beneficiary["GovernmentOfficial"] = $("select#field_Beneficiary_relatives1 option").filter(":selected").val(),
             beneficiary["GovernmentOfficialRelative"] = $("select#field_Beneficiary_relatives2 option").filter(":selected").val(),
         beneficiary["Occupation"] = field_BenificiaryOccupation
@@ -2960,7 +2961,6 @@ function buttonSubmitClicked(event) {
         finalPayload["BeneficiaryList"] = BeneficiaryList;
         finalPayload["BankDetailsList"] = BankDetailsList;
         finalPayload["FilesInformation"] = FilesInformation;
-        finalPayload["referenceNumber"] = referenceNumber;
 
         console.log("final payload : ")
         console.log(finalPayload)
@@ -3050,7 +3050,6 @@ function addBeneficiaryButtonClicked(event) {
         finalPayload["BeneficiaryList"] = BeneficiaryList;
         finalPayload["BankDetailsList"] = BankDetailsList;
         finalPayload["FilesInformation"] = FilesInformation;
-        finalPayload["referenceNumber"] = referenceNumber;
 
         console.log("final payload : ")
         console.log(finalPayload)

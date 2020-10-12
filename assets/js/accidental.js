@@ -111,7 +111,7 @@ function renderProgress(progress) {
 
 
 
-
+let beneficiaryCount = "1";
 let finalPayload = {};
 let accidentPayload = {};
 let basicInformation = {};
@@ -1648,7 +1648,7 @@ function handleAccountInfo(event) {
     InsuredInformation["PayoutOption"] = "CTA";
     finalPayload["BasicInformation"] = basicInformation;
     finalPayload["InsuredInformation"] = InsuredInformation;
-    finalPayload["BankDetails"] = BankDetailsList;
+    finalPayload["BankDetailsList"] = BankDetailsList;
     finalPayload["FilesInformation"] = filesObject;
 
     console.log("FPB : ")
@@ -1699,10 +1699,8 @@ function pickUp() {
   InsuredInformation["PayoutOption"] = "PUA";
   finalPayload["BasicInformation"] = basicInformation;
   finalPayload["InsuredInformation"] = InsuredInformation;
-  finalPayload["BankDetails"] = BankDetailsList;
+  finalPayload["BankDetailsList"] = BankDetailsList;
   finalPayload["FilesInformation"] = filesObject;
-  // finalPayload["stageThree"] = true;
-  // finalPayload["referenceNumber"] = referenceNumber;
 
   console.log("pick up payload : ")
   console.log(finalPayload)
