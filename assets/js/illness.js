@@ -882,10 +882,10 @@ function handleForm(event) {
         InsuredInformation["PhoneNumber"] = field_mobileNum;
         InsuredInformation["EmailAddress"] = field_emailAddress;
         InsuredInformation["HomeAddress"] = field_homeAddress;
-        InsuredInformation["DateOfSymtomps"] = field_DOA.split('-')[1] + "/" + field_DOA.split('-')[2] + "/" + field_DOA.split('-')[0];
-        InsuredInformation["RootCauseDate"] = field_TOA.split('-')[1] + "/" + field_TOA.split('-')[2] + "/" + field_TOA.split('-')[0];
-        InsuredInformation["DoctorVisitDate"] = field_POA.split('-')[1] + "/" + field_POA.split('-')[2] + "/" + field_POA.split('-')[0];
-        InsuredInformation["medicalConsultation"] = field_MedicalConsultation;
+        InsuredInformation["FirstSymptomsDate"] = field_DOA.split('-')[1] + "/" + field_DOA.split('-')[2] + "/" + field_DOA.split('-')[0];
+        InsuredInformation["AccidentDate"] = field_TOA.split('-')[1] + "/" + field_TOA.split('-')[2] + "/" + field_TOA.split('-')[0];
+        InsuredInformation["FirstConsultationDate"] = field_POA.split('-')[1] + "/" + field_POA.split('-')[2] + "/" + field_POA.split('-')[0];
+        InsuredInformation["InjuryDetails"] = field_MedicalConsultation;
 
         let stageOneData = {
             stageOne: true,
@@ -1457,8 +1457,6 @@ function handleAccountInfo(event) {
             finalPayload["InsuredInformation"] = InsuredInformation;
             finalPayload["BankDetailsList"] = BankDetailsList;
             finalPayload["FilesInformation"] = filesObject;
-            // finalPayload["stageThree"] = true;
-            // finalPayload["referenceNumber"] = referenceNumber;
 
             console.log("FPB : ")
             console.log(finalPayload)
@@ -1496,8 +1494,6 @@ function pickUp() {
     finalPayload["InsuredInformation"] = InsuredInformation;
     finalPayload["BankDetailsList"] = BankDetailsList;
     finalPayload["FilesInformation"] = filesObject;
-    // finalPayload["stageThree"] = true;
-    // finalPayload["referenceNumber"] = referenceNumber;
 
     console.log("pick up payload : ")
     console.log(finalPayload)
@@ -1510,7 +1506,6 @@ function pickUp() {
         })
     }), '*');
     $('#payment').hide();
-    /*   $('#process_confirmation').show(); */
     $("#pickUp").show();
     $("#step2").addClass("active");
     $("#step2>div").addClass("active");
