@@ -105,13 +105,6 @@ function renderProgress(progress) {
 }
 
 
-
-
-
-
-
-
-
 let finalPayload = {};
 let accidentPayload = {};
 let basicInformation = {};
@@ -137,6 +130,15 @@ $(document).ready(function (event) {
   $(this).mousemove(resetTimer); 
   $(this).keypress(resetTimer); 
 
+  let selector = 'Peso'
+  $("#field_Bank > option").hide();
+  $("#field_Bank > option").filter(function () { return $(this).data('pub') == selector }).show(); 
+  
+  $('#from_currency').on('change', function (e) {
+      let selector = $(this).val();
+      $("#field_Bank > option").hide();
+      $("#field_Bank > option").filter(function () { return $(this).data('pub') == selector }).show();
+  });
 });
 
 function resetTimer() { 
@@ -945,7 +947,7 @@ function handleForm(event) {
     $("#step2>div").addClass("active");
     $('#requirements').show();
     /*  $('#requirements')[0].scrollIntoView(true); */
-      $("#customer_Name").text(`Hi ${field_firstName}. Hang in there as we process your request. Expect an SMS from us within 1 to 2 WD on the status of your request.`);
+      $("#customer_Name").text(`Hi ${field_firstName}. Hang in there as we process your request. Expect an SMS from us within 1 to 2 working days on the status of your request.`);
     console.log('Data -> ', data)
 
     InsuredInformation["FirstName"] = field_firstName;
@@ -1503,7 +1505,7 @@ function buttonSubmitClicked(event) {
   }
 
   if (!$('#upload_invalidCheck_2').is(':checked')) {
-    $("#upload_warning").text('Please don’t forget to tick the box is certify the accuracy of the documents submitted');
+    $("#upload_warning").text('Please don’t forget to tick the box to confirm the accuracy of your submitted document.');
     $("#warning_parent").show();
     $('#popUp').modal('show');
     return;
