@@ -1360,7 +1360,7 @@ function buttonSubmitClicked(event) {
 
 
     if (!$('#upload_invalidCheck_2').is(':checked')) {
-        $("#upload_warning").text('Please don’t forget to tick the box to confirm the accuracy of your submitted document.');
+        $("#upload_warning").text('Please don’t forget to tick the box to confirm the accuracy of your submitted documents.');
         $("#warning_parent").show();
         $('#popUp').modal('show');
         return;
