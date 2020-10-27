@@ -820,6 +820,47 @@ svg > path {
     font-size: 15px;
 }
 
+/* ===========================
+   ======Reference Search Box ====== 
+   =========================== */
+
+.search
+{
+	border: 2px solid rgb(211, 211, 211);
+	overflow: auto;
+	border-radius: 5px;
+
+}
+
+.search input[type="text"]
+{
+	border: 0px;
+	width: 67%;
+    padding: 20px 10px;
+    background: white;
+}
+
+.search input[type="text"]:focus
+{
+	outline: 0;
+}
+
+.search input[type="submit"]
+{
+	border: 0px;
+	background: none;
+	background-color: #b8123e;
+	color: white;
+	float: right;
+	padding: 20px;
+	
+    cursor:pointer;
+}
+
+.search-field{
+    background-color: white;
+}
+
 .m-modal-top-2 {
   margin: 1rem 0;
 }
@@ -902,3 +943,18 @@ margin-top: 1rem;
  .md-step3-span {
    color: rgb(33, 150, 243) !important;
  }
+
+ /* ===========================
+   ====== Medua Query for Reference Search Box ====== 
+   =========================== */
+
+@media only screen and (min-width : 150px) and (max-width : 780px)
+{
+
+	.search
+	{
+		width: 95%;
+		margin: 0 auto;
+	}
+
+}

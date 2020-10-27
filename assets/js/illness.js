@@ -14,7 +14,7 @@ var file2 = document.getElementById('illness_file_Upload_2');
 var file3 = document.getElementById('illness_file_Upload_3');
 var file5 = document.getElementById('illness_file_Upload_5');
 var file6 = document.getElementById('proof_BAO');
-
+var user_mobile;
 $('#privacy_consent_1').prop('checked', true);
 $('#privacy_consent_2').prop('checked', true);
 
@@ -885,7 +885,7 @@ function handleForm(event) {
         InsuredInformation["RootCauseDate"] = field_TOA.split('-')[2] + "/" + field_TOA.split('-')[1] + "/" + field_TOA.split('-')[0];;
         InsuredInformation["DoctorVisitDate"] = field_POA.split('-')[2] + "/" + field_POA.split('-')[1] + "/" + field_POA.split('-')[0];;
         InsuredInformation["medicalConsultation"] = field_MedicalConsultation;
-
+        document.getElementById('user_mobile').innerHTML = field_mobileNum.replace(/.(?=.{4})/g, '*')
         let stageOneData = {
             stageOne: true,
             type: "Accident",
@@ -1343,8 +1343,7 @@ function buttonSubmitClicked(event) {
 
     $("#step2").addClass("active");
     $("#step2>div").addClass("active");
-    $('#requirements').hide();
-    $('#payment').show();
+    otpTimer();
     /* $('#payment')[0].scrollIntoView(true); */
 
     console.log('upload data --> ', upload_data);
@@ -1625,3 +1624,99 @@ function goBack1() {
     $('#requirements').show();
     /* $('#form_wrapper')[0].scrollIntoView(true); */
 }
+
+
+//drop-2 methods
+var duration;
+var remaining = 120; // 2 mins timer 
+var resendCount = 0;
+var otpModal = document.getElementById('otpPopUp');
+var otpExpModal = document.getElementById('otpExpiry');
+var invalidOtpModal = document.getElementById('invalidOtp');
+var maxResendOtp = document.getElementById('maxResendOtp');
+
+
+
+// otp timer function
+function otpTimer() {
+    if (resendCount <= 3) {
+        $('#otpPopUp').modal('show');
+        if (remaining == 120) {
+            duration = setInterval(otpTimer, 1000);
+        }
+        var m = Math.floor(remaining / 60);
+        var s = remaining % 60;
+        m = m < 10 ? '0' + m : m;
+        s = s < 10 ? '0' + s : s;
+        document.getElementById('otpTimer').innerHTML = m + ':' + s;
+        remaining -= 1;
+        if (remaining == 0) {
+            //  timeout stuff here
+            removeTimer();
+            $('#otpPopUp').modal('hide'); // to hide otp modal on timer exceed
+            $('#otpExpiry').modal('show'); //show otp expiry  modal on timer exceed
+        }
+    }
+    else {
+        $('#otpExpiry').modal('hide');
+        $('#invalidOtp').modal('hide');
+        $('#maxResendOtp').modal('show');
+    }
+}
+
+
+// to refresh the otp otp timer
+
+function removeTimer() {
+    clearInterval(duration);
+    document.getElementById('otpTimer').innerHTML = "";
+    remaining = 120;
+}
+
+function resendOtp(type) {
+    //api call for resend otp
+
+    removeTimer();
+    resendCount++;
+    if (resendCount > 3) {
+        $('#otpPopUp').modal('hide');
+        $('#invalidOtp').modal('hide');
+        $('#maxResendOtp').modal('show');
+
+    }
+    else {
+        $('#invalidOtp').modal('hide');
+        if (type != 'resend') { $('#otpPopUp').modal('show'); }
+        document.getElementById('otp').value = ''
+        otpTimer();
+
+    }
+    $('#otpExpiry').modal('hide');
+}
+
+
+function submitOtp() {
+    //api call fro submit otp
+
+    var dummy_otp = '1234'
+    removeTimer();
+    if (document.getElementById('otp').value != dummy_otp) {
+        $('#invalidOtp').modal('show');
+    }
+    else {
+        $('#otpPopUp').modal('hide');
+        $('#requirements').hide();
+        $('#payment').show();
+    }
+    document.getElementById('otp').value = '';
+}
+
+// When the user clicks anywhere outside of the modal, close it and remove timer 
+window.onclick = function (event) {
+    if (event.target == otpModal || event.target == otpExpModal || event.target == invalidOtpModal || event.target == maxResendOtp) {
+        console.log(event.target)
+        removeTimer();
+    }
+}
+
+//drop-2 methods
