@@ -26,6 +26,7 @@ let botId = url.searchParams.get('botId');
 form.addEventListener('submit', handleForm);
 form_Bank.addEventListener('submit', handleAccountInfo);
 
+let beneficiaryCount="1";
 let finalPayload = {};
 let accidentPayload = {};
 let basicInformation = {};
@@ -38,9 +39,9 @@ let filesList = [];
 let filesMap = {};
 let claimType, causeOfLoss, govIdFront, govIdBack, apsFile, narrationReport, officialReceipts;
 let file1Buffer, file2Buffer, file3Buffer, file4Buffer, file5Buffer, file6Buffer, file7Buffer, file8Buffer;
-basicInformation["CompanyCode"] = "PAL/BPLAC";
-basicInformation["Claim Type "] = "LIVING";
-basicInformation["CauseOfLoss"] = "Accident";
+basicInformation["CompanyCode"] = "BPLAC";
+basicInformation["ClaimType"] = "Living";
+basicInformation["CauseOfLoss"] = "Illness";
 basicInformation["WebReferenceNumber"] = referenceNumber;
 
 /* document.addEventListener('DOMContentLoaded', function () {
@@ -69,6 +70,17 @@ function myDisable() {
     document.getElementById("back_btn1").style.pointerEvents = "none";
     document.getElementById("bank_form").style.cursor = "no-drop";
 }
+
+function addFileToList(fileObject, fileName){
+    console.log("in function, with name : ");
+    console.log(fileName);
+    let index = filesList.findIndex(x => x.Filename == fileName )
+
+    if(index===-1){
+      console.log("adding bcoz unique");
+      filesList.push(fileObject);
+    }
+  }
 
 function timer() {
     var random = Math.floor(Math.random() * 5) + 1
@@ -125,6 +137,16 @@ $(document).ready(function (event) {
     let idleInterval = setInterval(timerIncrement, 1000);
     $(this).mousemove(resetTimer);
     $(this).keypress(resetTimer);
+
+    let selector = 'Peso'
+    $("#field_Bank > option").hide();
+    $("#field_Bank > option").filter(function () { return $(this).data('pub') == selector }).show();
+
+    $('#from_currency').on('change', function (e) {
+        let selector = $(this).val();
+        $("#field_Bank > option").hide();
+        $("#field_Bank > option").filter(function () { return $(this).data('pub') == selector }).show();
+    });
 });
 
 
@@ -867,7 +889,7 @@ function handleForm(event) {
         $("#step2").addClass("active");
         $("#step2>div").addClass("active");
         $("#requirements").show();
-        $("#customer_Name").text(`Hi ${field_firstName}. Hang in there as we process your request. Expect an SMS from us within 1 to 2 WD on the status of your request.`);
+        $("#customer_Name").text(`Hi ${field_firstName}. Hang in there as we process your request. Expect an SMS from us within 1 to 2 working days on the status of your request.`);
         /* $('#requirements')[0].scrollIntoView(true); */
 
         console.log("Data -> ", data);
@@ -876,16 +898,16 @@ function handleForm(event) {
         InsuredInformation["MiddleName"] = field_middleName;
         InsuredInformation["LastName"] = field_lastName;
         InsuredInformation["Suffix"] = field_lastName_Suffix;
-        InsuredInformation["DateOfBirth"] = field_DOB.split('-')[2] + "/" + field_DOB.split('-')[1] + "/" + field_DOB.split('-')[0];
+        InsuredInformation["DateOfBirth"] = field_DOB.split('-')[1] + "/" + field_DOB.split('-')[2] + "/" + field_DOB.split('-')[0];
         InsuredInformation["CountryCode"] = $("select#inlineFormCustomSelect option").filter(":selected").val();
         InsuredInformation["PhoneNumber"] = field_mobileNum;
         InsuredInformation["EmailAddress"] = field_emailAddress;
         InsuredInformation["HomeAddress"] = field_homeAddress;
-        InsuredInformation["DateOfSymtomps"] = field_DOA.split('-')[2] + "/" + field_DOA.split('-')[1] + "/" + field_DOA.split('-')[0];;
-        InsuredInformation["RootCauseDate"] = field_TOA.split('-')[2] + "/" + field_TOA.split('-')[1] + "/" + field_TOA.split('-')[0];;
-        InsuredInformation["DoctorVisitDate"] = field_POA.split('-')[2] + "/" + field_POA.split('-')[1] + "/" + field_POA.split('-')[0];;
-        InsuredInformation["medicalConsultation"] = field_MedicalConsultation;
-        document.getElementById('user_mobile').innerHTML = field_mobileNum.replace(/.(?=.{4})/g, '*')
+        InsuredInformation["FirstSymptomsDate"] = field_DOA.split('-')[1] + "/" + field_DOA.split('-')[2] + "/" + field_DOA.split('-')[0];
+        InsuredInformation["AccidentDate"] = field_TOA.split('-')[1] + "/" + field_TOA.split('-')[2] + "/" + field_TOA.split('-')[0];
+        InsuredInformation["FirstConsultationDate"] = field_POA.split('-')[1] + "/" + field_POA.split('-')[2] + "/" + field_POA.split('-')[0];
+        InsuredInformation["InjuryDetails"] = field_MedicalConsultation;
+
         let stageOneData = {
             stageOne: true,
             type: "Accident",
@@ -1027,7 +1049,7 @@ const isFileSizeValid = (file) => {
 
 file1.onchange = async function (e) {
     docType = "LIDC001";
-    tranType = "CIF";
+    tranType = "CIF-MIN";
     $("#file_upload_cancle_1").hide();
     $("#file_Upload_Tick_1").hide();
     console.log("Starting");
@@ -1047,18 +1069,16 @@ file1.onchange = async function (e) {
                     proceedScan(file, buttonNum, pageId);
                 }
 
-                let fileName = referenceNumber + "_" + docType + "_" + tranType;
+                let fileName = referenceNumber + "-" + docType + "-" + tranType;
 
-                console.log("setting file data : ");
                 let accident = {};
-                accident['LIDC001Front'] = {
-                    "Filename": `${fileName}.pdf`,
-                    "DocType": "PDF",
-                    "DocTypeCode": "LIDC001",
-                    "DocumentDescription": "Front copy of doc"
-                }
+                accident['BeneficiaryNo'] = beneficiaryCount,
+                    accident["Filename"] = `${fileName}.pdf`,
+                    accident["DocType"] = "PDF",
+                    accident["DocTypeCode"] = docType,
+                    accident["DocumentDescription"] = "Front copy of doc"
 
-                filesList.push(accident);
+                addFileToList(accident, `${fileName}.pdf`);
                 const formData = new FormData()
                 formData.append('file', file, fileName + `.${ext}`);
                 handleFileUpload(formData, fileName);
@@ -1085,7 +1105,7 @@ file1.onchange = async function (e) {
 
 file2.onchange = async function (e) {
     docType = "LIDC001";
-    tranType = "CIB";
+    tranType = "CIB-MIN";
     $("#file_upload_cancle_2").hide();
     $("#file_Upload_Tick_2").hide();
     var ext = this.value.match(/\.([^\.]+)$/)[1];
@@ -1104,17 +1124,17 @@ file2.onchange = async function (e) {
                     proceedScan(file, buttonNum, pageId);
                 }
 
-                let fileName = referenceNumber + "_" + docType + "_" + tranType;
+                let fileName = referenceNumber + "-" + docType + "-" + tranType;
 
                 let accident = {};
-                accident['LIDC001Back'] = {
-                    "Filename": `${fileName}.pdf`,
-                    "DocType": "PDF",
-                    "DocTypeCode": "LIDC001",
-                    "DocumentDescription": "Back copy of doc"
-                }
+                
+                accident['BeneficiaryNo'] = beneficiaryCount,
+                    accident["Filename"] = `${fileName}.pdf`,
+                    accident["DocType"] = "PDF",
+                    accident["DocTypeCode"] = docType,
+                    accident["DocumentDescription"] = "Back copy of doc"
 
-                filesList.push(accident);
+                addFileToList(accident, `${fileName}.pdf`);
                 const formData = new FormData()
                 formData.append('file', file, fileName + `.${ext}`)
                 handleFileUpload(formData, fileName);
@@ -1142,7 +1162,7 @@ file2.onchange = async function (e) {
 
 file3.onchange = async function (e) {
     docType = "LIDC034";
-    tranType = "APS";
+    tranType = "APS-MIN";
     $("#file_upload_cancle_3").hide();
     $("#file_Upload_Tick_3").hide();
     var ext = this.value.match(/\.([^\.]+)$/)[1];
@@ -1161,17 +1181,16 @@ file3.onchange = async function (e) {
                     proceedScan(file, buttonNum, pageId);
                 }
 
-                let fileName = referenceNumber + "_" + docType + "_" + tranType;
+                let fileName = referenceNumber + "-" + docType + "-" + tranType;
 
                 let accident = {};
-                accident[docType] = {
-                    "Filename": `${fileName}.pdf`,
-                    "DocType": "PDF",
-                    "DocTypeCode": docType,
-                    "DocumentDescription": "Attending Physician’s Statement"
-                }
+                accident['BeneficiaryNo'] = beneficiaryCount,
+                    accident["Filename"] = `${fileName}.pdf`,
+                    accident["DocType"] = "PDF",
+                    accident["DocTypeCode"] = docType,
+                    accident["DocumentDescription"] = "Attending Physician’s Statement"
 
-                filesList.push(accident);
+                    addFileToList(accident, `${fileName}.pdf`);
                 const formData = new FormData()
                 formData.append('file', file, fileName + `.${ext}`)
                 handleFileUpload(formData, fileName);
@@ -1198,7 +1217,7 @@ file3.onchange = async function (e) {
 
 file5.onchange = async function (e) {
     docType = "LIDC037";
-    tranType = "SOA";
+    tranType = "SOA-MIN";
     $("#file_upload_cancle_5").hide();
     $("#file_Upload_Tick_5").hide();
     var ext = this.value.match(/\.([^\.]+)$/)[1];
@@ -1216,17 +1235,16 @@ file5.onchange = async function (e) {
                 else {
                     proceedScan(file, buttonNum, pageId);
                 }
-                let fileName = referenceNumber + "_" + docType + "_" + tranType;
+                let fileName = referenceNumber + "-" + docType + "-" + tranType;
 
                 let accident = {};
-                accident[docType] = {
-                    "Filename": `${fileName}.pdf`,
-                    "DocType": "PDF",
-                    "DocTypeCode": docType,
-                    "DocumentDescription": "Police or Narration Report"
-                }
+                accident['BeneficiaryNo'] = beneficiaryCount,
+                    accident["Filename"] = `${fileName}.pdf`,
+                    accident["DocType"] = "PDF",
+                    accident["DocTypeCode"] = docType,
+                    accident["DocumentDescription"] = "Police or Narration Report"
 
-                filesList.push(accident);
+                addFileToList(accident, `${fileName}.pdf`);
                 const formData = new FormData()
                 formData.append('file', file, fileName + `.${ext}`)
                 handleFileUpload(formData, fileName);
@@ -1253,6 +1271,8 @@ file5.onchange = async function (e) {
 };
 
 file6.onchange = async function (e) {
+    docType = "LIBA001";
+    tranType = "BA-MIN";
     $("#file_upload_cancle_6").hide();
     $("#file_Upload_Tick_6").hide();
     var ext = this.value.match(/\.([^\.]+)$/)[1];
@@ -1270,6 +1290,20 @@ file6.onchange = async function (e) {
                 else {
                     proceedScan(file, buttonNum, pageId);
                 }
+
+                let fileName = referenceNumber + "-" + docType + "-" + tranType;
+
+                let accident = {};
+                accident['BeneficiaryNo'] = beneficiaryCount,
+                accident["Filename"] = `${fileName}.pdf`,
+                accident["DocType"] = "PDF",
+                accident["DocTypeCode"] = docType,
+                accident["DocumentDescription"] = "Proof of Bank Account"
+
+                addFileToList(accident, `${fileName}.pdf`);
+                const formData = new FormData()
+                formData.append('file', file, fileName + `.${ext}`);
+                handleFileUpload(formData, fileName);
             } else {
                 $("#warning_parent_acct").show();
                 $("#file_loader_icon_6").hide();
@@ -1326,7 +1360,7 @@ function buttonSubmitClicked(event) {
 
 
     if (!$('#upload_invalidCheck_2').is(':checked')) {
-        $("#upload_warning").text('Please don’t forget to tick the box to confirm the accuracy of your submitted documents.');
+        $("#upload_warning").text('Please don’t forget to tick the box to confirm the accuracy of your submitted document.');
         $("#warning_parent").show();
         $('#popUp').modal('show');
         return;
@@ -1445,21 +1479,19 @@ function handleAccountInfo(event) {
             BankDetails["AccountName"] = field_AccountName;
             BankDetails["AccountNumber"] = field_AccountNumber;
             BankDetails["AccountCurrency"] = $("select#from_currency option").filter(":selected").val();
-
             let BankDetailsList = [];
             BankDetailsList.push(BankDetails);
 
             let filesObject = {};
-            filesObject["FolderName"] = `/home/accounts/Claims/${referenceNumber}`
+            filesObject["FolderName"] = `/CLAIMS/${referenceNumber}`
             filesObject["FileList"] = filesList;
+            
+            InsuredInformation["PayoutOption"] = "CTA";
 
-            // filesMap["Accident"] = accident
             finalPayload["BasicInformation"] = basicInformation;
             finalPayload["InsuredInformation"] = InsuredInformation;
             finalPayload["BankDetailsList"] = BankDetailsList;
-            finalPayload["FileList"] = filesObject;
-            finalPayload["stageThree"] = true;
-            finalPayload["referenceNumber"] = referenceNumber;
+            finalPayload["FilesInformation"] = filesObject;
 
             console.log("FPB : ")
             console.log(finalPayload)
@@ -1487,18 +1519,16 @@ function bankTranfer() {
 
 function pickUp() {
     let filesObject = {};
-    filesObject["FolderName"] = `/home/accounts/Claims/${referenceNumber}`
+    filesObject["FolderName"] = `/CLAIMS/${referenceNumber}`
     filesObject["FileList"] = filesList;
     let BankDetailsList = [];
     BankDetailsList.push(BankDetails);
 
-    // filesMap["Accident"] = accident
+    InsuredInformation["PayoutOption"] = "PUA";
     finalPayload["BasicInformation"] = basicInformation;
     finalPayload["InsuredInformation"] = InsuredInformation;
-    finalPayload["BankDetails"] = BankDetailsList;
-    finalPayload["FileList"] = filesObject;
-    finalPayload["stageThree"] = true;
-    finalPayload["referenceNumber"] = referenceNumber;
+    finalPayload["BankDetailsList"] = BankDetailsList;
+    finalPayload["FilesInformation"] = filesObject;
 
     console.log("pick up payload : ")
     console.log(finalPayload)
@@ -1511,7 +1541,6 @@ function pickUp() {
         })
     }), '*');
     $('#payment').hide();
-    /*   $('#process_confirmation').show(); */
     $("#pickUp").show();
     $("#step2").addClass("active");
     $("#step2>div").addClass("active");
