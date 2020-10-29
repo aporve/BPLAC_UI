@@ -864,7 +864,11 @@ function handleFormAddBeneficiary(event) {
             beneficiary["Sex"] = field_addBeneficiarySex,
             beneficiary["Relationship"] = field_addBeneficiaryRelationToDeceased,
             beneficiary["DocumentFolder"] = `/CLAIMS/${referenceNumber}`,
-            beneficiary["PayoutOption"] = "CTA"
+            beneficiary["PayoutOption"] = "CTA",
+            beneficiary["Employer"] = field_addBeneficiaryEmployerName,
+            beneficiary["GovernmentOfficial"] = field_addBeneficiary_relatives1,
+            beneficiary["GovernmentOfficialRelative"] = field_add_Beneficiary_add_relatives2,
+            beneficiary["Occupation"] = field_addBeneficiaryOccupation
         BeneficiaryList.push(beneficiary);
 
         if  (buttonCount == 1) {
