@@ -7,6 +7,7 @@ var bCount;
 var optiondisable = 1;
 var optionAge = false;
 var relation = false;
+var upload_data = null;
 var dataBen = null;
 var addBenAccountInfo = null;
 var addBeni_upload_data = null;
@@ -73,23 +74,41 @@ $(document).ready(function (event) {
     $(this).mousemove(resetTimer); 
     $(this).keypress(resetTimer); 
 
-    let selector = 'Peso'
-    $("#field_Bank > option").hide();
-    $("#field_Bank > option").filter(function () { return $(this).data('pub') == selector }).show();
 
-    $("#field_addBenificiaryBank > option").hide();
-    $("#field_addBenificiaryBank > option").filter(function () { return $(this).data('pub') == selector }).show();
-
-    $('#from_currency').on('change', function (e) {
-        let selector = $(this).val();
-        $("#field_Bank > option").hide();
-        $("#field_Bank > option").filter(function () { return $(this).data('pub') == selector }).show();
+    var val = 'Peso';
+    if (val == "Peso") {
+      $("#field_Bank").html(
+       "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option><option value='BPI Family Savings Bank - BFB'>BPI Family Savings Bank - BFB</option>"
+      );
+      $("#field_addBenificiaryBank").html(
+        "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option><option value='BPI Family Savings Bank - BFB'>BPI Family Savings Bank - BFB</option>"
+      );
+    }
+  
+    $("#from_currency").change(function () {
+      var val = $(this).val();
+      if (val == "Peso") {
+        $("#field_Bank").html(
+         "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option><option value='BPI Family Savings Bank - BFB'>BPI Family Savings Bank - BFB</option>"
+        );
+      } else if (val == "USD") {
+        $("#field_Bank").html(
+          "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option>"
+        );
+      }
     });
 
-    $('#from_addBeneficiarycurrency').on('change', function (e) {
-        let selector = $(this).val();
-        $("#field_addBenificiaryBank > option").hide();
-        $("#field_addBenificiaryBank > option").filter(function () { return $(this).data('pub') == selector }).show();
+    $("#from_addBeneficiarycurrency").change(function () {
+        var val = $(this).val();
+        if (val == "Peso") {
+          $("#field_addBenificiaryBank").html(
+           "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option><option value='BPI Family Savings Bank - BFB'>BPI Family Savings Bank - BFB</option>"
+          );
+        } else if (val == "USD") {
+          $("#field_addBenificiaryBank").html(
+            "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option>"
+          );
+        }
     });
 });
 
@@ -2400,7 +2419,7 @@ function addBeneficiary(event) {
 
     $("#upload_warning").text('');
     $("#warning_parent").hide();
-    const upload_data = {
+    upload_data = {
         upload_file_1: file1.value,
         upload_file_2: file2.value,
         upload_file_3: file3.value,
@@ -2523,6 +2542,10 @@ function addBeneficiaryNew(event) {
             }
                 
             dataReset("field_addBenificiaryAccountName", "field_addBenificiaryAccountNumber", "field_addBenificiaryBank", "field_addBeneficiaryBranch", "field_addBeneficiaryCurrency", "upload_file_8");
+            $('#from_addBeneficiarycurrency').val('Peso');
+            $("#field_addBenificiaryBank").html(
+                "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option><option value='BPI Family Savings Bank - BFB'>BPI Family Savings Bank - BFB</option>"
+              );        
             fileUploadDataReset(); 
 
             $('#privacy_consent_1').prop('checked', false);
@@ -3805,7 +3828,18 @@ function isEmpty(obj) {
 
 function setDataBeneficiary(data) {
     for (const [key, value] of Object.entries(data)) {
-        $(`#${key}`).val(`${value}`)
+
+        if( key == 'field_addBenificiaryBank'){
+            $("#field_addBenificiaryBank").html(
+                `<option value='${value}'>${value}</option>`
+              );
+        }else if (key == 'field_addBeneficiaryCurrency'){
+            $('#field_addBeneficiaryCurrency').val(`${value}`)
+        }
+        else {
+            $(`#${key}`).val(`${value}`);
+        }
+
       }
 }
 
