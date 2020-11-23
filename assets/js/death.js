@@ -598,7 +598,8 @@ function validateNotNumber(evt) {
 
 function handleFormAddBeneficiary(event) {
     event.preventDefault();
-    beneficiaryCount++;
+    // beneficiaryCount++;
+    beneficiaryCount = buttonCount+1;
     traverse = 1;
     var field_addBeneficiaryFirstName = $("#field_addBeneficiaryFirstName").val();
     var field_addBeneficiaryMiddleName = $("#field_addBeneficiaryMiddleName").val();
@@ -893,7 +894,9 @@ function handleFormAddBeneficiary(event) {
             beneficiary["Employer"] = field_addBeneficiaryEmployerName,
             beneficiary["GovernmentOfficial"] = field_addBeneficiary_relatives1,
             beneficiary["GovernmentOfficialRelative"] = field_add_Beneficiary_add_relatives2,
-            beneficiary["Occupation"] = field_addBeneficiaryOccupation
+            beneficiary["Occupation"] = field_addBeneficiaryOccupation,
+            beneficiary["check1"] = dataBen.privacy_consent_beneficiary_1,
+            beneficiary["check2"] = dataBen.privacy_consent_beneficiary_2
         BeneficiaryList.push(beneficiary);
 
         if  (buttonCount == 1) {
@@ -1467,7 +1470,9 @@ function handleForm(event) {
             beneficiary["Employer"] = field_BeneficiaryEmployerName,
             beneficiary["GovernmentOfficial"] = $("select#field_Beneficiary_relatives1 option").filter(":selected").val(),
             beneficiary["GovernmentOfficialRelative"] = $("select#field_Beneficiary_relatives2 option").filter(":selected").val(),
-        beneficiary["Occupation"] = field_BenificiaryOccupation
+        beneficiary["Occupation"] = field_BenificiaryOccupation,
+        beneficiary["check1"] = data.privacy_consent_1,
+            beneficiary["check2"] = data.privacy_consent_2
         BeneficiaryList.push(beneficiary);
 
        /*  dataReset("field_firstName", "field_firstName", "field_middleName", "field_lastName", "field_lastName_Suffix", "field_DOB", "field_DOID", "field_BeneficiaryFirstName", "field_BeneficiaryMiddleName", "field_BeneficiaryLastName", "field_BeneficiaryMobileNum", "field_BeneficiaryEmailAddress", "field_BeneficiaryHomeAddress", "field_BeneficiaryDOB", "field_BeneficiaryPOB", "field_BeneficiaryNationality", "field_BeneficiarySex", "field_BeneficiaryRelationToDeceased", "field_Beneficiary_relatives1", "field_Beneficiary_relatives2") */

@@ -993,6 +993,9 @@ function handleForm(event) {
     InsuredInformation["AccidentDate"] = field_DOA.split('-')[1]+"/"+field_DOA.split('-')[2]+"/"+field_DOA.split('-')[0];
     InsuredInformation["AccidentTime"] = full_TOA;
     InsuredInformation["AccidentPlace"] = field_POA;
+    InsuredInformation["check1"] = data.privacy_consent_1;
+    InsuredInformation["check2"] = data.privacy_consent_2;
+
 
     let stageOneData = {
       stageOne: true,
