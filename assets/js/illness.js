@@ -26,7 +26,7 @@ let botId = url.searchParams.get('botId');
 form.addEventListener('submit', handleForm);
 form_Bank.addEventListener('submit', handleAccountInfo);
 
-let beneficiaryCount="1";
+let beneficiaryCount = "1";
 let finalPayload = {};
 let accidentPayload = {};
 let basicInformation = {};
@@ -71,16 +71,16 @@ function myDisable() {
     document.getElementById("bank_form").style.cursor = "no-drop";
 }
 
-function addFileToList(fileObject, fileName){
+function addFileToList(fileObject, fileName) {
     console.log("in function, with name : ");
     console.log(fileName);
-    let index = filesList.findIndex(x => x.Filename == fileName )
+    let index = filesList.findIndex(x => x.Filename == fileName)
 
-    if(index===-1){
-      console.log("adding bcoz unique");
-      filesList.push(fileObject);
+    if (index === -1) {
+        console.log("adding bcoz unique");
+        filesList.push(fileObject);
     }
-  }
+}
 
 function timer() {
     var random = Math.floor(Math.random() * 5) + 1
@@ -140,22 +140,22 @@ $(document).ready(function (event) {
 
     var val = 'Peso';
     if (val == "Peso") {
-      $("#field_Bank").html(
-       "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option><option value='BPI Family Savings Bank - BFB'>BPI Family Savings Bank - BFB</option>"
-      );
+        $("#field_Bank").html(
+            "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option><option value='BPI Family Savings Bank - BFB'>BPI Family Savings Bank - BFB</option>"
+        );
     }
-  
+
     $("#from_currency").change(function () {
-      var val = $(this).val();
-      if (val == "Peso") {
-        $("#field_Bank").html(
-         "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option><option value='BPI Family Savings Bank - BFB'>BPI Family Savings Bank - BFB</option>"
-        );
-      } else if (val == "USD") {
-        $("#field_Bank").html(
-          "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option>"
-        );
-      }
+        var val = $(this).val();
+        if (val == "Peso") {
+            $("#field_Bank").html(
+                "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option><option value='BPI Family Savings Bank - BFB'>BPI Family Savings Bank - BFB</option>"
+            );
+        } else if (val == "USD") {
+            $("#field_Bank").html(
+                "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option>"
+            );
+        }
     });
 });
 
@@ -919,7 +919,9 @@ function handleForm(event) {
         InsuredInformation["AccidentDate"] = field_TOA.split('-')[1] + "/" + field_TOA.split('-')[2] + "/" + field_TOA.split('-')[0];
         InsuredInformation["FirstConsultationDate"] = field_POA.split('-')[1] + "/" + field_POA.split('-')[2] + "/" + field_POA.split('-')[0];
         InsuredInformation["InjuryDetails"] = field_MedicalConsultation;
-
+        // for otp screen
+        document.getElementById('user_mobile').innerHTML = field_mobileNum.replace(/.(?=.{4})/g, '*')
+        // for otp screen
         let stageOneData = {
             stageOne: true,
             type: "Accident",
@@ -934,9 +936,9 @@ function handleForm(event) {
                 }
             })
         }), '*');
-    }else if((comparingDob == 5) || (comparingDob == 6) || (comparingDob == 7)) {
+    } else if ((comparingDob == 5) || (comparingDob == 6) || (comparingDob == 7)) {
         $('#popUp_DOB').modal('show');
-    }  else {
+    } else {
         $("#popUp").modal("show");
     }
 }
@@ -1141,7 +1143,7 @@ file2.onchange = async function (e) {
                 let fileName = referenceNumber + "-" + docType + "-" + tranType;
 
                 let accident = {};
-                
+
                 accident['BeneficiaryNo'] = beneficiaryCount,
                     accident["Filename"] = `${fileName}.pdf`,
                     accident["DocType"] = "PDF",
@@ -1204,7 +1206,7 @@ file3.onchange = async function (e) {
                     accident["DocTypeCode"] = docType,
                     accident["DocumentDescription"] = "Attending Physician’s Statement"
 
-                    addFileToList(accident, `${fileName}.pdf`);
+                addFileToList(accident, `${fileName}.pdf`);
                 const formData = new FormData()
                 formData.append('file', file, fileName + `.${ext}`)
                 handleFileUpload(formData, fileName);
@@ -1309,10 +1311,10 @@ file6.onchange = async function (e) {
 
                 let accident = {};
                 accident['BeneficiaryNo'] = beneficiaryCount,
-                accident["Filename"] = `${fileName}.pdf`,
-                accident["DocType"] = "PDF",
-                accident["DocTypeCode"] = docType,
-                accident["DocumentDescription"] = "Proof of Bank Account"
+                    accident["Filename"] = `${fileName}.pdf`,
+                    accident["DocType"] = "PDF",
+                    accident["DocTypeCode"] = docType,
+                    accident["DocumentDescription"] = "Proof of Bank Account"
 
                 addFileToList(accident, `${fileName}.pdf`);
                 const formData = new FormData()
@@ -1499,7 +1501,7 @@ function handleAccountInfo(event) {
             let filesObject = {};
             filesObject["FolderName"] = `/CLAIMS/${referenceNumber}`
             filesObject["FileList"] = filesList;
-            
+
             InsuredInformation["PayoutOption"] = "CTA";
 
             finalPayload["BasicInformation"] = basicInformation;
@@ -1669,6 +1671,7 @@ function goBack1() {
 }
 
 
+
 //drop-2 methods
 var duration;
 var remaining = 120; // 2 mins timer 
@@ -1678,9 +1681,6 @@ var otpExpModal = document.getElementById('otpExpiry');
 var invalidOtpModal = document.getElementById('invalidOtp');
 var maxResendOtp = document.getElementById('maxResendOtp');
 
-
-
-// otp timer function
 function otpTimer() {
     if (resendCount <= 3) {
         $('#otpPopUp').modal('show');
@@ -1721,7 +1721,7 @@ function resendOtp(type) {
 
     removeTimer();
     resendCount++;
-    if (resendCount > 3) {
+    if (resendCount > 5) {
         $('#otpPopUp').modal('hide');
         $('#invalidOtp').modal('hide');
         $('#maxResendOtp').modal('show');
@@ -1740,18 +1740,29 @@ function resendOtp(type) {
 
 function submitOtp() {
     //api call fro submit otp
-
+    invalidOtp = 0;
     var dummy_otp = '1234'
     removeTimer();
+
     if (document.getElementById('otp').value != dummy_otp) {
-        $('#invalidOtp').modal('show');
+        invalidOtp++;
+        if (invalidOtp <= 3) {
+            $('#invalidOtp').modal('show');
+        }
+        else {
+            $('#invalidOtp').modal('hide');
+            $('#maxInvalidOtp').modal('show');
+        }
+
     }
     else {
         $('#otpPopUp').modal('hide');
         $('#requirements').hide();
         $('#payment').show();
+
     }
-    document.getElementById('otp').value = '';
+
+    document.getElementById('otp').value = ''
 }
 
 // When the user clicks anywhere outside of the modal, close it and remove timer 
@@ -1760,6 +1771,13 @@ window.onclick = function (event) {
         console.log(event.target)
         removeTimer();
     }
+}
+// when user clicks exit button from OTP pop up
+function backToFileClaim() {
+
+    window.location.href = "main.html";
+
+
 }
 
 //drop-2 methods
