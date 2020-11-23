@@ -108,7 +108,7 @@
                                     <p class="font-weight-normal">This won't take long. To start your claim request, kindly fill out the form below.
                                     </p>
                                     <br />
-                                    <p class="font-italic font-weight-normal">Important Note!  The session will end in thirty (30) minutes. Have your policy information and documents ready so we can complete your request before the session ends.</p>
+                                    <p class="font-italic font-weight-normal">Important Note:  The session will end in thirty (30) minutes. Have your policy information and documents ready so we can complete your request before the session ends.</p>
                                 </div>
                             </div>
                         </div>
@@ -1339,7 +1339,7 @@
                                 </p>
                                 <br />
                                 <p class="font-weight-normal">
-                                    If you have any questions regarding your claim request, please send us an email at <a target="_blank" href="mailto:BPIPhilam_CustomerService@aia.com">BPIPhilam_CustomerService@aia.com</a>. For those in Makati, you may also visit our Vibe Customer Service Center at BPI-Philam Makati along Ayala Ave. You may also call our Customer Hotline at (02) 8528-5501.
+                                    If you have any questions regarding your claim request, please send us an email at <a target="_blank" href="mailto:BPI-Philam_CustomerService@aia.com">BPI-Philam_CustomerService@aia.com</a>. For those in Makati, you may also visit our Vibe Customer Service Center at BPI-Philam Makati along Ayala Ave. You may also call our Customer Hotline at (02) 8528-5501.
                                 </p>
                             </div>
                             <div class="col-3 time_container">
@@ -1410,22 +1410,7 @@
                                                         onkeypress="return isNotNumber(event) && checkSpcialChar(event)" required />
                                                     <div id="err_field_Bank" class="error"></div> -->
                                                     <select class="custom-select-container mr-sm-2 " id="field_Bank">
-														<option value="" selected>--</option>
-														<option value="Bank of the Philippine Islands - BPI" data-pub="USD">Bank of the Philippine Islands - BPI</option>
-														<option value="BPI Family Savings Bank - BFB" data-pub="Peso">BPI Family Savings Bank - BFB</option>
-														<option value="Banco de Oro - BDO">Banco de Oro - BDO</option>
-														<option value="China Banking Corporation - CBC">China Banking Corporation - CBC</option>
-														<option value="Citibank Philippines - CITI">Citibank Philippines - CITI</option>
-														<option value="Development Bank of the Phils - DBP">Development Bank of the Phils - DBP</option>
-														<option value="Eastwest Bank - EWB">Eastwest Bank - EWB</option>
-														<option value="Hongkong Shanghai Banking Corp. Phils - HSBC">Hongkong Shanghai Banking Corp. Phils - HSBC</option>
-														<option value="Land Bank of the Philippines - LPB">Land Bank of the Philippines - LPB</option>
-														<option value="Metropolitan Banks and Trust Company - MBTC">Metropolitan Banks and Trust Company - MBTC</option>
-														<option value="Philippine National Bank - PNB">Philippine National Bank - PNB</option>
-														<option value="Rizal Commercial Banking Corp - RCBC">Rizal Commercial Banking Corp - RCBC</option>
-														<option value="Security Bank - SBTC">Security Bank - SBTC</option>
-                                                        <option value="Union Bank of the Philippines - UB">Union Bank of the Philippines - UB</option>
-                                                        <option value="Bank of the Philippine Islands - BPI" data-pub="Peso">Bank of the Philippine Islands - BPI</option>
+														
 													</select>
 													<div id="err_field_Bank" class="error"></div>
                                                 </div>
@@ -1726,135 +1711,134 @@
         </div>
         </section>
 
-<section class="hide modal fade" id="popUp" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <p id="p1">Kindly review any missed or Incorrect information before proceeding.<br> All fields are
-                    mandatory to be filled out.
-                </p>
+        <section class="hide modal fade" id="popUp_DOB" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                <div class="modal-body">
+                    <p id="p1">We’re sorry, the date of birth keyed in is invalid and does not match the date of incident / loss reported. Please double check all information before proceeding.
+                      </p>
+                </div>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" style="width: 50%; margin: 0 auto 3rem auto;">Ok</button>
             </div>
-            <button type="button" class="btn btn-danger" data-dismiss="modal"
-                style="width: 50%; margin: 0 auto 3rem auto;">Ok</button>
-        </div>
-</section>
-<!-- otp pop up modal (drop-2 ) -->
-<section class="hide modal fade" id="otpPopUp" tabindex="-1" role="dialog" aria-labelledby="otpPopUp"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <p id="otp-text">We have send a One-Time PIN to your
-                    <br> mobile number <span id="user_mobile"></span>.
-                    <br> Kindly enter the OTP in the space below.</p>
-                <p id="otp-text">Your OTP expires after two minutes.
-                    <br> Click
-                    <a style="color:#1b89f0 ;cursor: pointer;" onclick="resendOtp('resend')">here</a> to resend another
-                    one.</p>
-                <p id="otp-text">If your current mobile number does not
-                    <br> match our records, kindly update your
-                    <br> contact details via
-                    <a style="color:#1b89f0 ;cursor: pointer;">ePlan</a> or by calling
-                    <br> our hotline at (02)8528-2000. </p>
-                <br>
-                <input type="text" class="input__box" maxlength="25" id="otp" value="" placeholder="OTP" tabindex="1" />
-                <div align="right">Time left : <span id="otpTimer"></span></div>
+        </section>
+
+
+        <!-- otp pop up modal (drop-2 ) -->
+        <section class="hide modal fade" id="otpPopUp" tabindex="-1" role="dialog" aria-labelledby="otpPopUp"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <p id="otp-text">We have send a One-Time PIN to your
+                            <br> mobile number <span id="user_mobile"></span>.
+                            <br> Kindly enter the OTP in the space below.</p>
+                        <p id="otp-text">Your OTP expires after two minutes.
+                            <br> Click
+                            <a style="color:#1b89f0 ;cursor: pointer;" onclick="resendOtp('resend')">here</a> to resend another
+                            one.</p>
+                        <p id="otp-text">If your current mobile number does not
+                            <br> match our records, kindly update your
+                            <br> contact details via
+                            <a style="color:#1b89f0 ;cursor: pointer;">ePlan</a> or by calling
+                            <br> our hotline at (02)8528-2000. </p>
+                        <br>
+                        <input type="text" class="input__box" maxlength="25" id="otp" value="" placeholder="OTP" tabindex="1" />
+                        <div align="right">Time left : <span id="otpTimer"></span></div>
+                    </div>
+                    <button type="button" data-dismiss="modal" class="btn btn-danger" onclick="submitOtp(event)"
+                        style="width: 50%; margin: 0 auto 3rem auto;">Submit</button>
+                </div>
+        
             </div>
-            <button type="button" data-dismiss="modal" class="btn btn-danger" onclick="submitOtp(event)"
-                style="width: 50%; margin: 0 auto 3rem auto;">Submit</button>
-        </div>
-
-    </div>
-</section>
-<!-- otp pop up modal (drop-2 ) -->
-
-<!-- Empty mobile number  modal (drop-2 ) -->
-<section class="hide modal fade" id="emptyMobileNumPopUp" tabindex="-1" role="dialog"
-    aria-labelledby="emptyMobileNumPopUp" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <p id="modal-text">We currently do not have your mobile number on record. Kindly provide us your mobile
-                    number in the space below provided so we can proceed with your claim request.
-                </p>
-
-                <br>
-                <input type="text" class="input__box" maxlength="25" id="newMobileNum" value=""
-                    placeholder="Mobile Number" tabindex="1" />
-
+        </section>
+        <!-- otp pop up modal (drop-2 ) -->
+        
+        <!-- Empty mobile number  modal (drop-2 ) -->
+        <section class="hide modal fade" id="emptyMobileNumPopUp" tabindex="-1" role="dialog"
+            aria-labelledby="emptyMobileNumPopUp" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <p id="modal-text">We currently do not have your mobile number on record. Kindly provide us your mobile
+                            number in the space below provided so we can proceed with your claim request.
+                        </p>
+        
+                        <br>
+                        <input type="text" class="input__box" maxlength="25" id="newMobileNum" value=""
+                            placeholder="Mobile Number" tabindex="1" />
+        
+                    </div>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"
+                        style="width: 50%; margin: 0 auto 3rem auto;">Submit</button>
+                </div>
+        
             </div>
-            <button type="button" class="btn btn-danger" data-dismiss="modal"
-                style="width: 50%; margin: 0 auto 3rem auto;">Submit</button>
-        </div>
-
-    </div>
-</section>
-<!-- Empty mobile number  modal (drop-2 ) -->
-
-<!-- Invalid Otp modal (drop-2 ) -->
-<section class="hide modal fade" id="invalidOtp" tabindex="-1" role="dialog" aria-labelledby="invalidOtp"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <p id="modal-text" style="text-align:center;">Sorry, you have entered an invalid
-                    <br> One-Time PIN. To have another OTP sent to your mobile number, please click
-                    <a style="color:#1b89f0 ;cursor: pointer;" onclick="resendOtp('invalidInput')">here</a>.
-                </p>
-
-                <br>
-
-
+        </section>
+        <!-- Empty mobile number  modal (drop-2 ) -->
+        
+        <!-- Invalid Otp modal (drop-2 ) -->
+        <section class="hide modal fade" id="invalidOtp" tabindex="-1" role="dialog" aria-labelledby="invalidOtp"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <p id="modal-text" style="text-align:center;">Sorry, you have entered an invalid
+                            <br> One-Time PIN. To have another OTP sent to your mobile number, please click
+                            <a style="color:#1b89f0 ;cursor: pointer;" onclick="resendOtp('invalidInput')">here</a>.
+                        </p>
+        
+                        <br>
+        
+        
+                    </div>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"
+                        style="width: 50%; margin: 0 auto 3rem auto;">Exit</button>
+                </div>
+        
             </div>
-            <button type="button" class="btn btn-danger" data-dismiss="modal"
-                style="width: 50%; margin: 0 auto 3rem auto;">Exit</button>
-        </div>
-
-    </div>
-</section>
-<!-- Invalid Otp modal (drop-2 ) -->
-
-<!--Otp expiry modal (drop-2 ) -->
-<section class="hide modal fade" id="otpExpiry" tabindex="-1" role="dialog" aria-labelledby="otpExpiry"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <p id="modal-text">Sorry, your 2 minutes to enter the OTP is up. To have another OTP sent to your mobile
-                    number,please click
-                    <a style="color:#1b89f0;cursor: pointer;" onclick="resendOtp('otpExpire')">here</a>.
-                </p>
-
+        </section>
+        <!-- Invalid Otp modal (drop-2 ) -->
+        
+        <!--Otp expiry modal (drop-2 ) -->
+        <section class="hide modal fade" id="otpExpiry" tabindex="-1" role="dialog" aria-labelledby="otpExpiry"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <p id="modal-text">Sorry, your 2 minutes to enter the OTP is up. To have another OTP sent to your mobile
+                            number,please click
+                            <a style="color:#1b89f0;cursor: pointer;" onclick="resendOtp('otpExpire')">here</a>.
+                        </p>
+        
+                    </div>
+                    <br>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"
+                        style="width: 50%; margin: 0 auto 3rem auto;">Exit</button>
+                </div>
+        
             </div>
-            <br>
-            <button type="button" class="btn btn-danger" data-dismiss="modal"
-                style="width: 50%; margin: 0 auto 3rem auto;">Exit</button>
-        </div>
-
-    </div>
-</section>
-<!-- Otp expiry modal (drop-2 ) -->
-
-<!--Resend otp max number exceed (drop-2 ) -->
-<section class="hide modal fade" id="maxResendOtp" tabindex="-1" role="dialog" aria-labelledby="maxResendOtp"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <p id="modal-text">Sorry, you have reached the maximum
-                    <br> allowable number to resend the OTP to <br> your mobile number. Please try again <br> in 24
-                    hours.</p>
-
+        </section>
+        <!-- Otp expiry modal (drop-2 ) -->
+        
+        <!--Resend otp max number exceed (drop-2 ) -->
+        <section class="hide modal fade" id="maxResendOtp" tabindex="-1" role="dialog" aria-labelledby="maxResendOtp"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <p id="modal-text">Sorry, you have reached the maximum
+                            <br> allowable number to resend the OTP to <br> your mobile number. Please try again <br> in 24
+                            hours.</p>
+        
+                    </div>
+                    <br>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"
+                        style="width: 50%; margin: 0 auto 3rem auto;">Exit</button>
+                </div>
+        
             </div>
-            <br>
-            <button type="button" class="btn btn-danger" data-dismiss="modal"
-                style="width: 50%; margin: 0 auto 3rem auto;">Exit</button>
-        </div>
-
-    </div>
-</section>
-<!-- Resend otp max number exceed (drop-2 ) -->
+        </section>
+        <!-- Resend otp max number exceed (drop-2 ) -->
     </main>
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"

@@ -7,6 +7,7 @@ var bCount;
 var optiondisable = 1;
 var optionAge = false;
 var relation = false;
+var upload_data = null;
 var dataBen = null;
 var addBenAccountInfo = null;
 var addBeni_upload_data = null;
@@ -73,25 +74,47 @@ $(document).ready(function (event) {
     $(this).mousemove(resetTimer); 
     $(this).keypress(resetTimer); 
 
-    let selector = 'Peso'
-    $("#field_Bank > option").hide();
-    $("#field_Bank > option").filter(function () { return $(this).data('pub') == selector }).show();
 
-    $("#field_addBenificiaryBank > option").hide();
-    $("#field_addBenificiaryBank > option").filter(function () { return $(this).data('pub') == selector }).show();
-
-    $('#from_currency').on('change', function (e) {
-        let selector = $(this).val();
-        $("#field_Bank > option").hide();
-        $("#field_Bank > option").filter(function () { return $(this).data('pub') == selector }).show();
+    defaultBank();
+  
+    $("#from_currency").change(function () {
+      var val = $(this).val();
+      if (val == "Peso") {
+        $("#field_Bank").html(
+         "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option><option value='BPI Family Savings Bank - BFB'>BPI Family Savings Bank - BFB</option>"
+        );
+      } else if (val == "USD") {
+        $("#field_Bank").html(
+          "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option>"
+        );
+      }
     });
 
-    $('#from_addBeneficiarycurrency').on('change', function (e) {
-        let selector = $(this).val();
-        $("#field_addBenificiaryBank > option").hide();
-        $("#field_addBenificiaryBank > option").filter(function () { return $(this).data('pub') == selector }).show();
+    $("#from_addBeneficiarycurrency").change(function () {
+        var val = $(this).val();
+        if (val == "Peso") {
+          $("#field_addBenificiaryBank").html(
+           "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option><option value='BPI Family Savings Bank - BFB'>BPI Family Savings Bank - BFB</option>"
+          );
+        } else if (val == "USD") {
+          $("#field_addBenificiaryBank").html(
+            "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option>"
+          );
+        }
     });
 });
+
+function defaultBank() {
+    var val = 'Peso';
+    if (val == "Peso") {
+      $("#field_Bank").html(
+       "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option><option value='BPI Family Savings Bank - BFB'>BPI Family Savings Bank - BFB</option>"
+      );
+      $("#field_addBenificiaryBank").html(
+        "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option><option value='BPI Family Savings Bank - BFB'>BPI Family Savings Bank - BFB</option>"
+      );
+    }
+}
 
 
 function resetTimer() { 
@@ -845,7 +868,9 @@ function handleFormAddBeneficiary(event) {
             field_add_Beneficiary_add_relatives2,
             country_code: $("select#field_addBeneficiaryMobileNumberSelect option").filter(":selected").val(),
             basic_checkbox: $('#invalidCheck_basicAddBeneficiary').is(':checked'),
-            privacy_checkbox: $('#invalidCheck_privacyAddBeneficiary').is(':checked')
+            privacy_checkbox: $('#invalidCheck_privacyAddBeneficiary').is(':checked'),
+            privacy_consent_beneficiary_1: $("#privacy_consent_beneficiary_1").is(":checked"),
+            privacy_consent_beneficiary_2: $("#privacy_consent_beneficiary_2").is(":checked")
         }
 
         let beneficiary = {};
@@ -1404,7 +1429,9 @@ function handleForm(event) {
             field_BeneficiaryRelationToDeceased,
             country_code: $("select#field_BeneficiaryMobileNumberSelect option").filter(":selected").val(),
             basic_checkbox: $('#invalidCheck_basic').is(':checked'),
-            privacy_checkbox: $('#invalidCheck_privacy').is(':checked')
+            privacy_checkbox: $('#invalidCheck_privacy').is(':checked'),
+            privacy_consent_1: $("#privacy_consent_1").is(":checked"),
+            privacy_consent_2: $("#privacy_consent_2").is(":checked")
         }
 
         InsuredInformation["FirstName"] = field_firstName;
@@ -1451,6 +1478,8 @@ function handleForm(event) {
         $("#customer_Name").text(`Hi ${field_BeneficiaryFirstName}. Hang in there as we process your request. Expect an SMS from us within 1 to 2 working days on the status of your request.`);
         console.log('Data -> ', data)
 
+    }else if ((comapareDates == false) && ((field_DOB !== '') || (field_DOID !== ''))){
+        $('#popUp_DOB').modal('show');
     } else {
         $('#popUp').modal('show');
     }
@@ -2388,7 +2417,7 @@ function addBeneficiary(event) {
     }
 
     if (!$('#upload_invalidCheck_2').is(':checked')) {
-        $("#upload_warning").text('Please don’t forget to tick the box to confirm the accuracy of your submitted document.');
+        $("#upload_warning").text('Please don’t forget to tick the box to confirm the accuracy of your submitted documents.');
         $("#warning_parent").show();
         $('#popUp').modal('show');
         return;
@@ -2396,7 +2425,7 @@ function addBeneficiary(event) {
 
     $("#upload_warning").text('');
     $("#warning_parent").hide();
-    const upload_data = {
+    upload_data = {
         upload_file_1: file1.value,
         upload_file_2: file2.value,
         upload_file_3: file3.value,
@@ -2519,6 +2548,7 @@ function addBeneficiaryNew(event) {
             }
                 
             dataReset("field_addBenificiaryAccountName", "field_addBenificiaryAccountNumber", "field_addBenificiaryBank", "field_addBeneficiaryBranch", "field_addBeneficiaryCurrency", "upload_file_8");
+            resetBank();       
             fileUploadDataReset(); 
 
             $('#privacy_consent_1').prop('checked', false);
@@ -2532,6 +2562,12 @@ function addBeneficiaryNew(event) {
     }
 } 
 
+function resetBank() {
+    $('#from_addBeneficiarycurrency').val('Peso');
+    $("#field_addBenificiaryBank").html(
+        "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option><option value='BPI Family Savings Bank - BFB'>BPI Family Savings Bank - BFB</option>"
+      );
+}
 
 function screen() {
     buttonCount = screenCount;
@@ -2982,7 +3018,7 @@ function buttonSubmitClicked(event) {
         }
 
         if (!$('#upload_invalidCheck_2').is(':checked')) {
-            $("#upload_warning").text('Please don’t forget to tick the box to confirm the accuracy of your submitted document.');
+            $("#upload_warning").text('Please don’t forget to tick the box to confirm the accuracy of your submitted documents.');
             $("#warning_parent").show();
             $('#popUp').modal('show');
             return;
@@ -3801,7 +3837,18 @@ function isEmpty(obj) {
 
 function setDataBeneficiary(data) {
     for (const [key, value] of Object.entries(data)) {
-        $(`#${key}`).val(`${value}`)
+
+        if( key == 'field_addBenificiaryBank'){
+            $("#field_addBenificiaryBank").html(
+                `<option value='${value}'>${value}</option>`
+              );
+        }else if (key == 'field_addBeneficiaryCurrency'){
+            $('#from_addBeneficiarycurrency').val(`${value}`)
+        }
+        else {
+            $(`#${key}`).val(`${value}`);
+        }
+
       }
 }
 

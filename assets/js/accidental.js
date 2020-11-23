@@ -148,14 +148,24 @@ $(document).ready(function (event) {
   $(this).mousemove(resetTimer);
   $(this).keypress(resetTimer);
 
-  let selector = 'Peso'
-  $("#field_Bank > option").hide();
-  $("#field_Bank > option").filter(function () { return $(this).data('pub') == selector }).show(); 
-  
-  $('#from_currency').on('change', function (e) {
-      let selector = $(this).val();
-      $("#field_Bank > option").hide();
-      $("#field_Bank > option").filter(function () { return $(this).data('pub') == selector }).show();
+  var val = 'Peso';
+  if (val == "Peso") {
+    $("#field_Bank").html(
+     "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option><option value='BPI Family Savings Bank - BFB'>BPI Family Savings Bank - BFB</option>"
+    );
+  }
+
+  $("#from_currency").change(function () {
+    var val = $(this).val();
+    if (val == "Peso") {
+      $("#field_Bank").html(
+       "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option><option value='BPI Family Savings Bank - BFB'>BPI Family Savings Bank - BFB</option>"
+      );
+    } else if (val == "USD") {
+      $("#field_Bank").html(
+        "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option>"
+      );
+    }
   });
 });
 
@@ -955,6 +965,8 @@ function handleForm(event) {
       field_POA,
       basic_checkbox: $("#invalidCheck_basic").is(":checked"),
       privacy_checkbox: $("#invalidCheck_privacy").is(":checked"),
+      privacy_consent_1: $("#privacy_consent_1").is(":checked"),
+      privacy_consent_2: $("#privacy_consent_2").is(":checked")
     };
 
     $('#form_wrapper').hide();
@@ -996,7 +1008,9 @@ function handleForm(event) {
         }
       })
     }), '*');
-  } else {
+  }else if((comapareDates == false) && ((field_DOB !== '') && (field_DOA != ''))) {
+    $('#popUp_DOB').modal('show');
+  }  else {
     $('#popUp').modal('show');
   }
 }
@@ -1533,7 +1547,7 @@ function buttonSubmitClicked(event) {
   }
 
   if (!$('#upload_invalidCheck_2').is(':checked')) {
-    $("#upload_warning").text('Please don’t forget to tick the box to confirm the accuracy of your submitted document.');
+    $("#upload_warning").text('Please don’t forget to tick the box to confirm the accuracy of your submitted documents.');
     $("#warning_parent").show();
     $('#popUp').modal('show');
     return;
