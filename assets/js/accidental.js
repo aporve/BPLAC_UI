@@ -994,6 +994,10 @@ function handleForm(event) {
     InsuredInformation["AccidentTime"] = full_TOA;
     InsuredInformation["AccidentPlace"] = field_POA;
     document.getElementById('user_mobile').innerHTML = field_mobileNum.replace(/.(?=.{4})/g, '*')
+    InsuredInformation["check1"] = data.privacy_consent_1;
+    InsuredInformation["check2"] = data.privacy_consent_2;
+
+
     let stageOneData = {
       stageOne: true,
       type: "Accident",
