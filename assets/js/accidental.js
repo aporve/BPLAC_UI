@@ -24,7 +24,7 @@ var currSeconds = 0;
 
 $('#privacy_consent_1').prop('checked', true);
 $('#privacy_consent_2').prop('checked', true);
-
+$('#privacy_consent_3').prop('checked', true);
 var form_addBank = document.getElementById("addbank_form");
 form_addBank.addEventListener('submit', handleAddBankInfo);
 
@@ -966,7 +966,8 @@ function handleForm(event) {
       basic_checkbox: $("#invalidCheck_basic").is(":checked"),
       privacy_checkbox: $("#invalidCheck_privacy").is(":checked"),
       privacy_consent_1: $("#privacy_consent_1").is(":checked"),
-      privacy_consent_2: $("#privacy_consent_2").is(":checked")
+      privacy_consent_2: $("#privacy_consent_2").is(":checked"),
+      privacy_consent_3: $("#privacy_consent_3").is(":checked"),
     };
 
     $('#form_wrapper').hide();
