@@ -1746,6 +1746,7 @@ function handleAccountInfo(event) {
 
 
 function bankTranfer() {
+  document.getElementById('ref_number').innerHTML = referenceNumber
   $('#payment').hide();
   $('#account_details').show();
   $("#step2").addClass("active");
@@ -1753,6 +1754,7 @@ function bankTranfer() {
 }
 
 function pickUp() {
+  document.getElementById('ref_number').innerHTML = referenceNumber
   let filesObject = {};
   filesObject["FolderName"] = `/CLAIMS/${referenceNumber}`
   filesObject["FileList"] = filesList;
@@ -1995,7 +1997,7 @@ var otpModal = document.getElementById('otpPopUp');
 var otpExpModal = document.getElementById('otpExpiry');
 var invalidOtpModal = document.getElementById('invalidOtp');
 var maxResendOtp = document.getElementById('maxResendOtp');
-
+var invalidOtp = 0;
 
 
 // otp timer function
@@ -2064,7 +2066,7 @@ function submitOtp() {
 
   if (document.getElementById('otp').value != dummy_otp) {
     invalidOtp++;
-    if (invalidOtp <= 3) {
+    if (invalidOtp <3) {
       $('#invalidOtp').modal('show');
     }
     else {

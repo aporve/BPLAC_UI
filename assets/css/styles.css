@@ -254,7 +254,7 @@ input[type="radio"] {
   .jumbotron {
     margin-bottom: 0;
     /* padding: 0 2rem !important; */
-    padding: 2rem 0 0 0;
+    padding: 0 0 0 0;
   }
   .modal-dialog {
     width: 334px;
@@ -487,15 +487,27 @@ small {
   opacity: 1;
 }
 
-.time_duration {
-  background: #f0eee1;
+.time_duration1 {
+  background: currentColor;
+  padding: 1rem;
+  text-align: center;
+}
+#payment-ref {
+  background: rgb(201, 240, 253);
+  padding: 1rem;
+  text-align: center;
+}
+#turnaround-time-ref{
+  background: rgb(201, 240, 253);
   padding: 1rem;
   text-align: center;
 }
 
+
 .time_container {
-  display: flex;
+  display: grid;
   align-items: center;
+  padding: 2rem;
 }
 
 .reference {
@@ -699,6 +711,15 @@ svg > path {
   background: #f0eee1;
   /* height: 5vh; */
 }
+.light_green{
+  background:   #8bc435;
+
+}
+
+.bg_light_pink {
+  background: #f0eee1;
+  /* height: 5vh; */
+}
 
 .card-hv {
   border: 1px solid #fff;
@@ -804,63 +825,6 @@ svg > path {
   font-size: 17px;
 }
 
-#modal-text {
-    margin-top: 16px;
-    text-align: center;
-    color: #363e3f;
-    font-family: "AIABody", Arial, "Helvetica Neue", Helvetica, sans-serif;
-    font-size: 15px;
-}
-
-#otp-text {
-    margin-top: 16px;
-    text-align: center;
-    color: #363e3f;
-    font-family: "AIABody", Arial, "Helvetica Neue", Helvetica, sans-serif;
-    font-size: 15px;
-}
-
-/* ===========================
-   ======Reference Search Box ====== 
-   =========================== */
-
-.search
-{
-	border: 2px solid rgb(211, 211, 211);
-	overflow: auto;
-	border-radius: 5px;
-
-}
-
-.search input[type="text"]
-{
-	border: 0px;
-	width: 67%;
-    padding: 20px 10px;
-    background: white;
-}
-
-.search input[type="text"]:focus
-{
-	outline: 0;
-}
-
-.search input[type="submit"]
-{
-	border: 0px;
-	background: none;
-	background-color: #b8123e;
-	color: white;
-	float: right;
-	padding: 20px;
-	
-    cursor:pointer;
-}
-
-.search-field{
-    background-color: white;
-}
-
 .m-modal-top-2 {
   margin: 1rem 0;
 }
@@ -944,17 +908,379 @@ margin-top: 1rem;
    color: rgb(33, 150, 243) !important;
  }
 
- /* ===========================
-   ====== Medua Query for Reference Search Box ====== 
-   =========================== */
 
-@media only screen and (min-width : 150px) and (max-width : 780px)
-{
 
-	.search
-	{
-		width: 95%;
-		margin: 0 auto;
-	}
+@media screen and (min-width: 992px ) {
+  .reference-track{ 
+    margin-left: 126px;
+   
+  }
+}
+
+@media screen and (min-width: 1200px ) {
+  .reference-track{ 
+    margin-left: 212px;
+  
+  }
+}
+
+
+@media screen and (min-width: 1200px ) {
+  .g-recaptcha{ 
+    padding-left: 94px;
+  
+  }
+}
+
+@media screen and (min-width: 992px ) {
+  .g-recaptcha{ 
+    margin-left:122px;
+   
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* -------------------------------------------------------------------------
+  VERTICAL STEPPERS
+-------------------------------------------------------------------------- */
+
+/* Steps */
+.step {
+  position: relative;
+  min-height: 1em;
+  color: gray;
+}
+.step + .step {
+  margin-top: 1.5em
+}
+.step > div:first-child {
+  position: static;
+  height: 0;
+}
+.step > div:not(:first-child) {
+  margin-left: 1.5em;
+  padding-left: 1em;
+}
+.step.step-active {
+  color: #8bc435;
+}
+.step.step-active .circle {
+  background-color: #8bc435;  /* active button */
+}
+
+/* Circle */
+.circle {
+  background: #8bc435;
+  position: relative;
+  width: 1.5em;
+  height: 1.5em;
+  line-height: 1.5em;
+  border-radius: 100%;
+  color: #fff;
+  text-align: center;
+  box-shadow: 0 0 0 1px #fff;
+}
+
+/* Vertical Line */
+.circle:after {
+  content: ' ';
+  position: absolute;
+  display: block;
+  top: 1px;
+  right: 50%;
+  bottom: 1px;
+  left: 50%;
+  height: 100%;
+  width: 1px;
+  transform: scale(1, 2);
+  transform-origin: 50% -100%;
+  background-color: rgba(0, 0, 0, 0.25);
+  z-index: -1;
+}
+.step:last-child .circle:after {
+  display: none
+}
+
+/* Stepper Titles */
+.title {
+  
+  font-size: 11px;
+}
+.caption {
+  font-size: 0.8em;
+}
+
+
+/* drop down */
+
+.dropbtn {
+  background-color:white;
+  color: black;
+  width: 190px;
+  padding: 16px;
+  font-size: 14px;
+  border: 0px;
+  outline: 0px;
 
 }
+.dropbtn:focus{
+  outline: 0px auto -webkit-focus-ring-color;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.fa-check:before{
+  color:#fff;
+}
+
+.dropdown-content {
+  display: none;
+  position: inherit;
+  /* background-color:white; */
+  min-width: 190px;
+  font-family: "AIABody",Arial,"Helvetica Neue",Helvetica,sans-serif;
+  /* height: 333px; */
+  padding-left: 16px;
+ /*  padding-top:20px ; */
+  box-shadow: 0px 0px 0px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  background-color: white;
+  text-decoration: none;
+  display: block;
+}
+/* 
+.dropdown-content a:hover {background-color: #ddd;}
+
+.dropdown:hover .dropdown-content {display: block;}
+
+.dropdown:hover .dropbtn {background-color: #b8123e;}
+ */
+
+.show {
+  display: block;
+}
+
+
+
+
+
+
+.lead {
+  font-size: 1rem;
+  font-weight: 300;
+  color: #363e3f;
+  text-align: justify;
+  padding-top: 1rem;
+  font-family: "AIABody", Arial, "Helvetica Neue", Helvetica, sans-serif;
+}
+
+.btnn:hover {
+  /*  color: #b8123e !important; */
+  background-color: #b8123e !important;
+  text-decoration: unset !important;
+
+}
+
+.submit__btn1 {
+ 
+  background-color: #b8123e !important;
+ /*  float: right; */
+  width: 21%; 
+  font-weight: 400;
+  font-size: 1rem;
+  margin-left: 277px;
+  margin-top: 36px;
+}
+
+.btnn {
+  background-color: #fff !important;
+  color: black;
+  border: 1px solid white;
+}
+.feedback{
+ /*  width: 669px; */
+  padding-left: 50px;
+}
+h6{
+padding-top: 13px;
+font-size: .8rem;
+}
+.row-flex{
+max-width: 90px;
+}
+.row-flex-2{
+max-width: 44px;
+}
+
+
+@media screen and (max-width: 750px ) {
+.submit__btn1 {
+
+margin-left: 89px;
+width: 44%;
+}
+}
+/* @media screen and (max-width: 378px ) {
+.abc{
+
+margin-left: 46px;
+}
+@media screen and (max-width: 298px ) {
+.abc{
+
+margin-left: 1px;
+}   */ 
+
+
+
+#modal-text {
+    margin-top: 16px;
+    text-align: center;
+    color: #363e3f;
+    font-family: "AIABody", Arial, "Helvetica Neue", Helvetica, sans-serif;
+    font-size: 15px;
+}
+
+#otp-text {
+    margin-top: 16px;
+    text-align: center;
+    color: #363e3f;
+    font-family: "AIABody", Arial, "Helvetica Neue", Helvetica, sans-serif;
+    font-size: 15px;
+}
+
+
+/* ===========================
+   ======Reference Search Box ====== 
+   =========================== */
+
+.search
+{
+	border: 2px solid rgb(211, 211, 211);
+	overflow: auto;
+	border-radius: 5px;
+
+}
+
+.search input[type="text"]
+{
+	border: 0px;
+	width: 67%;
+    padding: 20px 10px;
+    background: white;
+}
+
+.search input[type="text"]:focus
+{
+	outline: 0;
+}
+
+.search input[type="submit"]
+{
+	border: 0px;
+	background: none;
+	background-color: #b8123e;
+	color: white;
+	float: right;
+    padding: 20px;
+font-weight: bold;
+	/* font-size: 25px; */
+    cursor:pointer;
+}
+
+.search-field{
+    background-color: white;
+}
+
+
+
+@media screen and (max-width: 760px ) {
+.feedback{
+
+  padding-left: 7px;
+}
+} 
+.footer{
+padding-bottom: 10px;
+}
+
+
+
+
+@media screen and (min-width: 791px ) {
+  .time-duration-queary {
+    padding-left: 150px;
+ 
+  }
+  }
+
+
+
+
+.request-font{
+  text-align: justify;
+}
+
+.dropdown-toggle-split::after{
+  margin-left: 9px;
+}
+
+.box , .box1{
+    text-align: center;
+}
+
+#displayDt{
+  padding-left: 5%;
+  padding-right: 5%;
+
+}
+
+ #outer-circle {
+   background: #b8123e;
+   border-radius: 50%;
+   height: 15px;
+   width: 15px;
+   position: relative;
+   /* 
+    Child elements with absolute positioning will be 
+    positioned relative to this div 
+   */
+ }
+ #inner-circle {
+     position: absolute;
+    background: white;
+    border-radius: 50%;
+    height: 5px;
+    width: 5px;
+    top: 50%;
+    left: 50%;
+    margin: -2.5px 0px 0px -2.5px;
+
+ }
+ 
+/* 
+#reference-stepper .mat-step-header .mat-step-icon-selected,
+        .mat-step-header .mat-step-icon-state-done,
+        .mat-step-header .mat-step-icon-state-edit {
+            background-color: red !important;
+            color: red !important;
+        } */
+ 

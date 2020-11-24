@@ -14,6 +14,8 @@ var file2 = document.getElementById('illness_file_Upload_2');
 var file3 = document.getElementById('illness_file_Upload_3');
 var file5 = document.getElementById('illness_file_Upload_5');
 var file6 = document.getElementById('proof_BAO');
+var file7 = document.getElementById('proof_addBAO');
+
 var user_mobile;
 $('#privacy_consent_1').prop('checked', true);
 $('#privacy_consent_2').prop('checked', true);
@@ -26,6 +28,8 @@ let botId = url.searchParams.get('botId');
 form.addEventListener('submit', handleForm);
 form_Bank.addEventListener('submit', handleAccountInfo);
 
+var form_addBank = document.getElementById("addbank_form");
+form_addBank.addEventListener('submit', handleAddBankInfo);
 let beneficiaryCount = "1";
 let finalPayload = {};
 let accidentPayload = {};
@@ -242,7 +246,13 @@ function futureDate(date) {
     }
 }
 
-
+function addBank(event) {
+    event.preventDefault();
+    $('#account_details').hide();
+    $('#requirements').hide();
+    $('#account_details1').show();
+    /*   $('#account_details1')[0].scrollIntoView(true); */
+}
 function futureDateDOB(date) {
     /*   let id = evt.target.id;
       var date1 = document.getElementById(id).value; */
@@ -1344,6 +1354,49 @@ file6.onchange = async function (e) {
     }
 };
 
+file7.onchange = async function (e) {
+    $("#file_upload_cancle_7").hide();
+    $("#file_Upload_Tick_7").hide();
+    var ext = this.value.match(/\.([^\.]+)$/)[1];
+    switch (ext) {
+        case "jpg":
+        case "pdf":
+            var file = this.files[0];
+            var buttonNum = 7;
+            var sizevalid = isFileSizeValid(file, buttonNum);
+            if (sizevalid) {
+                if (ext == "jpg") {
+                    fileCheck(file, buttonNum);
+                }
+                else {
+                    proceedScan(file, buttonNum);
+                }
+                file1Buffer = await getBuffer(file);
+                console.log("file buffer : ")
+                console.log(file1Buffer);
+                filesMap["file7"] = file1Buffer;
+            } else {
+                $("#warning_parent").show();
+                $("#file_loader_icon_7").hide();
+                $("#file_Upload_Tick_7").hide();
+                $("#file_upload_cancle_7").show();
+                $("#upload_warning").text(
+                    "You may only upload documents not exceeding 2MB in file size. Please re-upload in the correct format and file size proceed."
+                );
+            }
+            break;
+        default:
+            $("#warning_parent").show();
+            $("#file_Upload_Tick_7").hide();
+            $("#file_upload_cancle_7").show();
+            $("#upload_warning").text(
+                "You may only upload documents that are in .jpg, .pdf formats and must not exceed 2MB in file size. Please re-upload in the correct format and file size to proceed."
+            );
+            this.value = "";
+    }
+};
+
+
 function buttonSubmitClicked(event) {
     event.preventDefault();
 
@@ -1528,8 +1581,102 @@ function handleAccountInfo(event) {
     }
 }
 
+function handleAddBankInfo(event) {
+    event.preventDefault();
+    var field_AccountName1 = $("#field_AccountName1").val();
+    var field_AccountNumber1 = $("#field_AccountNumber1").val();
+    var field_currency1 = $("#from_currency1").val();
+    var field_Bank1 = $("#field_Bank1").val();
+    var field_Branch1 = $("#field_Branch1").val();
+    var speCharAddAccountName = specialcharacterValidation(field_AccountName1);
+    var numAddAccountName = numberValidation(field_AccountName1);
+    var numAddAccountNumber = onlyNumberValidate(field_AccountNumber1);
+
+
+    if (field_AccountName1.length === 0) {
+        $("#err_field_AccountName1").text('Field is empty');
+        $("#err_field_AccountName1").show();
+    } else if (speCharAddAccountName) {
+        $("#err_field_AccountName1").text('special character is not allowed');
+        $("#err_field_AccountName1").show();
+    } else if (numAddAccountName) {
+        $("#err_field_AccountName1").text('Number not allowed');
+        $("#err_field_AccountName1").show();
+    } else {
+        $("#err_field_AccountName1").text('');
+        $("#err_field_AccountName1").hide();
+    }
+
+    if (field_AccountNumber1.length === 0) {
+        $("#err_field_AccountNumber1").text('Field is empty');
+        $("#err_field_AccountNumber1").show();
+    } else if (!numAddAccountNumber) {
+        $("#err_field_AccountNumber1").text('Only number is allowed');
+        $("#err_field_AccountNumber1").show();
+    } else {
+        $("#err_field_AccountNumber1").text('');
+        $("#err_field_AccountNumber1").hide();
+    }
+
+    if (field_currency1 <= 0) {
+        $("#err_field_Currency1").text('Field is empty');
+        $("#err_field_Currency1").show();
+    } else {
+        $("#err_field_Currency1").text('');
+        $("#err_field_Currency1").show();
+    }
+
+    if (field_Bank1.length <= 0) {
+        $("#err_field_Bank1").text('Field is empty');
+        $("#err_field_Bank1").show();
+    } else {
+        $("#err_field_Bank1").text('');
+        $("#err_field_Bank1").hide();
+    }
+
+    if (field_Branch1.length === 0) {
+        $("#err_field_Branch1").text('Field is empty');
+        $("#err_field_Branch1").show();
+    }/*  else if (specCharAddBRANCH) {
+    $("#err_field_Branch1").text('special character is not allowed');
+    $("#err_field_Branch1").show();
+  } else if (numAddBranch) {
+    $("#err_field_Branch1").text('Number not allowed');
+    $("#err_field_Branch1").show();
+  }  */else {
+        $("#err_field_Branch1").text('');
+        $("#err_field_Branch1").hide();
+    }
+
+    if (!file7.value) {
+        $('#upload_feedback_label1').show();
+        $('#upload_feedback_label1').text('Please upload your Bank Account Ownership');
+    }
+
+    if (field_AccountName1.length !== 0 && field_AccountNumber1.length !== 0 && field_currency1.length !== 0 && field_Bank1.length !== 0 && field_Branch1.length !== 0 && file7.length !== 0 && (speCharAddAccountName == false) && (numAddAccountName == false) && (numAddAccountNumber == true)) {
+        const data = {
+            field_AccountName1,
+            field_AccountNumber1,
+            field_Bank1,
+            field_Branch1,
+            field_Currency1: $("select#from_currency1 option").filter(":selected").val(),
+            upload_file_7: file7.value
+        }
+        $("#step3_circle").addClass("md-step-step3-circle ");
+        $("#step3_span").addClass("md-step3-span");
+        $("#step3_reference").addClass("md-step3-span")
+        /* $("#step3").addClass("active");
+        $("#step3>div").addClass("active"); */
+        /* $("#step3").addClass("done"); */
+        $('#account_details1').hide();
+        $('#process_confirmation').show();
+        console.log('bank data -> ', data)
+    }
+}
+
 
 function bankTranfer() {
+    document.getElementById('ref_number').innerHTML = referenceNumber
     $('#payment').hide();
     $('#account_details').show();
     $("#step2").addClass("active");
@@ -1537,6 +1684,7 @@ function bankTranfer() {
 }
 
 function pickUp() {
+    document.getElementById('ref_number').innerHTML = referenceNumber
     let filesObject = {};
     filesObject["FolderName"] = `/CLAIMS/${referenceNumber}`
     filesObject["FileList"] = filesList;
@@ -1683,7 +1831,7 @@ var otpModal = document.getElementById('otpPopUp');
 var otpExpModal = document.getElementById('otpExpiry');
 var invalidOtpModal = document.getElementById('invalidOtp');
 var maxResendOtp = document.getElementById('maxResendOtp');
-
+var invalidOtp = 0;
 function otpTimer() {
     if (resendCount <= 3) {
         $('#otpPopUp').modal('show');
@@ -1749,7 +1897,7 @@ function submitOtp() {
 
     if (document.getElementById('otp').value != dummy_otp) {
         invalidOtp++;
-        if (invalidOtp <= 3) {
+        if (invalidOtp < 3) {
             $('#invalidOtp').modal('show');
         }
         else {

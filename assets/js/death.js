@@ -11,18 +11,18 @@ var upload_data = null;
 var dataBen = null;
 var addBenAccountInfo = null;
 var addBeni_upload_data = null;
-var data1, data2,data3 ,data4,data5,data6;
+var data1, data2, data3, data4, data5, data6;
 var acct_data1, acct_data2, acct_data3, acct_data4, acct_data5, acct_data6;
 var uppload_data1, uppload_data2, uppload_data3, uppload_data4, uppload_data5, uppload_data6;
 var trackBenificiary = 0;
-var trackaddBenificiary ;
+var trackaddBenificiary;
 var trackaddBenificiary1, trackaddBenificiary2, trackaddBenificiary3, trackaddBenificiary4, trackaddBenificiary5, trackaddBenificiary6;
 var screenCount = 0;
 var bpiCount = 0;
 var acctButtonCount = 0;
 var traverse;
-var currSeconds = 0; 
-
+var currSeconds = 0;
+let filesMap = {};
 
 var file1 = document.getElementById('file_Upload_1');
 var file2 = document.getElementById('file_Upload_2');
@@ -36,6 +36,7 @@ var file9 = document.getElementById('file_Upload_9');
 var file10 = document.getElementById('file_Upload_10');
 var file11 = document.getElementById('file_Upload_11');
 var file12 = document.getElementById('file_Upload_12');
+var file13 = document.getElementById('proof_addBAO');
 
 let url = new URL(window.location.href);
 let referenceNumber = url.searchParams.get('refNumber');
@@ -66,40 +67,43 @@ death__form_addBeneficiary.addEventListener('submit', handleFormAddBeneficiary);
 form_Bank.addEventListener('submit', handleAccountInfo);
 addBeneficiaryform_Bank.addEventListener('submit', addBenificiaryAccountInfo);
 
+var form_addBank = document.getElementById("addbank_form");
+form_addBank.addEventListener('submit', handleAddBankInfo);
+
 $(document).ready(function (event) {
     disableFutureDates();
     disableFutureDatesDOB();
     setCountryCode();
-    let idleInterval = setInterval(timerIncrement, 1000); 
-    $(this).mousemove(resetTimer); 
-    $(this).keypress(resetTimer); 
+    let idleInterval = setInterval(timerIncrement, 1000);
+    $(this).mousemove(resetTimer);
+    $(this).keypress(resetTimer);
 
 
     defaultBank();
-  
+
     $("#from_currency").change(function () {
-      var val = $(this).val();
-      if (val == "Peso") {
-        $("#field_Bank").html(
-         "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option><option value='BPI Family Savings Bank - BFB'>BPI Family Savings Bank - BFB</option>"
-        );
-      } else if (val == "USD") {
-        $("#field_Bank").html(
-          "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option>"
-        );
-      }
+        var val = $(this).val();
+        if (val == "Peso") {
+            $("#field_Bank").html(
+                "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option><option value='BPI Family Savings Bank - BFB'>BPI Family Savings Bank - BFB</option>"
+            );
+        } else if (val == "USD") {
+            $("#field_Bank").html(
+                "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option>"
+            );
+        }
     });
 
     $("#from_addBeneficiarycurrency").change(function () {
         var val = $(this).val();
         if (val == "Peso") {
-          $("#field_addBenificiaryBank").html(
-           "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option><option value='BPI Family Savings Bank - BFB'>BPI Family Savings Bank - BFB</option>"
-          );
+            $("#field_addBenificiaryBank").html(
+                "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option><option value='BPI Family Savings Bank - BFB'>BPI Family Savings Bank - BFB</option>"
+            );
         } else if (val == "USD") {
-          $("#field_addBenificiaryBank").html(
-            "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option>"
-          );
+            $("#field_addBenificiaryBank").html(
+                "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option>"
+            );
         }
     });
 });
@@ -107,27 +111,27 @@ $(document).ready(function (event) {
 function defaultBank() {
     var val = 'Peso';
     if (val == "Peso") {
-      $("#field_Bank").html(
-       "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option><option value='BPI Family Savings Bank - BFB'>BPI Family Savings Bank - BFB</option>"
-      );
-      $("#field_addBenificiaryBank").html(
-        "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option><option value='BPI Family Savings Bank - BFB'>BPI Family Savings Bank - BFB</option>"
-      );
+        $("#field_Bank").html(
+            "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option><option value='BPI Family Savings Bank - BFB'>BPI Family Savings Bank - BFB</option>"
+        );
+        $("#field_addBenificiaryBank").html(
+            "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option><option value='BPI Family Savings Bank - BFB'>BPI Family Savings Bank - BFB</option>"
+        );
     }
 }
 
 
-function resetTimer() { 
-    currSeconds = 0; 
-  } 
-  
-  function timerIncrement() { 
-    currSeconds = currSeconds + 1; 
-    if(currSeconds == 1800) {
+function resetTimer() {
+    currSeconds = 0;
+}
+
+function timerIncrement() {
+    currSeconds = currSeconds + 1;
+    if (currSeconds == 1800) {
         window.top.location = 'https://www.bpi-philam.com'
     }
-  } 
-  
+}
+
 
 function myDisable() {
     document.getElementById("submit9").disabled = true;
@@ -152,15 +156,15 @@ function myDisable() {
     document.getElementById("form_Beneficiary").style.cursor = "no-drop";
 }
 
-function addFileToList(fileObject, fileName){
+function addFileToList(fileObject, fileName) {
     console.log(fileName);
-    let index = filesList.findIndex(x => x.Filename == fileName )
-  
-    if(index===-1){
-      console.log("adding bcoz unique");
-      filesList.push(fileObject);
+    let index = filesList.findIndex(x => x.Filename == fileName)
+
+    if (index === -1) {
+        console.log("adding bcoz unique");
+        filesList.push(fileObject);
     }
-  }
+}
 
 function timer() {
     var random = Math.floor(Math.random() * 5) + 1
@@ -397,31 +401,55 @@ function disableFutureDatesDOB() {
     var dtToday = new Date();
     var month = dtToday.getMonth() + 1;
     var day = dtToday.getDate();
-    var dobdate = day-1
+    var dobdate = day - 1
     var year = dtToday.getFullYear();
     if (month < 10)
-      month = '0' + month.toString();
+        month = '0' + month.toString();
     if (day < 10)
-      day = '0' + day.toString();
+        day = '0' + day.toString();
     var maxDate = year + '-' + month + '-' + dobdate;
-    if( day <= 10) {
-        maxDate = year + '-' + month + '-' + '0'+ dobdate;
-    } 
+    if (day <= 10) {
+        maxDate = year + '-' + month + '-' + '0' + dobdate;
+    }
     $('#field_DOB').attr('max', maxDate);
-  }
+}
 
 
 
-function checkKeyword(keyword) {
+function checkKeyword(keyword, type) {
 
     if ((keyword == 'husband') || (keyword == 'wife') || (keyword == 'spouse') || (keyword == 'Husband') || (keyword == 'Wife') || (keyword == 'Spouse') || (keyword == 'HUSBAND') || (keyword == 'WIFE') || (keyword == 'SPOUSE')) {
+        if (type == 'new_beneficiary') {
+            document.getElementById("file_Upload_11").disabled = false;
+            document.getElementById("file_Upload_11").style.cursor = "pointer";
+            document.getElementById("file_Upload_11").style.opacity = "0";
+            document.getElementById("marriage_certificate_11").style.border = "none";
+        }
+        else {
+            document.getElementById("file_Upload_5").disabled = false;
+            document.getElementById("file_Upload_5").style.cursor = "pointer";
+            document.getElementById("file_Upload_5").style.opacity = "0";
+            document.getElementById("marriage_certificate").style.border = "none";
+        }
         return true;
     } else {
+        if (type == 'new_beneficiary') {
+            document.getElementById("file_Upload_11").disabled = true;
+            document.getElementById("file_Upload_11").style.cursor = "no-drop";
+            document.getElementById("file_Upload_11").style.opacity = "0.4";
+            document.getElementById("marriage_certificate_11").style.border = "none";
+        }
+        else {
+            document.getElementById("file_Upload_5").disabled = true;
+            document.getElementById("file_Upload_5").style.cursor = "no-drop";
+            document.getElementById("file_Upload_5").style.opacity = "0.4";
+            document.getElementById("marriage_certificate").style.border = "none";
+        }
         return false;
     }
 }
 
-function currentDate(date) {
+function currentDate(date, type) {
     var dtToday = new Date();
     var month = dtToday.getMonth() + 1;
     var day = dtToday.getDate();
@@ -432,9 +460,34 @@ function currentDate(date) {
     var userday = userDate[2];
     var age = year - userYear;
 
+
     if (age <= 18) {
+        if (type == 'new_beneficiary') {
+            document.getElementById("file_Upload_12").disabled = false;
+            document.getElementById("file_Upload_12").style.cursor = "pointer";
+            document.getElementById("file_Upload_12").style.opacity = "0";
+
+        }
+        else {
+            document.getElementById("file_Upload_6").disabled = false;
+            document.getElementById("file_Upload_6").style.cursor = "pointer";
+            document.getElementById("file_Upload_6").style.opacity = "0";
+
+        }
         return true;
     } else {
+        if (type == 'new_beneficiary') {
+            document.getElementById("file_Upload_12").disabled = true;
+            document.getElementById("file_Upload_12").style.cursor = "no-drop";
+            document.getElementById("file_Upload_12").style.opacity = "0.4";
+            document.getElementById("age_cert_12").style.border = "none";
+        }
+        else {
+            document.getElementById("file_Upload_6").disabled = true;
+            document.getElementById("file_Upload_6").style.cursor = "no-drop";
+            document.getElementById("file_Upload_6").style.opacity = "0.4";
+            document.getElementById("age_cert").style.border = "none";
+        }
         return false;
     }
 
@@ -469,6 +522,13 @@ const handleFileUpload = (formData, fileName) => {
         .then(result => console.log(result))
         .catch(error => console.log('error', error));
 }
+const getBuffer = file => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsArrayBuffer(file);
+    console.log("reading file")
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+});
 
 const toBase64 = file => new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -599,7 +659,7 @@ function validateNotNumber(evt) {
 function handleFormAddBeneficiary(event) {
     event.preventDefault();
     // beneficiaryCount++;
-    beneficiaryCount = buttonCount+1;
+    beneficiaryCount = buttonCount + 1;
     traverse = 1;
     var field_addBeneficiaryFirstName = $("#field_addBeneficiaryFirstName").val();
     var field_addBeneficiaryMiddleName = $("#field_addBeneficiaryMiddleName").val();
@@ -633,8 +693,8 @@ function handleFormAddBeneficiary(event) {
     var lenaddBeneficiaryNationality = fieldCheckLength(field_addBeneficiaryNationality, 120);
     var lenaddBeneficiaryRelationToDeceased = fieldCheckLength(field_addBeneficiaryRelationToDeceased, 50);
     var lenaddBeneficiaryEmployerName = fieldCheckLength(field_addBeneficiaryEmployerName, 30)
-    var ageaddBeneficiaryDOB = currentDate(field_addBeneficiaryDOB);
-    var relationaddBeneficiaryRelation = checkKeyword(field_addBeneficiaryRelationToDeceased);
+    var ageaddBeneficiaryDOB = currentDate(field_addBeneficiaryDOB, 'new_beneficiary');
+    var relationaddBeneficiaryRelation = checkKeyword(field_addBeneficiaryRelationToDeceased, 'new_beneficiary');
     /*  var numAddBeniEmployerName = numberValidation(field_addBeneficiaryEmployerName);
      var specAddBeniEmployerName = specialcharacterValidation(field_addBeneficiaryEmployerName); */
 
@@ -880,7 +940,7 @@ function handleFormAddBeneficiary(event) {
             beneficiary["FirstName"] = field_addBeneficiaryFirstName,
             beneficiary["MiddleName"] = field_addBeneficiaryMiddleName,
             beneficiary["LastName"] = field_addBeneficiaryLastName,
-            beneficiary["DateOfBirth"] = field_addBeneficiaryDOB.split('-')[1]+"/"+field_addBeneficiaryDOB.split('-')[2]+"/"+field_addBeneficiaryDOB.split('-')[0],
+            beneficiary["DateOfBirth"] = field_addBeneficiaryDOB.split('-')[1] + "/" + field_addBeneficiaryDOB.split('-')[2] + "/" + field_addBeneficiaryDOB.split('-')[0],
             beneficiary["CountryCode"] = $("select#field_addBeneficiaryMobileNumberSelect option").filter(":selected").val(),
             beneficiary["PhoneNumber"] = field_addBeneficiaryMobileNum,
             beneficiary["EmailAddress"] = field_addBeneficiaryEmailAddress,
@@ -899,34 +959,34 @@ function handleFormAddBeneficiary(event) {
             beneficiary["check2"] = dataBen.privacy_consent_beneficiary_2
         BeneficiaryList.push(beneficiary);
 
-        if  (buttonCount == 1) {
+        if (buttonCount == 1) {
             data1 = dataBen;
-            console.log('data1',data1);
+            console.log('data1', data1);
         }
 
         if (buttonCount == 2) {
             data2 = dataBen;
-            console.log('data2',data2)
+            console.log('data2', data2)
         }
 
         if (buttonCount == 3) {
             data3 = dataBen;
-            console.log('data3',data3)
+            console.log('data3', data3)
         }
-        
+
         if (buttonCount == 4) {
             data4 = dataBen;
-            console.log('data4',data4)
+            console.log('data4', data4)
         }
 
         if (buttonCount == 5) {
             data5 = dataBen;
-            console.log('data5',data5)
+            console.log('data5', data5)
         }
 
         if (buttonCount == 6) {
             data6 = dataBen;
-            console.log('data6',data6)
+            console.log('data6', data6)
         }
 
         dataReset("field_addBeneficiaryFirstName", "field_addBeneficiaryMiddleName", "field_addBeneficiaryLastName", "field_addBeneficiaryMobileNum", "field_addBeneficiaryEmailAddress", "field_addBeneficiaryHomeAddress", "field_addBeneficiaryDOB", "field_addBeneficiaryPOB", "field_addBeneficiaryNationality", "field_addBeneficiarySex", "field_addBeneficiaryRelationToDeceased", "field_addBeneficiaryEmployerName", "field_addBeneficiaryOccupation", "field_addBeneficiary_relatives1", "field_add_Beneficiary_add_relatives2");
@@ -940,10 +1000,10 @@ function handleFormAddBeneficiary(event) {
         $("#step3").remove("active");
         /*  $('#requirements')[0].scrollIntoView(true); */
 
-     /*    console.log('Data -> ', dataBen) */
-        
-    }else {
-        $('#popUp').modal('show'); 
+        /*    console.log('Data -> ', dataBen) */
+
+    } else {
+        $('#popUp').modal('show');
     }
 }
 
@@ -1068,8 +1128,8 @@ function handleForm(event) {
     var lenBeneficiaryNationality = fieldCheckLength(field_BeneficiaryNationality, 120)
     var lenBeneficiaryRelationToDeceased = fieldCheckLength(field_BeneficiaryRelationToDeceased, 50)
     var lenBeneficiaryEmployerName = fieldCheckLength(field_BeneficiaryEmployerName, 30)
-    var checkDOb = currentDate(field_BeneficiaryDOB);
-    var relationKeyword = checkKeyword(field_BeneficiaryRelationToDeceased);
+    var checkDOb = currentDate(field_BeneficiaryDOB, '');
+    var relationKeyword = checkKeyword(field_BeneficiaryRelationToDeceased, '');
 
 
     if (field_DOB.length !== 0) {
@@ -1090,9 +1150,20 @@ function handleForm(event) {
 
     //if(field_NatureOfLoss == 'Illness') {
     if (0 == field_NatureOfLoss.localeCompare("Illness")) {
+        document.getElementById("file_Upload_2").disabled = true;
+        document.getElementById("file_Upload_2").style.cursor = "no-drop";
+        document.getElementById("file_Upload_2").style.opacity = "0.4";
+        document.getElementById("police_report").style.border = "none";
+
+
         optiondisable = 2;
     }
     else {
+
+        document.getElementById("file_Upload_2").disabled = false;
+        document.getElementById("file_Upload_2").style.cursor = "pointer";
+        document.getElementById("file_Upload_2").style.opacity = "0";
+        document.getElementById("police_report").style.border = "none";
         optiondisable = 1;
     }
 
@@ -1445,9 +1516,9 @@ function handleForm(event) {
         InsuredInformation["MiddleName"] = field_middleName;
         InsuredInformation["LastName"] = field_lastName;
         InsuredInformation["Suffix"] = field_lastName_Suffix;
-        InsuredInformation["DateOfBirth"] = field_DOB.split('-')[1]+"/"+field_DOB.split('-')[2]+"/"+field_DOB.split('-')[0];
-        InsuredInformation["InsuredsDeath"] = field_DOID.split('-')[1]+"/"+field_DOID.split('-')[2]+"/"+field_DOID.split('-')[0];
-
+        InsuredInformation["DateOfBirth"] = field_DOB.split('-')[1] + "/" + field_DOB.split('-')[2] + "/" + field_DOB.split('-')[0];
+        InsuredInformation["InsuredsDeath"] = field_DOID.split('-')[1] + "/" + field_DOID.split('-')[2] + "/" + field_DOID.split('-')[0];
+        document.getElementById('user_mobile').innerHTML = field_BeneficiaryMobileNum.replace(/.(?=.{4})/g, '*')
         basicInformation["CauseOfLoss"] = field_NatureLoss;
 
         let beneficiary = {};
@@ -1456,7 +1527,7 @@ function handleForm(event) {
             beneficiary["FirstName"] = field_BeneficiaryFirstName,
             beneficiary["MiddleName"] = field_BeneficiaryMiddleName,
             beneficiary["LastName"] = field_BeneficiaryLastName,
-            beneficiary["DateOfBirth"] = field_BeneficiaryDOB.split('-')[1]+"/"+field_BeneficiaryDOB.split('-')[2]+"/"+field_BeneficiaryDOB.split('-')[0],
+            beneficiary["DateOfBirth"] = field_BeneficiaryDOB.split('-')[1] + "/" + field_BeneficiaryDOB.split('-')[2] + "/" + field_BeneficiaryDOB.split('-')[0],
             beneficiary["CountryCode"] = $("select#field_BeneficiaryMobileNumberSelect option").filter(":selected").val(),
             beneficiary["PhoneNumber"] = field_BeneficiaryMobileNum,
             beneficiary["EmailAddress"] = field_BeneficiaryEmailAddress,
@@ -1470,12 +1541,12 @@ function handleForm(event) {
             beneficiary["Employer"] = field_BeneficiaryEmployerName,
             beneficiary["GovernmentOfficial"] = $("select#field_Beneficiary_relatives1 option").filter(":selected").val(),
             beneficiary["GovernmentOfficialRelative"] = $("select#field_Beneficiary_relatives2 option").filter(":selected").val(),
-        beneficiary["Occupation"] = field_BenificiaryOccupation,
-        beneficiary["check1"] = data.privacy_consent_1,
+            beneficiary["Occupation"] = field_BenificiaryOccupation,
+            beneficiary["check1"] = data.privacy_consent_1,
             beneficiary["check2"] = data.privacy_consent_2
         BeneficiaryList.push(beneficiary);
 
-       /*  dataReset("field_firstName", "field_firstName", "field_middleName", "field_lastName", "field_lastName_Suffix", "field_DOB", "field_DOID", "field_BeneficiaryFirstName", "field_BeneficiaryMiddleName", "field_BeneficiaryLastName", "field_BeneficiaryMobileNum", "field_BeneficiaryEmailAddress", "field_BeneficiaryHomeAddress", "field_BeneficiaryDOB", "field_BeneficiaryPOB", "field_BeneficiaryNationality", "field_BeneficiarySex", "field_BeneficiaryRelationToDeceased", "field_Beneficiary_relatives1", "field_Beneficiary_relatives2") */
+        /*  dataReset("field_firstName", "field_firstName", "field_middleName", "field_lastName", "field_lastName_Suffix", "field_DOB", "field_DOID", "field_BeneficiaryFirstName", "field_BeneficiaryMiddleName", "field_BeneficiaryLastName", "field_BeneficiaryMobileNum", "field_BeneficiaryEmailAddress", "field_BeneficiaryHomeAddress", "field_BeneficiaryDOB", "field_BeneficiaryPOB", "field_BeneficiaryNationality", "field_BeneficiarySex", "field_BeneficiaryRelationToDeceased", "field_Beneficiary_relatives1", "field_Beneficiary_relatives2") */
 
 
         $("#step1").addClass("done");
@@ -1487,7 +1558,7 @@ function handleForm(event) {
         $("#customer_Name").text(`Hi ${field_BeneficiaryFirstName}. Hang in there as we process your request. Expect an SMS from us within 1 to 2 working days on the status of your request.`);
         console.log('Data -> ', data)
 
-    }else if ((comapareDates == false) && ((field_DOB !== '') || (field_DOID !== ''))){
+    } else if ((comapareDates == false) && ((field_DOB !== '') || (field_DOID !== ''))) {
         $('#popUp_DOB').modal('show');
     } else {
         $('#popUp').modal('show');
@@ -1599,7 +1670,7 @@ const proceedScan = async (fileObj, button, pageid) => {
                 $("#warning_parent_addBeneficiary").hide();
                 $("#warning_parent_addBeneficiaryacct").hide();
                 $(`#file_loader_icon_${button}`).hide();
-                $(`#file_Upload_Tick_${button}`).show();
+                $(`#file_Upload_Tick_${button}`).show(); 
                 $(`#file_upload_cancle_${button}`).hide();
                 $('#upload_feedback_label').hide();
                 $('#upload_feedback_label8').hide();
@@ -2031,7 +2102,7 @@ file6.onchange = async function (e) {
 
 file7.onchange = async function (e) {
     docType = "DIBA001";
-  tranType = "BA-MAJ";
+    tranType = "BA-MAJ";
     $("#file_upload_cancle_7").hide();
     $("#file_Upload_Tick_7").hide();
     var ext = this.value.match(/\.([^\.]+)$/)[1];
@@ -2052,15 +2123,15 @@ file7.onchange = async function (e) {
                 let fileName = referenceNumber + "-" + docType + "-" + tranType;
 
                 let accident = {};
-        
+
                 accident['BeneficiaryNo'] = beneficiaryCount,
-                accident['Filename'] = `${fileName}.pdf`,
-                accident['DocType'] = "PDF",
-                accident['DocTypeCode'] = docType,
-                accident['DocumentDescription']= "Proof of Bank Account"
-        
+                    accident['Filename'] = `${fileName}.pdf`,
+                    accident['DocType'] = "PDF",
+                    accident['DocTypeCode'] = docType,
+                    accident['DocumentDescription'] = "Proof of Bank Account"
+
                 addFileToList(accident, `${fileName}.pdf`);
-        
+
                 const formData = new FormData()
                 formData.append('file', file, fileName + `.${ext}`)
                 handleFileUpload(formData, fileName);
@@ -2363,114 +2434,162 @@ file12.onchange = async function (e) {
     }
 };
 
+file13.onchange = async function (e) {
+    $("#file_upload_cancle_13").hide();
+    $("#file_Upload_Tick_13").hide();
+    var ext = this.value.match(/\.([^\.]+)$/)[1];
+    switch (ext) {
+        case "jpg":
+        case "pdf":
+            var file = this.files[0];
+            var buttonNum = 13;
+            var sizevalid = isFileSizeValid(file, buttonNum);
+            if (sizevalid) {
+                if (ext == "jpg") {
+                    fileCheck(file, buttonNum);
+                }
+                else {
+                    proceedScan(file, buttonNum);
+                }
+                file1Buffer = await getBuffer(file);
+                console.log("file buffer : ")
+                console.log(file1Buffer);
+                filesMap["file13"] = file1Buffer;
+            } else {
+                $("#warning_parent").show();
+                $("#file_loader_icon_13").hide();
+                $("#file_Upload_Tick_13").hide();
+                $("#file_upload_cancle_13").show();
+                $("#upload_warning").text(
+                    "You may only upload documents not exceeding 2MB in file size. Please re-upload in the correct format and file size proceed."
+                );
+            }
+            break;
+        default:
+            $("#warning_parent").show();
+            $("#file_Upload_Tick_13").hide();
+            $("#file_upload_cancle_13").show();
+            $("#upload_warning").text(
+                "You may only upload documents that are in .jpg, .pdf formats and must not exceed 2MB in file size. Please re-upload in the correct format and file size to proceed."
+            );
+            this.value = "";
+    }
+};
+function addBank(event) {
+    event.preventDefault();
+    $('#account_details').hide();
+    $('#requirements').hide();
+    $('#account_details1').show();
+    /*   $('#account_details1')[0].scrollIntoView(true); */
+}
 function dataResetInfo(data) {
     for (const [key, value] of Object.entries(data)) {
         $(`#${key}`).val('')
-      }
+    }
 }
 
 function addBeneficiary(event) {
     event.preventDefault();
-    if(screenCount !== 0 && traverse == 0) {
+    if (screenCount !== 0 && traverse == 0) {
         $('#missingDetails').modal('show');
-    }else {
-    if (!file1.value || ($('#file_Upload_Tick_1').is(":hidden"))) {
-        $('#warning_parent').show();
-        $('#upload_warning').text('Please upload your Death Certificate of the Deceased');
-        $('#popUp').modal('show');
-        return;
-    }
-
-    if (optiondisable == 1) {
-
-        if (!file2.value || $("#file_Upload_Tick_2").is(":hidden")) {
-            $("#warning_parent").show();
-            $("#upload_warning").text(
-                "Please upload your Police or Narration Report!"
-            );
-            $("#popUp").modal("show");
+    } else {
+        if (!file1.value || ($('#file_Upload_Tick_1').is(":hidden"))) {
+            $('#warning_parent').show();
+            $('#upload_warning').text('Please upload your Death Certificate of the Deceased');
+            $('#popUp').modal('show');
             return;
         }
-    }
 
-    if (!file3.value || ($('#file_Upload_Tick_3').is(":hidden"))) {
-        $('#warning_parent').show();
-        $('#upload_warning').text('Please upload your Valid Government ID (Front)');
-        $('#popUp').modal('show');
-        return;
-    }
+        if (optiondisable == 1) {
 
-    if (!file4.value || ($('#file_Upload_Tick_4').is(":hidden"))) {
-        $('#warning_parent').show();
-        $('#upload_warning').text('Please upload your Valid Government ID (Back)');
-        $('#popUp').modal('show');
-        return;
-    }
+            if (!file2.value || $("#file_Upload_Tick_2").is(":hidden")) {
+                $("#warning_parent").show();
+                $("#upload_warning").text(
+                    "Please upload your Police or Narration Report!"
+                );
+                $("#popUp").modal("show");
+                return;
+            }
+        }
 
-    if (relation == true) {
-        if (!file5.value || $("#file_Upload_Tick_5").is(":hidden")) {
-            $("#warning_parent").show();
-            $("#upload_warning").text("Please upload your Marriage Contract");
-            $("#popUp").modal("show");
+        if (!file3.value || ($('#file_Upload_Tick_3').is(":hidden"))) {
+            $('#warning_parent').show();
+            $('#upload_warning').text('Please upload your Valid Government ID (Front)');
+            $('#popUp').modal('show');
             return;
         }
-    }
 
-    if (optionAge == true) {
-        if (!file6.value || $("#file_Upload_Tick_6").is(":hidden")) {
-            $("#warning_parent").show();
-            $("#upload_warning").text("Please upload your Birth Certificate");
-            $("#popUp").modal("show");
+        if (!file4.value || ($('#file_Upload_Tick_4').is(":hidden"))) {
+            $('#warning_parent').show();
+            $('#upload_warning').text('Please upload your Valid Government ID (Back)');
+            $('#popUp').modal('show');
             return;
         }
+
+        if (relation == true) {
+            if (!file5.value || $("#file_Upload_Tick_5").is(":hidden")) {
+                $("#warning_parent").show();
+                $("#upload_warning").text("Please upload your Marriage Contract");
+                $("#popUp").modal("show");
+                return;
+            }
+        }
+
+        if (optionAge == true) {
+            if (!file6.value || $("#file_Upload_Tick_6").is(":hidden")) {
+                $("#warning_parent").show();
+                $("#upload_warning").text("Please upload your Birth Certificate");
+                $("#popUp").modal("show");
+                return;
+            }
+        }
+
+        if (!$('#upload_invalidCheck_2').is(':checked')) {
+            $("#upload_warning").text('Please don’t forget to tick the box to confirm the accuracy of your submitted documents.');
+            $("#warning_parent").show();
+            $('#popUp').modal('show');
+            return;
+        }
+
+        $("#upload_warning").text('');
+        $("#warning_parent").hide();
+        upload_data = {
+            upload_file_1: file1.value,
+            upload_file_2: file2.value,
+            upload_file_3: file3.value,
+            upload_file_4: file4.value,
+            upload_file_5: file5.value,
+            upload_file_6: file6.value,
+            insurance_Checkbox: $('#upload_invalidCheck_2').is(':checked')
+        }
+
+        buttonCount = (buttonCount + 1);
+        $('#privacy_consent_1').prop('checked', false);
+        $('#privacy_consent_2').prop('checked', false);
+
+        $("#step1").addClass("active");
+        $("#step2").removeClass("active");
+        $("#step2>div").removeClass("active");
+        $('#addBeneficiary').show();
+        $('#requirements').hide();
+
+        optionAge = false;
+        relation = false;
+        console.log('upload data --> ', upload_data);
+
+
+        /*  $('#addBeneficiary')[0].scrollIntoView(true); */
     }
-
-    if (!$('#upload_invalidCheck_2').is(':checked')) {
-        $("#upload_warning").text('Please don’t forget to tick the box to confirm the accuracy of your submitted documents.');
-        $("#warning_parent").show();
-        $('#popUp').modal('show');
-        return;
-    }
-
-    $("#upload_warning").text('');
-    $("#warning_parent").hide();
-    upload_data = {
-        upload_file_1: file1.value,
-        upload_file_2: file2.value,
-        upload_file_3: file3.value,
-        upload_file_4: file4.value,
-        upload_file_5: file5.value,
-        upload_file_6: file6.value,
-        insurance_Checkbox: $('#upload_invalidCheck_2').is(':checked')
-    }
-
-    buttonCount = (buttonCount + 1);
-    $('#privacy_consent_1').prop('checked', false);
-    $('#privacy_consent_2').prop('checked', false);
-
-    $("#step1").addClass("active");
-    $("#step2").removeClass("active");
-    $("#step2>div").removeClass("active");
-    $('#addBeneficiary').show();
-    $('#requirements').hide();
-
-    optionAge = false;
-    relation = false;
-    console.log('upload data --> ', upload_data);
-
-
-    /*  $('#addBeneficiary')[0].scrollIntoView(true); */
-    } 
 }
 
 
 function addBeneficiaryNew(event) {
     event.preventDefault();
 
-    if(screenCount !== 0 && traverse == 0) {
+    if (screenCount !== 0 && traverse == 0) {
         $('#missingDetails').modal('show');
-    }else {
-        if (screenCount !== 0 && traverse !== 0 ) {
+    } else {
+        if (screenCount !== 0 && traverse !== 0) {
             screenCount = 0
         }
         if (!file9.value || ($('#file_Upload_Tick_9').is(":hidden"))) {
@@ -2506,11 +2625,11 @@ function addBeneficiaryNew(event) {
         }
 
         buttonCount = (buttonCount + 1);
-        bCount = buttonCount-1;
+        bCount = buttonCount - 1;
         optionAge = false;
         relation = false;
         if (buttonCount > 6) {
-                    buttonCount = 6
+            buttonCount = 6
             $('#warning_parent_addBeneficiary').show();
             $('#addBeneficiary_upload_warning').text('Sorry, you reached the maximum number of 6 beneficiaries for any claim request. You may review your policy details on ePlan or send us an e-mail at philamlife@aia.com for any concerns regarding your policy information.');
             $('.btn2').prop("disable", true);
@@ -2518,86 +2637,86 @@ function addBeneficiaryNew(event) {
         } else {
             $("#addBeneficiary_upload_warning").text('');
             $("#warning_parent_addBeneficiary").hide();
-                    addBeni_upload_data = {
+            addBeni_upload_data = {
                 upload_file_9: file9.value,
                 upload_file_10: file10.value,
                 upload_file_11: file11.value,
                 upload_file_12: file12.value,
                 /*  insurance_Checkbox: $('#upload_invalidCheck_2').is(':checked') */
             }
-            if  (bCount == 1) {
+            if (bCount == 1) {
                 uppload_data1 = addBeni_upload_data;
-                console.log('uppload_data1',uppload_data1)
+                console.log('uppload_data1', uppload_data1)
             }
-    
+
             if (bCount == 2) {
                 uppload_data2 = addBeni_upload_data;
-                console.log('uppload_data2',uppload_data2)
+                console.log('uppload_data2', uppload_data2)
             }
-    
+
             if (bCount == 3) {
                 uppload_data3 = addBeni_upload_data;
-                console.log('uppload_data3',uppload_data3)
+                console.log('uppload_data3', uppload_data3)
             }
-            
+
             if (bCount == 4) {
                 uppload_data4 = addBeni_upload_data;
-                console.log('uppload_data4',uppload_data4)
+                console.log('uppload_data4', uppload_data4)
             }
-    
+
             if (bCount == 5) {
                 uppload_data5 = addBeni_upload_data;
-                console.log('uppload_data5',uppload_data5)
+                console.log('uppload_data5', uppload_data5)
             }
-    
+
             if (bCount == 6) {
                 uppload_data6 = addBeni_upload_data
                 setDataUpload(uppload_data6);
-                console.log('uppload_data6',uppload_data6)
+                console.log('uppload_data6', uppload_data6)
             }
-                
+
             dataReset("field_addBenificiaryAccountName", "field_addBenificiaryAccountNumber", "field_addBenificiaryBank", "field_addBeneficiaryBranch", "field_addBeneficiaryCurrency", "upload_file_8");
-            resetBank();       
-            fileUploadDataReset(); 
+            resetBank();
+            fileUploadDataReset();
 
             $('#privacy_consent_1').prop('checked', false);
             $('#privacy_consent_2').prop('checked', false);
-                    $("#step1").addClass("active");
+            $("#step1").addClass("active");
             $("#step2").removeClass("active");
             $("#step2>div").removeClass("active");
             $('#addBeneficiary').show();
             $('#addBeneficiaryRequirements').hide();
         }
     }
-} 
+}
 
 function resetBank() {
     $('#from_addBeneficiarycurrency').val('Peso');
     $("#field_addBenificiaryBank").html(
         "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option><option value='BPI Family Savings Bank - BFB'>BPI Family Savings Bank - BFB</option>"
-      );
+    );
 }
 
 function screen() {
     buttonCount = screenCount;
     screenCount = 0;
-  
-    if(isEmpty(dataBen) == false){
-        dataResetInfo(dataBen);
-    }   
 
-   if(isEmpty(addBenAccountInfo) == false) {
+    if (isEmpty(dataBen) == false) {
+        dataResetInfo(dataBen);
+    }
+
+    if (isEmpty(addBenAccountInfo) == false) {
         dataResetInfo(addBenAccountInfo);
-   }
-   
-   /*  dataResetInfo(addBeni_upload_data); */
+    }
+
+    /*  dataResetInfo(addBeni_upload_data); */
     fileUploadDataReset();
     addBeneficiaryuploadDataReset();
     $('#invalidCheck_privacyAddBeneficiary').prop('checked', false);
     $('#invalidCheck_basicAddBeneficiary').prop('checked', false);
 
-    if (buttonCount == 1 ){
-        if(isEmpty(data1) == true){
+    if (buttonCount == 1) {
+        if (isEmpty(data1) == true) {
             $('#privacy_consent_1').prop('checked', false);
             $('#privacy_consent_2').prop('checked', false);
             $('#invalidCheck_privacyAddBeneficiary').prop('checked', false);
@@ -2607,12 +2726,12 @@ function screen() {
             $('#addBeneficiary').show();
             $('#addBeneficiaryRequirements').hide();
             $('#requirements').hide();
-        }else if(isEmpty(acct_data1) == true){
-            if(trackaddBenificiary1 == 0){
+        } else if (isEmpty(acct_data1) == true) {
+            if (trackaddBenificiary1 == 0) {
                 $('#privacy_consent_1').prop('checked', false);
                 $('#privacy_consent_2').prop('checked', false);
-               /*  $("#step2").removeClass("active");
-                $("#step2>div").removeClass("active"); */
+                /*  $("#step2").removeClass("active");
+                 $("#step2>div").removeClass("active"); */
                 $("#step2").addClass("active");
                 $("#step2>div").addClass("active");
                 $("#step3").remove("active");
@@ -2620,7 +2739,7 @@ function screen() {
                 $('#addBeneficiaryaccount_details').show();
                 $('#addBeneficiaryRequirements').hide();
                 $('#requirements').hide();
-            }else if ((trackaddBenificiary1 == 1) && (bpiCount == 0)){
+            } else if ((trackaddBenificiary1 == 1) && (bpiCount == 0)) {
                 $('#privacy_consent_1').prop('checked', false);
                 $('#privacy_consent_2').prop('checked', false);
                 $("#step2").addClass("active");
@@ -2630,8 +2749,8 @@ function screen() {
                 $('#addBeneficiaryPickUp').show();
                 $('#addBeneficiaryRequirements').hide();
                 $('#requirements').hide();
-               
-            } else{
+
+            } else {
                 bpiCount = 0;
                 $("#step2").addClass("active");
                 $("#step2>div").addClass("active");
@@ -2643,7 +2762,7 @@ function screen() {
                 $('#addBeneficiaryRequirements').show();
                 $('#requirements').hide();
             }
-        }else if(isEmpty(uppload_data1) == true){
+        } else if (isEmpty(uppload_data1) == true) {
             $("#step2").addClass("active");
             $("#step2>div").addClass("active");
             $("#step3").remove("active");
@@ -2653,12 +2772,12 @@ function screen() {
             $('#file_Upload_Tick_12').hide();
             $('#addBeneficiaryRequirements').show();
             $('#requirements').hide();
-            
+
         } else {
             console.log('In condition')
         }
-    } else if (buttonCount == 2 ){
-        if(isEmpty(data2) == true){
+    } else if (buttonCount == 2) {
+        if (isEmpty(data2) == true) {
             $('#privacy_consent_1').prop('checked', false);
             $('#privacy_consent_2').prop('checked', false);
             $('#invalidCheck_privacyAddBeneficiary').prop('checked', false);
@@ -2668,12 +2787,12 @@ function screen() {
             $('#addBeneficiary').show();
             $('#addBeneficiaryRequirements').hide();
             $('#requirements').hide();
-        }else if(isEmpty(acct_data2) == true){
-            if(trackaddBenificiary2 == 0){
+        } else if (isEmpty(acct_data2) == true) {
+            if (trackaddBenificiary2 == 0) {
                 $('#privacy_consent_1').prop('checked', false);
                 $('#privacy_consent_2').prop('checked', false);
-               /*  $("#step2").removeClass("active");
-                $("#step2>div").removeClass("active"); */
+                /*  $("#step2").removeClass("active");
+                 $("#step2>div").removeClass("active"); */
                 $("#step2").addClass("active");
                 $("#step2>div").addClass("active");
                 $("#step3").remove("active");
@@ -2681,11 +2800,11 @@ function screen() {
                 $('#addBeneficiaryaccount_details').show();
                 $('#addBeneficiaryRequirements').hide();
                 $('#requirements').hide();
-            }else if ((trackaddBenificiary2 == 1)  && (bpiCount == 0)){
+            } else if ((trackaddBenificiary2 == 1) && (bpiCount == 0)) {
                 $('#privacy_consent_1').prop('checked', false);
                 $('#privacy_consent_2').prop('checked', false);
-               /*  $("#step2").removeClass("active");
-                $("#step2>div").removeClass("active"); */
+                /*  $("#step2").removeClass("active");
+                 $("#step2>div").removeClass("active"); */
                 $("#step2").addClass("active");
                 $("#step2>div").addClass("active");
                 $("#step3").remove("active");
@@ -2693,7 +2812,7 @@ function screen() {
                 $('#addBeneficiaryPickUp').show();
                 $('#addBeneficiaryRequirements').hide();
                 $('#requirements').hide();
-            } else{
+            } else {
                 bpiCount = 0;
                 $('#privacy_consent_1').prop('checked', false);
                 $('#privacy_consent_2').prop('checked', false);
@@ -2707,7 +2826,7 @@ function screen() {
                 $('#addBeneficiaryRequirements').show();
                 $('#requirements').hide();
             }
-        }else if(isEmpty(uppload_data2) == true){
+        } else if (isEmpty(uppload_data2) == true) {
             $('#privacy_consent_1').prop('checked', false);
             $('#privacy_consent_2').prop('checked', false);
             $("#step2").addClass("active");
@@ -2719,12 +2838,12 @@ function screen() {
             $('#file_Upload_Tick_12').hide();
             $('#addBeneficiaryRequirements').show();
             $('#requirements').hide();
-            
+
         } else {
             console.log('In condition')
         }
-    } else if (buttonCount == 3 ){
-        if(isEmpty(data3) == true){
+    } else if (buttonCount == 3) {
+        if (isEmpty(data3) == true) {
             $('#privacy_consent_1').prop('checked', false);
             $('#privacy_consent_2').prop('checked', false);
             $('#invalidCheck_privacyAddBeneficiary').prop('checked', false);
@@ -2734,12 +2853,12 @@ function screen() {
             $('#addBeneficiary').show();
             $('#addBeneficiaryRequirements').hide();
             $('#requirements').hide();
-        }else if(isEmpty(acct_data3) == true){
-            if(trackaddBenificiary3 == 0){
+        } else if (isEmpty(acct_data3) == true) {
+            if (trackaddBenificiary3 == 0) {
                 $('#privacy_consent_1').prop('checked', false);
                 $('#privacy_consent_2').prop('checked', false);
-               /*  $("#step2").removeClass("active");
-                $("#step2>div").removeClass("active"); */
+                /*  $("#step2").removeClass("active");
+                 $("#step2>div").removeClass("active"); */
                 $("#step2").addClass("active");
                 $("#step2>div").addClass("active");
                 $("#step3").remove("active");
@@ -2747,18 +2866,18 @@ function screen() {
                 $('#addBeneficiaryaccount_details').show();
                 $('#addBeneficiaryRequirements').hide();
                 $('#requirements').hide();
-            }else if ((trackaddBenificiary3 == 1)  && (bpiCount == 0)){
+            } else if ((trackaddBenificiary3 == 1) && (bpiCount == 0)) {
                 $('#privacy_consent_1').prop('checked', false);
                 $('#privacy_consent_2').prop('checked', false);
-               /*  $("#step2").removeClass("active");
-                $("#step2>div").removeClass("active"); */
+                /*  $("#step2").removeClass("active");
+                 $("#step2>div").removeClass("active"); */
                 $("#step2").addClass("active");
                 $("#step2>div").addClass("active");
                 $("#step3").remove("active");
                 $('#addBeneficiaryPickUp').show();
                 $('#addBeneficiaryRequirements').hide();
                 $('#requirements').hide();
-            } else{
+            } else {
                 bpiCount = 0;
                 $('#privacy_consent_1').prop('checked', false);
                 $('#privacy_consent_2').prop('checked', false);
@@ -2772,7 +2891,7 @@ function screen() {
                 $('#addBeneficiaryRequirements').show();
                 $('#requirements').hide();
             }
-        }else if(isEmpty(uppload_data3) == true){
+        } else if (isEmpty(uppload_data3) == true) {
             $('#privacy_consent_1').prop('checked', false);
             $('#privacy_consent_2').prop('checked', false);
             $("#step2").addClass("active");
@@ -2788,8 +2907,8 @@ function screen() {
         } else {
             console.log('IN condition')
         }
-    } else if (buttonCount == 4 ){
-        if(isEmpty(data4) == true){
+    } else if (buttonCount == 4) {
+        if (isEmpty(data4) == true) {
             $('#privacy_consent_1').prop('checked', false);
             $('#privacy_consent_2').prop('checked', false);
             $('#invalidCheck_privacyAddBeneficiary').prop('checked', false);
@@ -2799,8 +2918,8 @@ function screen() {
             $('#addBeneficiary').show();
             $('#addBeneficiaryRequirements').hide();
             $('#requirements').hide();
-        }else if(isEmpty(acct_data4) == true){
-            if(trackaddBenificiary4 == 0){
+        } else if (isEmpty(acct_data4) == true) {
+            if (trackaddBenificiary4 == 0) {
                 $('#privacy_consent_1').prop('checked', false);
                 $('#privacy_consent_2').prop('checked', false);
                 $("#step2").addClass("active");
@@ -2810,7 +2929,7 @@ function screen() {
                 $('#addBeneficiaryaccount_details').show();
                 $('#addBeneficiaryRequirements').hide();
                 $('#requirements').hide();
-            }else if ((trackaddBenificiary4 == 1)  && (bpiCount == 0)){
+            } else if ((trackaddBenificiary4 == 1) && (bpiCount == 0)) {
                 $('#privacy_consent_1').prop('checked', false);
                 $('#privacy_consent_2').prop('checked', false);
                 $("#step2").addClass("active");
@@ -2820,7 +2939,7 @@ function screen() {
                 $('#addBeneficiaryPickUp').show();
                 $('#addBeneficiaryRequirements').hide();
                 $('#requirements').hide();
-            } else{
+            } else {
                 bpiCount = 0;
                 $("#step2").addClass("active");
                 $("#step2>div").addClass("active");
@@ -2832,7 +2951,7 @@ function screen() {
                 $('#addBeneficiaryRequirements').show();
                 $('#requirements').hide();
             }
-        } else if(isEmpty(uppload_data4) == true){
+        } else if (isEmpty(uppload_data4) == true) {
             $("#step2").addClass("active");
             $("#step2>div").addClass("active");
             $("#step3").remove("active");
@@ -2845,9 +2964,9 @@ function screen() {
         } else {
             console.log('In condition')
         }
-    } else if (buttonCount == 5 ){
+    } else if (buttonCount == 5) {
 
-        if(isEmpty(data5) == true){
+        if (isEmpty(data5) == true) {
             $('#privacy_consent_1').prop('checked', false);
             $('#privacy_consent_2').prop('checked', false);
             $('#invalidCheck_privacyAddBeneficiary').prop('checked', false);
@@ -2857,19 +2976,19 @@ function screen() {
             $('#addBeneficiary').show();
             $('#addBeneficiaryRequirements').hide();
             $('#requirements').hide();
-        }else if(isEmpty(acct_data5) == true){
-            if(trackaddBenificiary5 == 0){
+        } else if (isEmpty(acct_data5) == true) {
+            if (trackaddBenificiary5 == 0) {
                 $('#privacy_consent_1').prop('checked', false);
                 $('#privacy_consent_2').prop('checked', false);
-               /*  $("#step2").removeClass("active");
-                $("#step2>div").removeClass("active"); */
+                /*  $("#step2").removeClass("active");
+                 $("#step2>div").removeClass("active"); */
                 $("#step2").addClass("active");
                 $("#step2>div").addClass("active");
                 $("#step3").remove("active");
                 $('#addBeneficiaryaccount_details').show();
                 $('#addBeneficiaryRequirements').hide();
                 $('#requirements').hide();
-            }else if ((trackaddBenificiary5 == 1)  && (bpiCount == 0)){
+            } else if ((trackaddBenificiary5 == 1) && (bpiCount == 0)) {
                 $('#privacy_consent_1').prop('checked', false);
                 $('#privacy_consent_2').prop('checked', false);
                 $("#step2").addClass("active");
@@ -2878,7 +2997,7 @@ function screen() {
                 $('#addBeneficiaryPickUp').show();
                 $('#addBeneficiaryRequirements').hide();
                 $('#requirements').hide();
-            } else{
+            } else {
                 bpiCount = 0;
                 $('#privacy_consent_1').prop('checked', false);
                 $('#privacy_consent_2').prop('checked', false);
@@ -2892,7 +3011,7 @@ function screen() {
                 $('#addBeneficiaryRequirements').show();
                 $('#requirements').hide();
             }
-        }else if(isEmpty(uppload_data5) == true){
+        } else if (isEmpty(uppload_data5) == true) {
             $('#privacy_consent_1').prop('checked', false);
             $('#privacy_consent_2').prop('checked', false);
             $("#step2").addClass("active");
@@ -2904,11 +3023,11 @@ function screen() {
             $('#file_Upload_Tick_12').hide();
             $('#addBeneficiaryRequirements').show();
             $('#requirements').hide();
-        }  else {
-            console.log( 'IN condition')
+        } else {
+            console.log('IN condition')
         }
-    } else if (buttonCount == 6 ){
-        if(isEmpty(data6) == true){
+    } else if (buttonCount == 6) {
+        if (isEmpty(data6) == true) {
             $('#privacy_consent_1').prop('checked', false);
             $('#privacy_consent_2').prop('checked', false);
             $('#invalidCheck_privacyAddBeneficiary').prop('checked', false);
@@ -2918,8 +3037,8 @@ function screen() {
             $('#addBeneficiary').show();
             $('#addBeneficiaryRequirements').hide();
             $('#requirements').hide();
-        }else if(isEmpty(acct_data6) == true){
-            if(trackaddBenificiary6 == 0){
+        } else if (isEmpty(acct_data6) == true) {
+            if (trackaddBenificiary6 == 0) {
                 $('#privacy_consent_1').prop('checked', false);
                 $('#privacy_consent_2').prop('checked', false);
                 $("#step2").addClass("active");
@@ -2929,11 +3048,11 @@ function screen() {
                 $('#addBeneficiaryaccount_details').show();
                 $('#addBeneficiaryRequirements').hide();
                 $('#requirements').hide();
-            }else if ((trackaddBenificiary6 == 1) && (bpiCount == 0)){
+            } else if ((trackaddBenificiary6 == 1) && (bpiCount == 0)) {
                 $('#privacy_consent_1').prop('checked', false);
                 $('#privacy_consent_2').prop('checked', false);
-               /*  $("#step2").removeClass("active");
-                $("#step2>div").removeClass("active"); */
+                /*  $("#step2").removeClass("active");
+                 $("#step2>div").removeClass("active"); */
                 $("#step2").addClass("active");
                 $("#step2>div").addClass("active");
                 $("#step3").remove("active");
@@ -2941,7 +3060,7 @@ function screen() {
                 $('#addBeneficiaryPickUp').show();
                 $('#addBeneficiaryRequirements').hide();
                 $('#requirements').hide();
-            } else{
+            } else {
                 bpiCount = 0;
                 $("#step2").addClass("active");
                 $("#step2>div").addClass("active");
@@ -2953,7 +3072,7 @@ function screen() {
                 $('#addBeneficiaryRequirements').show();
                 $('#requirements').hide();
             }
-        }else if(isEmpty(uppload_data6) == true){
+        } else if (isEmpty(uppload_data6) == true) {
             $("#step2").addClass("active");
             $("#step2>div").addClass("active");
             $("#step3").remove("active");
@@ -2963,8 +3082,8 @@ function screen() {
             $('#file_Upload_Tick_12').hide();
             $('#addBeneficiaryRequirements').show();
             $('#requirements').hide();
-            
-        }  else {
+
+        } else {
             console.log('In Condition')
         }
     }
@@ -2972,9 +3091,9 @@ function screen() {
 
 function buttonSubmitClicked(event) {
     event.preventDefault();
-    if(screenCount !== 0 && traverse == 0) {
+    if (screenCount !== 0 && traverse == 0) {
         $('#missingDetails').modal('show');
-    }else {
+    } else {
         if (!file1.value || ($('#file_Upload_Tick_1').is(":hidden"))) {
             $('#warning_parent').show();
             $('#upload_warning').text('Please upload your Death Certificate of the Deceased');
@@ -3047,9 +3166,9 @@ function buttonSubmitClicked(event) {
         myDisable()
         timer().then(async () => {
             $("#step2").addClass("done");
-                $("#step3_circle").addClass("md-step-step3-circle ");
-                $("#step3_span").addClass("md-step3-span");
-                $("#step3_reference").addClass("md-step3-span")
+            $("#step3_circle").addClass("md-step-step3-circle ");
+            $("#step3_span").addClass("md-step3-span");
+            $("#step3_reference").addClass("md-step3-span")
             /*  $("#step3").addClass("active");
             $("#step3>div").addClass("active"); */
             /*  $("#step3").addClass("done"); */
@@ -3071,6 +3190,7 @@ function buttonSubmitClicked(event) {
 
         console.log("final payload : ")
         console.log(finalPayload)
+        otpTimer();
         window.parent.postMessage(JSON.stringify({
             event_code: 'ym-client-event', data: JSON.stringify({
                 event: {
@@ -3088,9 +3208,9 @@ function buttonSubmitClicked(event) {
 function addBeneficiaryButtonClicked(event) {
     event.preventDefault();
 
-    if(screenCount !== 0 && traverse == 0) {
+    if (screenCount !== 0 && traverse == 0) {
         $('#missingDetails').modal('show');
-    }else {
+    } else {
         if (!file9.value || ($('#file_Upload_Tick_9').is(":hidden"))) {
             $('#warning_parent_addBeneficiary').show();
             $('#addBeneficiary_upload_warning').text('Please upload your Valid Government ID (Front)!');
@@ -3138,9 +3258,9 @@ function addBeneficiaryButtonClicked(event) {
         myDisable2()
         timer2().then(async () => {
             $("#step2").addClass("done");
-        $("#step3_circle").addClass("md-step-step3-circle ");
-        $("#step3_span").addClass("md-step3-span");
-        $("#step3_reference").addClass("md-step3-span")
+            $("#step3_circle").addClass("md-step-step3-circle ");
+            $("#step3_span").addClass("md-step3-span");
+            $("#step3_reference").addClass("md-step3-span")
             /*  $("#step3").addClass("active");
             $("#step3>div").addClass("active"); */
             /*  $("#step3").addClass("done"); */
@@ -3250,7 +3370,7 @@ function handleAccountInfo(event) {
         $('#upload_feedback_label').text('Please upload your Bank Account Ownership');
         $('#popUp').modal('show');
         return;
-    }else {
+    } else {
         $('#upload_feedback_label').hide();
         $('#upload_feedback_label').text('');
     }
@@ -3281,8 +3401,100 @@ function handleAccountInfo(event) {
         $('#requirements').show();
         /* $('#requirements')[0].scrollIntoView(true);  */
         console.log('Data -> ', data);
-    }else {
-        $('#popUp').modal('show'); 
+    } else {
+        $('#popUp').modal('show');
+    }
+}
+function handleAddBankInfo(event) {
+    event.preventDefault();
+    var field_AccountName1 = $("#field_AccountName1").val();
+    var field_AccountNumber1 = $("#field_AccountNumber1").val();
+    var field_currency1 = $("#from_currency1").val();
+    var field_Bank1 = $("#field_Bank1").val();
+    var field_Branch1 = $("#field_Branch1").val();
+    var speCharAddAccountName = specialcharacterValidation(field_AccountName1);
+    var numAddAccountName = numberValidation(field_AccountName1);
+    var numAddAccountNumber = onlyNumberValidate(field_AccountNumber1);
+
+
+    if (field_AccountName1.length === 0) {
+        $("#err_field_AccountName1").text('Field is empty');
+        $("#err_field_AccountName1").show();
+    } else if (speCharAddAccountName) {
+        $("#err_field_AccountName1").text('special character is not allowed');
+        $("#err_field_AccountName1").show();
+    } else if (numAddAccountName) {
+        $("#err_field_AccountName1").text('Number not allowed');
+        $("#err_field_AccountName1").show();
+    } else {
+        $("#err_field_AccountName1").text('');
+        $("#err_field_AccountName1").hide();
+    }
+
+    if (field_AccountNumber1.length === 0) {
+        $("#err_field_AccountNumber1").text('Field is empty');
+        $("#err_field_AccountNumber1").show();
+    } else if (!numAddAccountNumber) {
+        $("#err_field_AccountNumber1").text('Only number is allowed');
+        $("#err_field_AccountNumber1").show();
+    } else {
+        $("#err_field_AccountNumber1").text('');
+        $("#err_field_AccountNumber1").hide();
+    }
+
+    if (field_currency1 <= 0) {
+        $("#err_field_Currency1").text('Field is empty');
+        $("#err_field_Currency1").show();
+    } else {
+        $("#err_field_Currency1").text('');
+        $("#err_field_Currency1").show();
+    }
+
+    if (field_Bank1.length <= 0) {
+        $("#err_field_Bank1").text('Field is empty');
+        $("#err_field_Bank1").show();
+    } else {
+        $("#err_field_Bank1").text('');
+        $("#err_field_Bank1").hide();
+    }
+
+    if (field_Branch1.length === 0) {
+        $("#err_field_Branch1").text('Field is empty');
+        $("#err_field_Branch1").show();
+    }/*  else if (specCharAddBRANCH) {
+    $("#err_field_Branch1").text('special character is not allowed');
+    $("#err_field_Branch1").show();
+  } else if (numAddBranch) {
+    $("#err_field_Branch1").text('Number not allowed');
+    $("#err_field_Branch1").show();
+  }  */else {
+        $("#err_field_Branch1").text('');
+        $("#err_field_Branch1").hide();
+    }
+
+    if (!file13.value) {
+        $('#upload_feedback_label1').show();
+        $('#upload_feedback_label1').text('Please upload your Bank Account Ownership');
+    }
+
+    if (field_AccountName1.length !== 0 && field_AccountNumber1.length !== 0 && field_currency1.length !== 0 && field_Bank1.length !== 0 && field_Branch1.length !== 0 && file7.length !== 0 && (speCharAddAccountName == false) && (numAddAccountName == false) && (numAddAccountNumber == true)) {
+        const data = {
+            field_AccountName1,
+            field_AccountNumber1,
+            field_Bank1,
+            field_Branch1,
+            field_Currency1: $("select#from_currency1 option").filter(":selected").val(),
+            upload_file_13: file13.value
+        }
+        $("#step3_circle").addClass("md-step-step3-circle ");
+        $("#step3_span").addClass("md-step3-span");
+        $("#step3_reference").addClass("md-step3-span")
+        /* $("#step3").addClass("active");
+        $("#step3>div").addClass("active"); */
+        /* $("#step3").addClass("done"); */
+        $('#account_details1').hide();
+        $('#process_confirmation').show();
+        console.log('bank data -> ', data)
     }
 }
 
@@ -3362,8 +3574,8 @@ function addBenificiaryAccountInfo(event) {
     }
 
     if ((screenCount !== 0) && (acctButtonCount == 0)) {
-        if (field_addBenificiaryAccountName.length !== 0 && field_addBenificiaryAccountNumber.length !== 0 && field_addBenificiaryBank.length !== 0 && field_addBeneficiaryBranch.length !== 0  && (speCharAccountName == false) && (numAccountName == false) &&(numAccountNumber == true)  ) {            
-            if  (buttonCount == 1) {
+        if (field_addBenificiaryAccountName.length !== 0 && field_addBenificiaryAccountNumber.length !== 0 && field_addBenificiaryBank.length !== 0 && field_addBeneficiaryBranch.length !== 0 && (speCharAccountName == false) && (numAccountName == false) && (numAccountNumber == true)) {
+            if (buttonCount == 1) {
                 console.log(acct_data1)
             }
             if (buttonCount == 2) {
@@ -3384,7 +3596,7 @@ function addBenificiaryAccountInfo(event) {
             }
             if (buttonCount == 6) {
                 console.log(acct_data6)
-            }      
+            }
             $("#step1").addClass("done");
             $("#step2").addClass("active");
             $("#step2>div").addClass("active");
@@ -3395,80 +3607,80 @@ function addBenificiaryAccountInfo(event) {
             addBeneficiaryuploadDataReset()
         }
 
-    }else {
-    if (!file8.value) {
-        $('#upload_feedback_label8').show();
-        $('#upload_feedback_label8').text('Please upload your Bank Account Ownership');
-        $('#popUp').modal('show');
-        return;
-    }else {
-        $('#upload_feedback_label8').hide();
-        $('#upload_feedback_label8').text('');
-    }
-
-    if (field_addBenificiaryAccountName.length !== 0 && field_addBenificiaryAccountNumber.length !== 0 && field_addBenificiaryBank.length !== 0 && field_addBeneficiaryBranch.length !== 0 && (speCharAccountName == false) && (numAccountName == false) && (numAccountNumber == true) && (file8.value && (!$('#file_Upload_Tick_8').is(":hidden")))) {
-                addBenAccountInfo = {
-            field_addBenificiaryAccountName,
-            field_addBenificiaryAccountNumber,
-            field_addBenificiaryBank,
-            field_addBeneficiaryBranch,
-            field_addBeneficiaryCurrency: $("select#from_addBeneficiarycurrency option").filter(":selected").val(),
-            upload_file_8: file8.value
-
-        }
-
-        let beneficiaryAccount = {};
-        beneficiaryAccount["BeneficiaryNo"] = beneficiaryCount,
-            beneficiaryAccount["BankName"] = field_addBenificiaryBank,
-            beneficiaryAccount["BankBranch"] = field_addBeneficiaryBranch,
-            beneficiaryAccount["AccountNumber"] = field_addBenificiaryAccountNumber,
-            beneficiaryAccount["AccountName"] = field_addBenificiaryAccountName,
-            beneficiaryAccount["AccountCurrency"] = $("select#from_addBeneficiarycurrency option").filter(":selected").val(),
-
-            BankDetailsList.push(beneficiaryAccount);
-        /* accountUploadDataReset(); */
-
-        if  (buttonCount == 1) {
-            acct_data1 = addBenAccountInfo;
-            console.log('acct_data1',acct_data1)
-        }
-
-        if (buttonCount == 2) {
-            acct_data2 = addBenAccountInfo;
-            console.log('acct_data2',acct_data2)
-        }
-
-        if (buttonCount == 3) {
-            acct_data3 = addBenAccountInfo;
-            console.log('acct_data3',acct_data3)
-        }
-        
-        if (buttonCount == 4) {
-            acct_data4 = addBenAccountInfo;
-            console.log('acct_data4',acct_data3)
-        }
-
-        if (buttonCount == 5) {
-            acct_data5 = addBenAccountInfo;
-            console.log('acct_data5',acct_data5)
-        }
-
-        if (buttonCount == 6) {
-            acct_data6 = addBenAccountInfo
-            console.log('acct_data6',acct_data6)
-        }    
-
-        $("#step1").addClass("done");
-        $("#step2").addClass("active");
-        $("#step2>div").addClass("active");
-        $('#addBeneficiaryaccount_details').hide();
-        $('#addBeneficiaryRequirements').show();
-
-        dataReset("field_addBenificiaryAccountName", "field_addBenificiaryAccountNumber", "field_addBenificiaryBank", "field_addBeneficiaryBranch", "field_addBeneficiaryCurrency", "upload_file_8", "field_addBeneficiary_relatives1", "field_add_Beneficiary_add_relatives2");
-
-        addBeneficiaryuploadDataReset()
     } else {
-        $('#popUp').modal('show');
+        if (!file8.value) {
+            $('#upload_feedback_label8').show();
+            $('#upload_feedback_label8').text('Please upload your Bank Account Ownership');
+            $('#popUp').modal('show');
+            return;
+        } else {
+            $('#upload_feedback_label8').hide();
+            $('#upload_feedback_label8').text('');
+        }
+
+        if (field_addBenificiaryAccountName.length !== 0 && field_addBenificiaryAccountNumber.length !== 0 && field_addBenificiaryBank.length !== 0 && field_addBeneficiaryBranch.length !== 0 && (speCharAccountName == false) && (numAccountName == false) && (numAccountNumber == true) && (file8.value && (!$('#file_Upload_Tick_8').is(":hidden")))) {
+            addBenAccountInfo = {
+                field_addBenificiaryAccountName,
+                field_addBenificiaryAccountNumber,
+                field_addBenificiaryBank,
+                field_addBeneficiaryBranch,
+                field_addBeneficiaryCurrency: $("select#from_addBeneficiarycurrency option").filter(":selected").val(),
+                upload_file_8: file8.value
+
+            }
+
+            let beneficiaryAccount = {};
+            beneficiaryAccount["BeneficiaryNo"] = beneficiaryCount,
+                beneficiaryAccount["BankName"] = field_addBenificiaryBank,
+                beneficiaryAccount["BankBranch"] = field_addBeneficiaryBranch,
+                beneficiaryAccount["AccountNumber"] = field_addBenificiaryAccountNumber,
+                beneficiaryAccount["AccountName"] = field_addBenificiaryAccountName,
+                beneficiaryAccount["AccountCurrency"] = $("select#from_addBeneficiarycurrency option").filter(":selected").val(),
+
+                BankDetailsList.push(beneficiaryAccount);
+            /* accountUploadDataReset(); */
+
+            if (buttonCount == 1) {
+                acct_data1 = addBenAccountInfo;
+                console.log('acct_data1', acct_data1)
+            }
+
+            if (buttonCount == 2) {
+                acct_data2 = addBenAccountInfo;
+                console.log('acct_data2', acct_data2)
+            }
+
+            if (buttonCount == 3) {
+                acct_data3 = addBenAccountInfo;
+                console.log('acct_data3', acct_data3)
+            }
+
+            if (buttonCount == 4) {
+                acct_data4 = addBenAccountInfo;
+                console.log('acct_data4', acct_data3)
+            }
+
+            if (buttonCount == 5) {
+                acct_data5 = addBenAccountInfo;
+                console.log('acct_data5', acct_data5)
+            }
+
+            if (buttonCount == 6) {
+                acct_data6 = addBenAccountInfo
+                console.log('acct_data6', acct_data6)
+            }
+
+            $("#step1").addClass("done");
+            $("#step2").addClass("active");
+            $("#step2>div").addClass("active");
+            $('#addBeneficiaryaccount_details').hide();
+            $('#addBeneficiaryRequirements').show();
+
+            dataReset("field_addBenificiaryAccountName", "field_addBenificiaryAccountNumber", "field_addBenificiaryBank", "field_addBeneficiaryBranch", "field_addBeneficiaryCurrency", "upload_file_8", "field_addBeneficiary_relatives1", "field_add_Beneficiary_add_relatives2");
+
+            addBeneficiaryuploadDataReset()
+        } else {
+            $('#popUp').modal('show');
         }
     }
 }
@@ -3484,6 +3696,7 @@ function addBeneficiaryuploadDataReset() {
 }
 
 function bankTranfer() {
+    document.getElementById('ref_number').innerHTML = referenceNumber
     trackBenificiary = 0;
     $('#payment').hide();
     $('#account_details').show();
@@ -3494,22 +3707,22 @@ function bankTranfer() {
 
 function addBeneficiarybankTranfer() {
     trackaddBenificiary = 0;
-    if (buttonCount == 1){
+    if (buttonCount == 1) {
         trackaddBenificiary1 = trackaddBenificiary;
     }
-    if (buttonCount == 2){
+    if (buttonCount == 2) {
         trackaddBenificiary2 = trackaddBenificiary;
     }
-    if (buttonCount == 3){
+    if (buttonCount == 3) {
         trackaddBenificiary3 = trackaddBenificiary;
     }
-    if (buttonCount == 4){
+    if (buttonCount == 4) {
         trackaddBenificiary4 = trackaddBenificiary;
     }
-    if (buttonCount == 5){
+    if (buttonCount == 5) {
         trackaddBenificiary5 = trackaddBenificiary;
     }
-    if (buttonCount == 6){
+    if (buttonCount == 6) {
         trackaddBenificiary6 = trackaddBenificiary;
     }
     $('#addBeneficiarypayment').hide();
@@ -3519,12 +3732,13 @@ function addBeneficiarybankTranfer() {
 }
 
 function pickUp() {
+    document.getElementById('ref_number').innerHTML = referenceNumber
     trackBenificiary = 1;
     let index = BeneficiaryList.findIndex(ele => ele["BeneficiaryNo"] == "1")
     let benObject = BeneficiaryList[index]
     benObject["PayoutOption"] = "PUA";
-    BeneficiaryList[index] = benObject; 
-    
+    BeneficiaryList[index] = benObject;
+
 
     $('#payment').hide();
     $("#pickUp").show();
@@ -3534,29 +3748,29 @@ function pickUp() {
 }
 
 function addBeneficiaryPickup() {
-    
+
     let index = BeneficiaryList.findIndex(ele => ele["BeneficiaryNo"] == (beneficiaryCount.toString()))
     let benObject = BeneficiaryList[index]
     benObject["PayoutOption"] = "PUA";
     BeneficiaryList[index] = benObject;
 
     trackaddBenificiary = 1;
-    if (buttonCount == 1){
+    if (buttonCount == 1) {
         trackaddBenificiary1 = trackaddBenificiary;
     }
-    if (buttonCount == 2){
+    if (buttonCount == 2) {
         trackaddBenificiary2 = trackaddBenificiary;
     }
-    if (buttonCount == 3){
+    if (buttonCount == 3) {
         trackaddBenificiary3 = trackaddBenificiary;
     }
-    if (buttonCount == 4){
+    if (buttonCount == 4) {
         trackaddBenificiary4 = trackaddBenificiary;
     }
-    if (buttonCount == 5){
+    if (buttonCount == 5) {
         trackaddBenificiary5 = trackaddBenificiary;
     }
-    if (buttonCount == 6){
+    if (buttonCount == 6) {
         trackaddBenificiary6 = trackaddBenificiary;
     }
     $('#addBeneficiarypayment').hide();
@@ -3576,14 +3790,14 @@ function goBack() {
 }
 
 function goBack1() {
-    if(trackBenificiary == 0) {
+    if (trackBenificiary == 0) {
         console.log('go back!!!');
         $("#step2").addClass("active");
         $("#step2>div").addClass("active");
         $('#requirements').hide();
         $('#account_details').show();
         $('#file_Upload_Tick_7').show();
-    }else{
+    } else {
         console.log('go back!!!');
         $("#step2").addClass("active");
         $("#step2>div").addClass("active");
@@ -3601,24 +3815,24 @@ function goBackPickUp() {
 }
 
 
-function checkUploadDocument(){
+function checkUploadDocument() {
 
-    if(upload_data.upload_file_1 !== '') {
+    if (upload_data.upload_file_1 !== '') {
         $('#file_Upload_Tick_1').show();
     }
-    if(upload_data.upload_file_2 !== '') {
+    if (upload_data.upload_file_2 !== '') {
         $('#file_Upload_Tick_2').show();
     }
-    if(upload_data.upload_file_3 !== '') {
+    if (upload_data.upload_file_3 !== '') {
         $('#file_Upload_Tick_3').show();
     }
-    if(upload_data.upload_file_4 !== '') {
+    if (upload_data.upload_file_4 !== '') {
         $('#file_Upload_Tick_4').show();
     }
-    if(upload_data.upload_file_5 !== '') {
+    if (upload_data.upload_file_5 !== '') {
         $('#file_Upload_Tick_5').show();
     }
-    if(upload_data.upload_file_6 !== '') {
+    if (upload_data.upload_file_6 !== '') {
         $('#file_Upload_Tick_6').show();
     }
 
@@ -3626,33 +3840,33 @@ function checkUploadDocument(){
 
 function checkUploadDocumentBene(data) {
 
-    if(data.upload_file_9 !== '') {
+    if (data.upload_file_9 !== '') {
         $('#file_Upload_Tick_9').show();
     }
-    if(data.upload_file_10 !== '') {
+    if (data.upload_file_10 !== '') {
         $('#file_Upload_Tick_10').show();
     }
-    if(data.upload_file_11 !== '') {
+    if (data.upload_file_11 !== '') {
         $('#file_Upload_Tick_11').show();
     }
-    if(data.upload_file_12 !== '') {
+    if (data.upload_file_12 !== '') {
         $('#file_Upload_Tick_12').show();
     }
-    
+
 }
 
 
-function goBackAddBeneficiary () {
-    traverse = 0 ;
+function goBackAddBeneficiary() {
+    traverse = 0;
 
-    if ( screenCount < 1){
+    if (screenCount < 1) {
         screenCount = buttonCount;
     }
     console.log('go AddBeneficiary');
-    buttonCount = buttonCount-1; 
-     $('input').attr('title', '');
-    
-    if(buttonCount == 0) {
+    buttonCount = buttonCount - 1;
+    $('input').attr('title', '');
+
+    if (buttonCount == 0) {
         $("#step1").removeClass("done");
         $("#step2").addClass("active");
         $("#step2>div").addClass("active");
@@ -3660,38 +3874,38 @@ function goBackAddBeneficiary () {
         $('#addBeneficiary').hide();
         checkUploadDocument();
     }
-    if( (buttonCount > 0) && (buttonCount <7) ) {
+    if ((buttonCount > 0) && (buttonCount < 7)) {
         $("#step1").removeClass("done");
         $("#step2").addClass("active");
         $("#step2>div").addClass("active");
         $('#addBeneficiaryRequirements').show();
         $('#addBeneficiary').hide();
- 
-        if(buttonCount == 1) {
+
+        if (buttonCount == 1) {
             fileUploadDataReset();
             setDataUpload(uppload_data1);
             checkUploadDocumentBene(uppload_data1);
         }
-    
-        if(buttonCount == 2) {
+
+        if (buttonCount == 2) {
             fileUploadDataReset();
             setDataUpload(uppload_data2);
             checkUploadDocumentBene(uppload_data2);
         }
-    
-        if(buttonCount == 3) {
+
+        if (buttonCount == 3) {
             fileUploadDataReset();
             setDataUpload(uppload_data3);
             checkUploadDocumentBene(uppload_data3);
         }
-    
-        if(buttonCount == 4) {
+
+        if (buttonCount == 4) {
             fileUploadDataReset();
             setDataUpload(uppload_data4);
             checkUploadDocumentBene(uppload_data4);
         }
-    
-        if(buttonCount == 5) {
+
+        if (buttonCount == 5) {
             fileUploadDataReset();
             setDataUpload(uppload_data5);
             checkUploadDocumentBene(uppload_data5);
@@ -3707,32 +3921,32 @@ function goBack2() {
     $('#addBeneficiary').show();
     $('#invalidCheck_privacyAddBeneficiary').prop('checked', true);
     $('#invalidCheck_basicAddBeneficiary').prop('checked', true);
-    if ( screenCount < 1){
+    if (screenCount < 1) {
         screenCount = buttonCount;
         console.log('GET IT SCREEN COUNT');
     }
-    if(buttonCount == 1) {
+    if (buttonCount == 1) {
         setDataBeneficiary(data1);
     }
 
-    if(buttonCount == 2) {
-    setDataBeneficiary(data2);
+    if (buttonCount == 2) {
+        setDataBeneficiary(data2);
     }
 
-    if(buttonCount == 3) {
-    setDataBeneficiary(data3);
+    if (buttonCount == 3) {
+        setDataBeneficiary(data3);
     }
 
-    if(buttonCount == 4) {
-    setDataBeneficiary(data4);
+    if (buttonCount == 4) {
+        setDataBeneficiary(data4);
     }
 
-    if(buttonCount == 5) {
-    setDataBeneficiary(data5);
+    if (buttonCount == 5) {
+        setDataBeneficiary(data5);
     }
 
-    if(buttonCount == 6) {
-    setDataBeneficiary(data6);
+    if (buttonCount == 6) {
+        setDataBeneficiary(data6);
     }
 }
 
@@ -3744,85 +3958,85 @@ function goBackAddPickup() {
     $('#addBeneficiary').show();
     $('#invalidCheck_privacyAddBeneficiary').prop('checked', true);
     $('#invalidCheck_basicAddBeneficiary').prop('checked', true);
-    if ( screenCount < 1){
+    if (screenCount < 1) {
         screenCount = buttonCount;
         console.log('GET IT SCREEN COUNT');
     }
-    if(buttonCount == 1) {
+    if (buttonCount == 1) {
         setDataBeneficiary(data1);
     }
 
-    if(buttonCount == 2) {
-    setDataBeneficiary(data2);
+    if (buttonCount == 2) {
+        setDataBeneficiary(data2);
     }
 
-    if(buttonCount == 3) {
-    setDataBeneficiary(data3);
+    if (buttonCount == 3) {
+        setDataBeneficiary(data3);
     }
 
-    if(buttonCount == 4) {
-    setDataBeneficiary(data4);
+    if (buttonCount == 4) {
+        setDataBeneficiary(data4);
     }
 
-    if(buttonCount == 5) {
-    setDataBeneficiary(data5);
+    if (buttonCount == 5) {
+        setDataBeneficiary(data5);
     }
 
-    if(buttonCount == 6) {
-    setDataBeneficiary(data6);
+    if (buttonCount == 6) {
+        setDataBeneficiary(data6);
     }
 }
 
 function goBack3() {
-    if ( screenCount < 1){
+    if (screenCount < 1) {
         screenCount = buttonCount;
         console.log('GET IT SCREEN COUNT');
     }
     $('input').attr('title', '');
 
-    if((buttonCount == 1) && (trackaddBenificiary1 == 0)) {
+    if ((buttonCount == 1) && (trackaddBenificiary1 == 0)) {
         setDataBeneficiary(acct_data1);
         $("#step2").addClass("active");
         $("#step2>div").addClass("active");
         $('#addBeneficiaryRequirements').hide();
         $('#addBeneficiaryaccount_details').show();
         $("#file_Upload_Tick_8").show();
-    }else if((buttonCount == 2) && (trackaddBenificiary2 == 0)) {
+    } else if ((buttonCount == 2) && (trackaddBenificiary2 == 0)) {
         setDataBeneficiary(acct_data2);
         $("#step2").addClass("active");
         $("#step2>div").addClass("active");
         $('#addBeneficiaryRequirements').hide();
         $('#addBeneficiaryaccount_details').show();
         $("#file_Upload_Tick_8").show();
-    }else if((buttonCount == 3) && (trackaddBenificiary3 == 0)) {
+    } else if ((buttonCount == 3) && (trackaddBenificiary3 == 0)) {
         setDataBeneficiary(acct_data3);
         $("#step2").addClass("active");
         $("#step2>div").addClass("active");
         $('#addBeneficiaryRequirements').hide();
         $('#addBeneficiaryaccount_details').show();
         $("#file_Upload_Tick_8").show();
-    }else if((buttonCount == 4) && (trackaddBenificiary4 == 0)) {
+    } else if ((buttonCount == 4) && (trackaddBenificiary4 == 0)) {
         setDataBeneficiary(acct_data4);
         $("#step2").addClass("active");
         $("#step2>div").addClass("active");
         $('#addBeneficiaryRequirements').hide();
         $('#addBeneficiaryaccount_details').show();
         $("#file_Upload_Tick_8").show();
-    }else if((buttonCount == 5) && (trackaddBenificiary5 == 0)) {
+    } else if ((buttonCount == 5) && (trackaddBenificiary5 == 0)) {
         setDataBeneficiary(acct_data5);
         $("#step2").addClass("active");
         $("#step2>div").addClass("active");
         $('#addBeneficiaryRequirements').hide();
         $('#addBeneficiaryaccount_details').show();
         $("#file_Upload_Tick_8").show();
-    }else if((buttonCount == 6) && (trackaddBenificiary6 == 0)) {
+    } else if ((buttonCount == 6) && (trackaddBenificiary6 == 0)) {
         setDataBeneficiary(acct_data6);
         $("#step2").addClass("active");
         $("#step2>div").addClass("active");
         $('#addBeneficiaryRequirements').hide();
         $('#addBeneficiaryaccount_details').show();
         $("#file_Upload_Tick_8").show();
-    }else {
+    } else {
         $("#step2").addClass("active");
         $("#step2>div").addClass("active");
         $('#addBeneficiaryRequirements').hide();
@@ -3833,12 +4047,12 @@ function goBack3() {
 function setDataUpload(data) {
     for (const [key, value] of Object.entries(data)) {
         $(`#${key}`).val(`${value}`);
-      }
+    }
 }
 
 function isEmpty(obj) {
-    for(var key in obj) {
-        if(obj.hasOwnProperty(key))
+    for (var key in obj) {
+        if (obj.hasOwnProperty(key))
             return false;
     }
     return true;
@@ -3847,18 +4061,18 @@ function isEmpty(obj) {
 function setDataBeneficiary(data) {
     for (const [key, value] of Object.entries(data)) {
 
-        if( key == 'field_addBenificiaryBank'){
+        if (key == 'field_addBenificiaryBank') {
             $("#field_addBenificiaryBank").html(
                 `<option value='${value}'>${value}</option>`
-              );
-        }else if (key == 'field_addBeneficiaryCurrency'){
+            );
+        } else if (key == 'field_addBeneficiaryCurrency') {
             $('#from_addBeneficiarycurrency').val(`${value}`)
         }
         else {
             $(`#${key}`).val(`${value}`);
         }
 
-      }
+    }
 }
 
 function pickup_Bpi() {
@@ -3874,9 +4088,9 @@ function addBeneficiaryPickup_Bpi() {
     bpiCount = 1;
     $("#addBeneficiaryPickUp").hide();
     $('#addBeneficiaryRequirements').show();
-   /*  $("#step3_circle").addClass("md-step-step3-circle ");
-    $("#step3_span").addClass("md-step3-span");
-    $("#step3_reference").addClass("md-step3-span") */
+    /*  $("#step3_circle").addClass("md-step-step3-circle ");
+     $("#step3_span").addClass("md-step3-span");
+     $("#step3_reference").addClass("md-step3-span") */
     /* $('#process_confirmation').show(); */
     /*  $("#step3").addClass("active");
      $("#step3>div").addClass("active"); */
@@ -3990,7 +4204,120 @@ function stringlength(inputtxt, minlength, maxlength) {
 }
 
 function acctButton() {
-  if (screenCount !== 0) {
-    acctButtonCount = 1;
-  }
+    if (screenCount !== 0) {
+        acctButtonCount = 1;
+    }
 }
+
+
+
+//drop-2 methods
+var duration;
+var remaining = 120; // 2 mins timer 
+var resendCount = 0;
+var otpModal = document.getElementById('otpPopUp');
+var otpExpModal = document.getElementById('otpExpiry');
+var invalidOtpModal = document.getElementById('invalidOtp');
+var maxResendOtp = document.getElementById('maxResendOtp');
+var invalidOtp = 0;
+
+
+// otp timer function
+function otpTimer() {
+    if (resendCount <= 5) {
+        $('#otpPopUp').modal('show');
+        if (remaining == 120) {
+            duration = setInterval(otpTimer, 1000);
+        }
+        var m = Math.floor(remaining / 60);
+        var s = remaining % 60;
+        m = m < 10 ? '0' + m : m;
+        s = s < 10 ? '0' + s : s;
+        document.getElementById('otpTimer').innerHTML = m + ':' + s;
+        remaining -= 1;
+        if (remaining == 0) {
+            //  timeout stuff here
+            removeTimer();
+            $('#otpPopUp').modal('hide'); // to hide otp modal on timer exceed
+            $('#otpExpiry').modal('show'); //show otp expiry  modal on timer exceed
+        }
+    }
+    else {
+        $('#otpExpiry').modal('hide');
+        $('#invalidOtp').modal('hide');
+        $('#maxResendOtp').modal('show');
+    }
+}
+
+
+// to refresh the otp otp timer
+
+function removeTimer() {
+    clearInterval(duration);
+    document.getElementById('otpTimer').innerHTML = "";
+    remaining = 120;
+}
+
+function resendOtp(type) {
+    //api call for resend otp
+
+    removeTimer();
+    resendCount++;
+    if (resendCount > 5) {
+        $('#otpPopUp').modal('hide');
+        $('#invalidOtp').modal('hide');
+        $('#maxResendOtp').modal('show');
+
+    }
+    else {
+        $('#invalidOtp').modal('hide');
+        if (type != 'resend') { $('#otpPopUp').modal('show'); }
+        document.getElementById('otp').value = ''
+        otpTimer();
+
+    }
+    $('#otpExpiry').modal('hide');
+}
+
+
+function submitOtp() {
+    //api call fro submit otp
+
+    var dummy_otp = '1234'
+    removeTimer();
+
+    if (document.getElementById('otp').value != dummy_otp) {
+        invalidOtp++;
+        if (invalidOtp < 3) {
+            $('#invalidOtp').modal('show');
+        }
+        else {
+            $('#invalidOtp').modal('hide');
+            $('#maxInvalidOtp').modal('show');
+        }
+    }
+    else {
+        $('#otpPopUp').modal('hide');
+        $('#requirements').hide();
+        $('#process_confirmation').show();
+    }
+    document.getElementById('otp').value = '';
+}
+
+// When the user clicks anywhere outside of the modal, close it and remove timer 
+window.onclick = function (event) {
+    if (event.target == otpModal || event.target == otpExpModal || event.target == invalidOtpModal || event.target == maxResendOtp) {
+        console.log(event.target)
+        removeTimer();
+    }
+}
+
+// when user clicks exit button from OTP pop up
+function backToFileClaim() {
+
+    window.location.href = "main.html";
+
+
+}
+
+//drop-2 methods
