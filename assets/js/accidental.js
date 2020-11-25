@@ -20,11 +20,11 @@ let referenceNumber = url.searchParams.get('refNumber');
 let uid = url.searchParams.get('sender');
 let botId = url.searchParams.get('botId');
 
-var currSeconds = 0; 
+var currSeconds = 0;
 
 $('#privacy_consent_1').prop('checked', true);
 $('#privacy_consent_2').prop('checked', true);
-
+$('#privacy_consent_3').prop('checked', true);
 var form_addBank = document.getElementById("addbank_form");
 form_addBank.addEventListener('submit', handleAddBankInfo);
 
@@ -37,12 +37,12 @@ form_Bank.addEventListener('submit', handleAccountInfo);
         animation: true
     })
 }) */
-  function myDisable() {
+function myDisable() {
   document.getElementById("submit9").disabled = true;
   document.getElementById("submit9").style.cursor = "no-drop";
-  document.getElementById("field_AccountName"). disabled = true; 
+  document.getElementById("field_AccountName").disabled = true;
   document.getElementById("field_AccountName").style.cursor = "no-drop";
-  document.getElementById("field_AccountNumber").disabled = true;  
+  document.getElementById("field_AccountNumber").disabled = true;
   document.getElementById("field_AccountNumber").style.cursor = "no-drop";
   document.getElementById("field_Bank").disabled = true;
   document.getElementById("field_Bank").style.cursor = "no-drop";
@@ -57,62 +57,62 @@ form_Bank.addEventListener('submit', handleAccountInfo);
   document.getElementById("bank_form").style.cursor = "no-drop";
 }
 
-function addFileToList(fileObject, fileName){
+function addFileToList(fileObject, fileName) {
   console.log("in function, with name : ");
   console.log(fileName);
-  let index = filesList.findIndex(x => x.Filename == fileName )
+  let index = filesList.findIndex(x => x.Filename == fileName)
 
-  if(index===-1){
+  if (index === -1) {
     console.log("adding bcoz unique");
     filesList.push(fileObject);
   }
 }
 
 function timer() {
-  var random = Math.floor(Math.random() * 5) + 1  
+  var random = Math.floor(Math.random() * 5) + 1
   return new Promise((resolve, reject) => {
-    var i=0
+    var i = 0
     let cleartime = setInterval(() => {
-     i = random + i;
-     renderProgress(i)
-     if(i == 99){
-      i = 100;
+      i = random + i;
       renderProgress(i)
-     }
-     if(i == 100 )  {
-   
+      if (i == 99) {
+        i = 100;
+        renderProgress(i)
+      }
+      if (i == 100) {
+
         console.log("cleartime");
         clearTimeout(cleartime);
         resolve("cleartime")
-    }
-  //  i++;
-   }, 500);
+      }
+      //  i++;
+    }, 500);
   })
 }
 
 function renderProgress(progress) {
   progress = Math.floor(progress);
-  if(progress<25){
-      var angle = -90 + (progress/100)*360;
-      $(".animate-0-25-b").css("transform","rotate("+angle+"deg)");
+  if (progress < 25) {
+    var angle = -90 + (progress / 100) * 360;
+    $(".animate-0-25-b").css("transform", "rotate(" + angle + "deg)");
   }
-  else if(progress>=25 && progress<50){
-      var angle = -90 + ((progress-25)/100)*360;
-      $(".animate-0-25-b").css("transform","rotate(0deg)");
-      $(".animate-25-50-b").css("transform","rotate("+angle+"deg)");
+  else if (progress >= 25 && progress < 50) {
+    var angle = -90 + ((progress - 25) / 100) * 360;
+    $(".animate-0-25-b").css("transform", "rotate(0deg)");
+    $(".animate-25-50-b").css("transform", "rotate(" + angle + "deg)");
   }
-  else if(progress>=50 && progress<75){
-      var angle = -90 + ((progress-50)/100)*360;
-      $(".animate-25-50-b, .animate-0-25-b").css("transform","rotate(0deg)");
-      $(".animate-50-75-b").css("transform","rotate("+angle+"deg)");
+  else if (progress >= 50 && progress < 75) {
+    var angle = -90 + ((progress - 50) / 100) * 360;
+    $(".animate-25-50-b, .animate-0-25-b").css("transform", "rotate(0deg)");
+    $(".animate-50-75-b").css("transform", "rotate(" + angle + "deg)");
   }
-  else if(progress>=75 && progress<=100){
-      var angle = -90 + ((progress-75)/100)*360;
-      $(".animate-50-75-b, .animate-25-50-b, .animate-0-25-b")
-                                          .css("transform","rotate(0deg)");
-      $(".animate-75-100-b").css("transform","rotate("+angle+"deg)");
+  else if (progress >= 75 && progress <= 100) {
+    var angle = -90 + ((progress - 75) / 100) * 360;
+    $(".animate-50-75-b, .animate-25-50-b, .animate-0-25-b")
+      .css("transform", "rotate(0deg)");
+    $(".animate-75-100-b").css("transform", "rotate(" + angle + "deg)");
   }
-  $(".text").html(progress+"%");
+  $(".text").html(progress + "%");
 }
 
 
@@ -144,14 +144,14 @@ $(document).ready(function (event) {
   disableFutureDates();
   disableFutureDatesDOB();
   setCountryCode();
-  let idleInterval = setInterval(timerIncrement, 1000); 
-  $(this).mousemove(resetTimer); 
-  $(this).keypress(resetTimer); 
+  let idleInterval = setInterval(timerIncrement, 1000);
+  $(this).mousemove(resetTimer);
+  $(this).keypress(resetTimer);
 
   var val = 'Peso';
   if (val == "Peso") {
     $("#field_Bank").html(
-     "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option><option value='BPI Family Savings Bank - BFB'>BPI Family Savings Bank - BFB</option>"
+      "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option><option value='BPI Family Savings Bank - BFB'>BPI Family Savings Bank - BFB</option>"
     );
   }
 
@@ -159,7 +159,7 @@ $(document).ready(function (event) {
     var val = $(this).val();
     if (val == "Peso") {
       $("#field_Bank").html(
-       "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option><option value='BPI Family Savings Bank - BFB'>BPI Family Savings Bank - BFB</option>"
+        "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option><option value='BPI Family Savings Bank - BFB'>BPI Family Savings Bank - BFB</option>"
       );
     } else if (val == "USD") {
       $("#field_Bank").html(
@@ -169,16 +169,16 @@ $(document).ready(function (event) {
   });
 });
 
-function resetTimer() { 
-  currSeconds = 0; 
-} 
+function resetTimer() {
+  currSeconds = 0;
+}
 
-function timerIncrement() { 
-  currSeconds = currSeconds + 1; 
-  if(currSeconds == 1800) {
+function timerIncrement() {
+  currSeconds = currSeconds + 1;
+  if (currSeconds == 1800) {
     window.top.location = 'https://www.bpi-philam.com'
   }
-} 
+}
 
 
 
@@ -254,16 +254,16 @@ function disableFutureDatesDOB() {
   var dtToday = new Date();
   var month = dtToday.getMonth() + 1;
   var day = dtToday.getDate();
-  var dobdate = day-1
+  var dobdate = day - 1
   var year = dtToday.getFullYear();
   if (month < 10)
     month = '0' + month.toString();
   if (day < 10)
     day = '0' + day.toString();
   var maxDate = year + '-' + month + '-' + dobdate;
-  if( day <= 10) {
-      maxDate = year + '-' + month + '-' + '0'+ dobdate;
-  } 
+  if (day <= 10) {
+    maxDate = year + '-' + month + '-' + '0' + dobdate;
+  }
   $('#field_DOB').attr('max', maxDate);
 }
 
@@ -664,10 +664,10 @@ function formatAMPM(date) {
   minutes = full_Time[1];
   var ampm = hours >= 12 ? 'pm' : 'am';
   hours = hours % 12;
-  hours = hours ? hours : 12; 
+  hours = hours ? hours : 12;
   minutes = minutes < 10 ? minutes : minutes;
   var strTime = hours + ':' + minutes + ' ' + ampm;
-  
+
   return strTime
 }
 
@@ -977,20 +977,20 @@ function handleForm(event) {
     $("#step2>div").addClass("active");
     $('#requirements').show();
     /*  $('#requirements')[0].scrollIntoView(true); */
-      $("#customer_Name").text(`Hi ${field_firstName}. Hang in there as we process your request. Expect an SMS from us within 1 to 2 working days on the status of your request.`);
+    $("#customer_Name").text(`Hi ${field_firstName}. Hang in there as we process your request. Expect an SMS from us within 1 to 2 working days on the status of your request.`);
     console.log('Data -> ', data)
 
     InsuredInformation["FirstName"] = field_firstName;
     InsuredInformation["MiddleName"] = field_middleName;
     InsuredInformation["LastName"] = field_lastName;
     InsuredInformation["Suffix"] = field_lastName_Suffix;
-    InsuredInformation["DateOfBirth"] = field_DOB.split('-')[1]+"/"+field_DOB.split('-')[2]+"/"+field_DOB.split('-')[0];
+    InsuredInformation["DateOfBirth"] = field_DOB.split('-')[1] + "/" + field_DOB.split('-')[2] + "/" + field_DOB.split('-')[0];
     InsuredInformation["CountryCode"] = $("select#inlineFormCustomSelect option").filter(":selected").val();
     InsuredInformation["PhoneNumber"] = field_mobileNum;
     InsuredInformation["EmailAddress"] = field_emailAddress;
     InsuredInformation["HomeAddress"] = field_homeAddress;
     InsuredInformation["InjuryDetails"] = field_injury;
-    InsuredInformation["AccidentDate"] = field_DOA.split('-')[1]+"/"+field_DOA.split('-')[2]+"/"+field_DOA.split('-')[0];
+    InsuredInformation["AccidentDate"] = field_DOA.split('-')[1] + "/" + field_DOA.split('-')[2] + "/" + field_DOA.split('-')[0];
     InsuredInformation["AccidentTime"] = full_TOA;
     InsuredInformation["AccidentPlace"] = field_POA;
     InsuredInformation["check1"] = data.privacy_consent_1;
@@ -1011,9 +1011,9 @@ function handleForm(event) {
         }
       })
     }), '*');
-  }else if((comapareDates == false) && ((field_DOB !== '') && (field_DOA != ''))) {
+  } else if ((comapareDates == false) && ((field_DOB !== '') && (field_DOA != ''))) {
     $('#popUp_DOB').modal('show');
-  }  else {
+  } else {
     $('#popUp').modal('show');
   }
 }
@@ -1085,6 +1085,7 @@ const proceedScan = async (fileObj, button, pageid) => {
 };
 
 const fileCheck = (file, button, pageid) => {
+  fileBlurStatus = false;
   console.log(button);
   var _URL = window.URL || window.webkitURL;
   console.log("FILE OBJECT -> ", file);
@@ -1108,9 +1109,11 @@ const fileCheck = (file, button, pageid) => {
       $(`#file_upload_cancle_${button}`).show();
       $("#upload_warning").text("Sorry, we noticed that your uploaded documents are unreadable. Please reupload a clearer copy of your documents to proceed.");
       console.log("Image is bad");
+      fileBlurStatus = true;
     } else {
       console.log("This is right JPG");
       proceedScan(file, button);
+      fileBlurStatus = false;
     }
   };
   img.onerror = function () {
@@ -1118,6 +1121,7 @@ const fileCheck = (file, button, pageid) => {
     alert("not a valid file: " + file.type);
   };
   img.src = _URL.createObjectURL(file);
+  return fileBlurStatus;
 };
 
 const isFileSizeValid = (file) => {
@@ -1143,25 +1147,42 @@ file1.onchange = async function (e) {
       var sizevalid = isFileSizeValid(file, buttonNum);
       if (sizevalid) {
         if (ext == "jpg") {
-          fileCheck(file, buttonNum, pageID);
+          var isFileBlur = fileCheck(file, buttonNum, pageID);
+          if (isFileBlur == false) {
+            let fileName = referenceNumber + "-" + docType + "-" + tranType;
+
+            console.log("setting file data : ");
+            let accident = {};
+            accident['BeneficiaryNo'] = beneficiaryCount,
+              accident["Filename"] = `${fileName}.pdf`,
+              accident["DocType"] = "PDF",
+              accident["DocTypeCode"] = docType,
+              accident["DocumentDescription"] = "Front copy of doc"
+
+            addFileToList(accident, `${fileName}.pdf`);
+            const formData = new FormData()
+            formData.append('file', file, fileName + `.${ext}`);
+            handleFileUpload(formData, fileName);
+          }
         }
         else {
           proceedScan(file, buttonNum, pageID);
+          let fileName = referenceNumber + "-" + docType + "-" + tranType;
+
+          console.log("setting file data : ");
+          let accident = {};
+          accident['BeneficiaryNo'] = beneficiaryCount,
+            accident["Filename"] = `${fileName}.pdf`,
+            accident["DocType"] = "PDF",
+            accident["DocTypeCode"] = docType,
+            accident["DocumentDescription"] = "Front copy of doc"
+
+          addFileToList(accident, `${fileName}.pdf`);
+          const formData = new FormData()
+          formData.append('file', file, fileName + `.${ext}`);
+          handleFileUpload(formData, fileName);
         }
-        let fileName = referenceNumber + "-" + docType + "-" + tranType;
 
-        console.log("setting file data : ");
-        let accident = {};
-        accident['BeneficiaryNo'] = beneficiaryCount,
-          accident["Filename"] = `${fileName}.pdf`,
-          accident["DocType"]= "PDF",
-          accident["DocTypeCode"]= docType,
-          accident["DocumentDescription"]= "Front copy of doc"
-
-        addFileToList(accident, `${fileName}.pdf`);
-        const formData = new FormData()
-        formData.append('file', file, fileName + `.${ext}`);
-        handleFileUpload(formData, fileName);
 
       } else {
         $("#warning_parent").show();
@@ -1199,25 +1220,41 @@ file2.onchange = async function (e) {
       var sizevalid = isFileSizeValid(file, buttonNum);
       if (sizevalid) {
         if (ext == "jpg") {
-          fileCheck(file, buttonNum, pageId);
+          var isFileBlur = fileCheck(file, buttonNum, pageId);
+          if (isFileBlur == false) {
+            let fileName = referenceNumber + "-" + docType + "-" + tranType;
+
+            let accident = {};
+            accident['BeneficiaryNo'] = beneficiaryCount,
+              accident["Filename"] = `${fileName}.pdf`,
+              accident["DocType"] = "PDF",
+              accident["DocTypeCode"] = docType,
+              accident["DocumentDescription"] = "Back copy of doc"
+
+            addFileToList(accident, `${fileName}.pdf`);
+            const formData = new FormData()
+            formData.append('file', file, fileName + `.${ext}`)
+            handleFileUpload(formData, fileName);
+          }
         }
         else {
           proceedScan(file, buttonNum, pageId);
+          let fileName = referenceNumber + "-" + docType + "-" + tranType;
+
+          let accident = {};
+          accident['BeneficiaryNo'] = beneficiaryCount,
+            accident["Filename"] = `${fileName}.pdf`,
+            accident["DocType"] = "PDF",
+            accident["DocTypeCode"] = docType,
+            accident["DocumentDescription"] = "Back copy of doc"
+
+          addFileToList(accident, `${fileName}.pdf`);
+          const formData = new FormData()
+          formData.append('file', file, fileName + `.${ext}`)
+          handleFileUpload(formData, fileName);
         }
 
-        let fileName = referenceNumber + "-" + docType + "-" + tranType;
 
-        let accident = {};
-        accident['BeneficiaryNo'] = beneficiaryCount,
-        accident["Filename"] = `${fileName}.pdf`,
-        accident["DocType"]= "PDF",
-        accident["DocTypeCode"]= docType,
-        accident["DocumentDescription"]= "Back copy of doc"
-
-        addFileToList(accident, `${fileName}.pdf`);
-        const formData = new FormData()
-        formData.append('file', file, fileName + `.${ext}`)
-        handleFileUpload(formData, fileName);
       } else {
         $("#warning_parent").show();
         $("#file_loader_icon_2").hide();
@@ -1254,25 +1291,42 @@ file3.onchange = async function (e) {
       var sizevalid = isFileSizeValid(file, buttonNum);
       if (sizevalid) {
         if (ext == "jpg") {
-          fileCheck(file, buttonNum, pageId);
+          var isFileBlur = fileCheck(file, buttonNum, pageId);
+          if (isFileBlur == false) {
+            let fileName = referenceNumber + "-" + docType + "-" + tranType;
+
+            let accident = {};
+            accident['BeneficiaryNo'] = beneficiaryCount,
+              accident["Filename"] = `${fileName}.pdf`,
+              accident["DocType"] = "PDF",
+              accident["DocTypeCode"] = docType,
+              accident["DocumentDescription"] = "Attending Physician’s Statement"
+
+
+            addFileToList(accident, `${fileName}.pdf`);
+            const formData = new FormData()
+            formData.append('file', file, fileName + `.${ext}`)
+            handleFileUpload(formData, fileName);
+          }
         }
         else {
           proceedScan(file, buttonNum, pageId);
+          let fileName = referenceNumber + "-" + docType + "-" + tranType;
+
+          let accident = {};
+          accident['BeneficiaryNo'] = beneficiaryCount,
+            accident["Filename"] = `${fileName}.pdf`,
+            accident["DocType"] = "PDF",
+            accident["DocTypeCode"] = docType,
+            accident["DocumentDescription"] = "Attending Physician’s Statement"
+
+
+          addFileToList(accident, `${fileName}.pdf`);
+          const formData = new FormData()
+          formData.append('file', file, fileName + `.${ext}`)
+          handleFileUpload(formData, fileName);
         }
-        let fileName = referenceNumber + "-" + docType + "-" + tranType;
 
-        let accident = {};
-        accident['BeneficiaryNo'] = beneficiaryCount,
-        accident["Filename"] = `${fileName}.pdf`,
-        accident["DocType"]= "PDF",
-        accident["DocTypeCode"]= docType,
-        accident["DocumentDescription"]= "Attending Physician’s Statement"
-
-
-        addFileToList(accident, `${fileName}.pdf`);
-        const formData = new FormData()
-        formData.append('file', file, fileName + `.${ext}`)
-        handleFileUpload(formData, fileName);
       } else {
         $("#warning_parent").show();
         $("#file_loader_icon_3").hide();
@@ -1309,26 +1363,43 @@ file4.onchange = async function (e) {
       var sizevalid = isFileSizeValid(file, buttonNum);
       if (sizevalid) {
         if (ext == "jpg") {
-          fileCheck(file, buttonNum, pageId);
+          var isFileBlur = fileCheck(file, buttonNum, pageId);
+          if (isFileBlur == false) {
+            let fileName = referenceNumber + "-" + docType + "-" + tranType;
+
+            let accident = {};
+            accident['BeneficiaryNo'] = beneficiaryCount,
+              accident["Filename"] = `${fileName}.pdf`,
+              accident["DocType"] = "PDF",
+              accident["DocTypeCode"] = docType,
+              accident["DocumentDescription"] = "Police or Narration Report"
+
+
+            addFileToList(accident, `${fileName}.pdf`);
+            const formData = new FormData()
+            formData.append('file', file, fileName + `.${ext}`)
+            handleFileUpload(formData, fileName);
+          }
         }
         else {
           proceedScan(file, buttonNum, pageId);
+          let fileName = referenceNumber + "-" + docType + "-" + tranType;
+
+          let accident = {};
+          accident['BeneficiaryNo'] = beneficiaryCount,
+            accident["Filename"] = `${fileName}.pdf`,
+            accident["DocType"] = "PDF",
+            accident["DocTypeCode"] = docType,
+            accident["DocumentDescription"] = "Police or Narration Report"
+
+
+          addFileToList(accident, `${fileName}.pdf`);
+          const formData = new FormData()
+          formData.append('file', file, fileName + `.${ext}`)
+          handleFileUpload(formData, fileName);
         }
 
-        let fileName = referenceNumber + "-" + docType + "-" + tranType;
 
-        let accident = {};
-        accident['BeneficiaryNo'] = beneficiaryCount,
-        accident["Filename"] = `${fileName}.pdf`,
-        accident["DocType"]= "PDF",
-        accident["DocTypeCode"]= docType,
-        accident["DocumentDescription"]= "Police or Narration Report"
-
-
-        addFileToList(accident, `${fileName}.pdf`);
-        const formData = new FormData()
-        formData.append('file', file, fileName + `.${ext}`)
-        handleFileUpload(formData, fileName);
       } else {
         $("#warning_parent").show();
         $("#file_loader_icon_4").hide();
@@ -1365,26 +1436,43 @@ file5.onchange = async function (e) {
       var sizevalid = isFileSizeValid(file, buttonNum);
       if (sizevalid) {
         if (ext == "jpg") {
-          fileCheck(file, buttonNum, pageId);
+          var isFileBlur = fileCheck(file, buttonNum, pageId);
+          if (isFileBlur == false) {
+            let fileName = referenceNumber + "-" + docType + "-" + tranType;
+
+            let accident = {};
+            accident['BeneficiaryNo'] = beneficiaryCount,
+              accident["Filename"] = `${fileName}.pdf`,
+              accident["DocType"] = "PDF",
+              accident["DocTypeCode"] = docType,
+              accident["DocumentDescription"] = "Official Receipts (ORs)"
+
+
+            addFileToList(accident, `${fileName}.pdf`);
+            const formData = new FormData()
+            formData.append('file', file, fileName + `.${ext}`)
+            handleFileUpload(formData, fileName);
+          }
         }
         else {
           proceedScan(file, buttonNum, pageId);
+          let fileName = referenceNumber + "-" + docType + "-" + tranType;
+
+          let accident = {};
+          accident['BeneficiaryNo'] = beneficiaryCount,
+            accident["Filename"] = `${fileName}.pdf`,
+            accident["DocType"] = "PDF",
+            accident["DocTypeCode"] = docType,
+            accident["DocumentDescription"] = "Official Receipts (ORs)"
+
+
+          addFileToList(accident, `${fileName}.pdf`);
+          const formData = new FormData()
+          formData.append('file', file, fileName + `.${ext}`)
+          handleFileUpload(formData, fileName);
         }
 
-        let fileName = referenceNumber + "-" + docType + "-" + tranType;
 
-        let accident = {};
-        accident['BeneficiaryNo'] = beneficiaryCount,
-        accident["Filename"] = `${fileName}.pdf`,
-        accident["DocType"]= "PDF",
-        accident["DocTypeCode"]= docType,
-        accident["DocumentDescription"]= "Official Receipts (ORs)"
-
-
-        addFileToList(accident, `${fileName}.pdf`);
-        const formData = new FormData()
-        formData.append('file', file, fileName + `.${ext}`)
-        handleFileUpload(formData, fileName);
       } else {
         $("#warning_parent").show();
         $("#file_loader_icon_5").hide();
@@ -1421,25 +1509,42 @@ file6.onchange = async function (e) {
       var sizevalid = isFileSizeValid(file, buttonNum);
       if (sizevalid) {
         if (ext == "jpg") {
-          fileCheck(file, buttonNum, pageId);
+          var isFileBlur = fileCheck(file, buttonNum, pageId);
+          if (isFileBlur == false) {
+            let fileName = referenceNumber + "-" + docType + "-" + tranType;
+
+            console.log("setting file data : ");
+            let accident = {};
+            accident['BeneficiaryNo'] = beneficiaryCount,
+              accident["Filename"] = `${fileName}.pdf`,
+              accident["DocType"] = "PDF",
+              accident["DocTypeCode"] = docType,
+              accident["DocumentDescription"] = "Proof of Bank Account"
+
+            addFileToList(accident, `${fileName}.pdf`);
+            const formData = new FormData()
+            formData.append('file', file, fileName + `.${ext}`);
+            handleFileUpload(formData, fileName);
+          }
         }
         else {
           proceedScan(file, buttonNum, pageId);
+          let fileName = referenceNumber + "-" + docType + "-" + tranType;
+
+          console.log("setting file data : ");
+          let accident = {};
+          accident['BeneficiaryNo'] = beneficiaryCount,
+            accident["Filename"] = `${fileName}.pdf`,
+            accident["DocType"] = "PDF",
+            accident["DocTypeCode"] = docType,
+            accident["DocumentDescription"] = "Proof of Bank Account"
+
+          addFileToList(accident, `${fileName}.pdf`);
+          const formData = new FormData()
+          formData.append('file', file, fileName + `.${ext}`);
+          handleFileUpload(formData, fileName);
         }
-        let fileName = referenceNumber + "-" + docType + "-" + tranType;
 
-        console.log("setting file data : ");
-        let accident = {};
-        accident['BeneficiaryNo'] = beneficiaryCount,
-          accident["Filename"] = `${fileName}.pdf`,
-          accident["DocType"]= "PDF",
-          accident["DocTypeCode"]= docType,
-          accident["DocumentDescription"]= "Proof of Bank Account"
-
-        addFileToList(accident, `${fileName}.pdf`);
-        const formData = new FormData()
-        formData.append('file', file, fileName + `.${ext}`);
-        handleFileUpload(formData, fileName);
 
       } else {
         $("#warning_parent_acct").show();
@@ -1474,15 +1579,22 @@ file7.onchange = async function (e) {
       var sizevalid = isFileSizeValid(file, buttonNum);
       if (sizevalid) {
         if (ext == "jpg") {
-          fileCheck(file, buttonNum);
+          var isFileBlur = fileCheck(file, buttonNum);
+          if (isFileBlur == false) {
+            file1Buffer = await getBuffer(file);
+            console.log("file buffer : ")
+            console.log(file1Buffer);
+            filesMap["file7"] = file1Buffer;
+          }
         }
         else {
           proceedScan(file, buttonNum);
+          file1Buffer = await getBuffer(file);
+          console.log("file buffer : ")
+          console.log(file1Buffer);
+          filesMap["file7"] = file1Buffer;
         }
-        file1Buffer = await getBuffer(file);
-        console.log("file buffer : ")
-        console.log(file1Buffer);
-        filesMap["file7"] = file1Buffer;
+
       } else {
         $("#warning_parent").show();
         $("#file_loader_icon_7").hide();
@@ -1667,7 +1779,7 @@ function handleAccountInfo(event) {
   if (!file6.value) {
     $('#upload_feedback_label').show();
     $('#upload_feedback_label').text('Please upload your Bank Account Ownership');
-  }else{
+  } else {
     $('#upload_feedback_label').hide();
     $('#upload_feedback_label').text('');
   }
@@ -1727,17 +1839,17 @@ function handleAccountInfo(event) {
       })
     }), '*');
     myDisable()
-    timer().then( async () => { 
-    $("#step2").addClass("done");
-   /*  $("#step3").addClass("active"); */
-  /*   $("#step3>div").addClass("active"); */
-    /* $("#step3").addClass("done"); */
-    $("#step3_circle").addClass("md-step-step3-circle ");
-    $("#step3_span").addClass("md-step3-span");
-    $("#step3_reference").addClass("md-step3-span")
-    $("#account_details").hide();
-    $("#process_confirmation").show();
-    console.log("Data -> ", data);
+    timer().then(async () => {
+      $("#step2").addClass("done");
+      /*  $("#step3").addClass("active"); */
+      /*   $("#step3>div").addClass("active"); */
+      /* $("#step3").addClass("done"); */
+      $("#step3_circle").addClass("md-step-step3-circle ");
+      $("#step3_span").addClass("md-step3-span");
+      $("#step3_reference").addClass("md-step3-span")
+      $("#account_details").hide();
+      $("#process_confirmation").show();
+      console.log("Data -> ", data);
     });
   } else {
     $("#popUp").modal("show");
@@ -1791,9 +1903,9 @@ function pickup_Bpi() {
   $("#step3_circle").addClass("md-step-step3-circle ");
   $("#step3_span").addClass("md-step3-span");
   $("#step3_reference").addClass("md-step3-span")
- /*  $("#step3").addClass("active");
-  $("#step3>div").addClass("active"); */
- /*  $("#step3").addClass("done"); */
+  /*  $("#step3").addClass("active");
+   $("#step3>div").addClass("active"); */
+  /*  $("#step3").addClass("done"); */
 }
 
 function addBank(event) {
@@ -1971,18 +2083,18 @@ function goBack() {
   /* $('#form_wrapper')[0].scrollIntoView(true); */
 }
 
-function goBackPickup(){
+function goBackPickup() {
   $("#step3").removeClass("done");
-    $('#pickUp').hide();
-    $('#requirements').show();
+  $('#pickUp').hide();
+  $('#requirements').show();
 }
 
 function goBack1() {
   console.log('go back!!!');
-    $("#step3").removeClass("done");
-    $('#account_details').hide();
-    $('#requirements').show();
-  
- 
+  $("#step3").removeClass("done");
+  $('#account_details').hide();
+  $('#requirements').show();
+
+
   /* $('#form_wrapper')[0].scrollIntoView(true); */
 }
