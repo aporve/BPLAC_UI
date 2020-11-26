@@ -2039,7 +2039,6 @@ function removeTimer() {
 
 function resendOtp(type) {
   //api call for resend otp
-
   removeTimer();
   resendCount++;
   if (resendCount > 5) {
@@ -2049,15 +2048,68 @@ function resendOtp(type) {
 
   }
   else {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var raw = JSON.stringify({
+
+      "companyName": "PAL",
+      "webReferenceNumber": referenceNumber
+
+    });
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw
+    };
+    fetch("http://localhost:3000/resend_otp", requestOptions).then((response) => response.json())
+      .then(response => {
+        console.log(response)
+        if (response.returnCode == '0') { //sucess
+          $('#otpPopUp').modal('hide');
+          $('#requirements').hide();
+          $('#payment').show();
+        }
+        else {
+          invalidOtp++;
+          if (invalidOtp <= 3) {
+            $('#invalidOtp').modal('show');
+          }
+          else {
+            $('#invalidOtp').modal('hide');
+            $('#maxInvalidOtp').modal('show');
+          }
+
+        }
+
+      }).catch(error => {
+        console.log(error)
+      });
+
     $('#invalidOtp').modal('hide');
     if (type != 'resend') { $('#otpPopUp').modal('show'); }
     document.getElementById('otp').value = ''
     otpTimer();
-
   }
   $('#otpExpiry').modal('hide');
-}
 
+  //--befre api intgrtn--//
+  // removeTimer();
+  // resendCount++;
+  // if (resendCount > 5) {
+  //   $('#otpPopUp').modal('hide');
+  //   $('#invalidOtp').modal('hide');
+  //   $('#maxResendOtp').modal('show');
+
+  // }
+  // else {
+  //   $('#invalidOtp').modal('hide');
+  //   if (type != 'resend') { $('#otpPopUp').modal('show'); }
+  //   document.getElementById('otp').value = ''
+  //   otpTimer();
+
+  // }
+  // $('#otpExpiry').modal('hide');
+}
 
 function submitOtp() {
 
