@@ -2060,29 +2060,73 @@ function resendOtp(type) {
 
 
 function submitOtp() {
-  //api call fro submit otp
 
-  var dummy_otp = '1234'
+  //--api call fro submit otp--//
   removeTimer();
-
-  if (document.getElementById('otp').value != dummy_otp) {
-    invalidOtp++;
-    if (invalidOtp <3) {
-      $('#invalidOtp').modal('show');
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  var raw = JSON.stringify({
+    "oneTimePINInformation": {
+      "companyName": "PAL",
+      "webReferenceNumber": referenceNumber,
+      "oneTimePIN": document.getElementById('otp').value
     }
-    else {
-      $('#invalidOtp').modal('hide');
-      $('#maxInvalidOtp').modal('show');
-    }
+  });
+  var requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    body: raw
+  };
+  fetch("http://localhost:3000/otp_verification", requestOptions).then((response) => response.json())
+    .then(response => {
+      console.log(response)
+      if (response.returnCode == '0') { //sucess
+        $('#otpPopUp').modal('hide');
+        $('#requirements').hide();
+        $('#payment').show();
+      }
+      else {
+        invalidOtp++;
+        if (invalidOtp < 3) {
+          $('#invalidOtp').modal('show');
+        }
+        else {
+          $('#invalidOtp').modal('hide');
+          $('#maxInvalidOtp').modal('show');
+        }
+      }
 
-  }
-  else {
-    $('#otpPopUp').modal('hide');
-    $('#requirements').hide();
-    $('#payment').show();
-  }
+    }).catch(error => {
+      console.log(error)
+    });
   document.getElementById('otp').value = '';
+
+  //--api call fro submit otp--//
+
+  //--before api--//
+  // var dummy_otp = '1234'
+  // removeTimer();
+
+  // if (document.getElementById('otp').value != dummy_otp) {
+  //   debugger
+  //   invalidOtp++;
+  //   if (invalidOtp < 3) {
+  //     $('#invalidOtp').modal('show');
+  //   }
+  //   else {
+  //     $('#invalidOtp').modal('hide');
+  //     $('#maxInvalidOtp').modal('show');
+  //   }
+
+  // }
+  // else {
+  //   $('#otpPopUp').modal('hide');
+  //   $('#requirements').hide();
+  //   $('#payment').show();
+  // }
+  // document.getElementById('otp').value = '';
 }
+
 
 // When the user clicks anywhere outside of the modal, close it and remove timer 
 window.onclick = function (event) {
