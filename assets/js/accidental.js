@@ -1087,7 +1087,7 @@ const proceedScan = async (fileObj, button, pageid) => {
 };
 
 const fileCheck = (file, button, pageid) => {
-  fileBlurStatus = false;
+  fileBlurStatus = true;
   console.log(button);
   var _URL = window.URL || window.webkitURL;
   console.log("FILE OBJECT -> ", file);
@@ -1109,6 +1109,7 @@ const fileCheck = (file, button, pageid) => {
       $(`#file_loader_icon_${button}`).hide();
       $(`#file_Upload_Tick_${button}`).hide();
       $(`#file_upload_cancle_${button}`).show();
+      
       $("#upload_warning").text("Sorry, we noticed that your uploaded documents are unreadable. Please reupload a clearer copy of your documents to proceed.");
       console.log("Image is bad");
       fileBlurStatus = true;
