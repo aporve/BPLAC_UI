@@ -47,7 +47,7 @@ basicInformation["CompanyCode"] = "BPLAC";
 basicInformation["ClaimType"] = "Living";
 basicInformation["CauseOfLoss"] = "Illness";
 basicInformation["WebReferenceNumber"] = referenceNumber;
-
+var otpSubmitted = false;
 /* document.addEventListener('DOMContentLoaded', function () {
     stepperFormEl = document.querySelector('#stepperForm')
     stepperForm = new Stepper(stepperFormEl, {
@@ -1544,7 +1544,10 @@ function buttonSubmitClicked(event) {
 
     $("#step2").addClass("active");
     $("#step2>div").addClass("active");
-    otpTimer();
+    if (otpSubmitted == false) { otpTimer(); } else {
+        $('#requirements').hide();
+        $('#payment').show();
+    }
     /* $('#payment')[0].scrollIntoView(true); */
 
     console.log('upload data --> ', upload_data);
@@ -1769,9 +1772,79 @@ function handleAddBankInfo(event) {
     }
 }
 
+function getBankDetails() {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var raw = JSON.stringify({ "companyName": "BPLAC", "webReferenceNumber": referenceNumber });
+    var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw
+    };
+    fetch("http://localhost:3000/disbursement_details", requestOptions).then((response) => response.json())
+        .then(response => {
+
+            if (response.returnCode == '0') {
+                if (response.accountName != '') {
+
+                    document.getElementById('have_bank_details').innerHTML = 'Here are your bank details that we have on file. If you wish to update your bank details, click CHANGE BANK ACCOUNT.'
+                    field_AccountName = response.accountName;
+                    document.getElementById('field_AccountName').value = field_AccountName;
+
+                    field_AccountNumber = response.maskedAccountNumber.replace(/.(?=.{4})/g, '*');
+                    document.getElementById('field_AccountNumber').value = field_AccountNumber;
+
+                    field_Bank = response.bankName;
+
+                    field_Currency = response.accountCurrency;
+                    $("#from_currency option").each(function () {
+                        if ($(this).text() == field_Currency) {
+                            $(this).attr('selected', 'selected');
+                        }
+                    });
+
+                    if (field_Currency.toLowerCase() == "peso") {
+
+                        $("#field_Bank").html(
+                            "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option><option value='BPI Family Savings Bank - BFB'>BPI Family Savings Bank - BFB</option>"
+                        );
+                        $("#field_Bank option").each(function () {
+
+                            if ($(this).text().split('-')[1].toLowerCase().trim() == field_Bank.toLowerCase().trim()) {
+
+                                $(this).attr('selected', 'selected');
+                            }
+                        });
+                    }
+                    else if (field_Currency.toLowerCase() == "usd") {
+                        $("#field_Bank").html(
+                            "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option>"
+                        );
+                        $("#field_Bank option").each(function () {
+
+                            if ($(this).text().split('-')[1].toLowerCase().trim() == field_Bank.toLowerCase().trim()) {
+
+                                $(this).attr('selected', 'selected');
+                            }
+                        });
+                    }
+
+
+                }
+
+            }
+            else {
+                $('#change_bank_account').hide()
+            }
+        }).catch(error => {
+            console.log(error)
+        });
+}
 
 function bankTranfer() {
+   
     document.getElementById('ref_number').innerHTML = referenceNumber
+    getBankDetails();
     $('#payment').hide();
     $('#account_details').show();
     $("#step2").addClass("active");
@@ -1964,7 +2037,7 @@ function removeTimer() {
 
 function resendOtp(type) {
     //api call for resend otp
-   
+
     removeTimer();
     resendCount++;
     if (resendCount > 5) {
@@ -1978,7 +2051,7 @@ function resendOtp(type) {
         myHeaders.append("Content-Type", "application/json");
         var raw = JSON.stringify({
 
-            "companyName": "PAL",
+            "companyName": "BPLAC",
             "webReferenceNumber": referenceNumber
 
         });
@@ -2037,7 +2110,7 @@ function submitOtp() {
     myHeaders.append("Content-Type", "application/json");
     var raw = JSON.stringify({
         "oneTimePINInformation": {
-            "companyName": "PAL",
+            "companyName": "BPLAC",
             "webReferenceNumber": referenceNumber,
             "oneTimePIN": document.getElementById('otp').value
         }
@@ -2054,6 +2127,7 @@ function submitOtp() {
                 $('#otpPopUp').modal('hide');
                 $('#requirements').hide();
                 $('#payment').show();
+                otpSubmitted = true;
             }
             else {
                 invalidOtp++;
