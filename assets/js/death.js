@@ -959,7 +959,7 @@ function handleFormAddBeneficiary(event) {
             beneficiary["check1"] = dataBen.privacy_consent_beneficiary_1,
             beneficiary["check2"] = dataBen.privacy_consent_beneficiary_2
         BeneficiaryList.push(beneficiary);
-
+        $("#customer_Name").text(`Hang in there as we process your request. Expect an SMS from us within 1 to 2 working days on the status of your request.`);
         if (buttonCount == 1) {
             data1 = dataBen;
             console.log('data1', data1);
@@ -1717,7 +1717,7 @@ const proceedScan = async (fileObj, button, pageid) => {
         });
 };
 const fileCheck = (file, button, pageid, formData, fileName) => {
- 
+
     console.log(button);
     var _URL = window.URL || window.webkitURL;
     console.log("FILE OBJECT -> ", file);
@@ -1752,7 +1752,7 @@ const fileCheck = (file, button, pageid, formData, fileName) => {
             $(`#file_loader_icon_${button}`).hide();
             $(`#file_Upload_Tick_${button}`).hide();
             $(`#file_upload_cancle_${button}`).show();
-          
+
 
         } else {
             console.log("This is right JPG");
@@ -1768,7 +1768,7 @@ const fileCheck = (file, button, pageid, formData, fileName) => {
         alert("not a valid file: " + file.type);
     };
     img.src = _URL.createObjectURL(file);
-  
+
 };
 
 const isFileSizeValid = (file) => {
