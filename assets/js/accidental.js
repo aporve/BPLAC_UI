@@ -22,6 +22,7 @@ let botId = url.searchParams.get('botId');
 var user_mobile;
 var currSeconds = 0;
 var otpSubmitted = false;
+var scanDoc = false;
 $('#privacy_consent_1').prop('checked', true);
 $('#privacy_consent_2').prop('checked', true);
 $('#privacy_consent_3').prop('checked', true);
@@ -1033,7 +1034,7 @@ const proceedScan = async (fileObj, button, pageid) => {
   let baseData = await toBase64(fileObj);
   const regex = /data:application\/pdf;base64,/gi;
   let newBaseData = baseData.replace(regex, "");
-  checkForVirus(newBaseData)
+  await checkForVirus(newBaseData)
     .then((response) => response.text())
     .then((result) => {
       let parsedJson = JSON.parse(result);
@@ -1059,6 +1060,7 @@ const proceedScan = async (fileObj, button, pageid) => {
         $(`#file_upload_cancle_${button}`).show();
         return;
       } else {
+        scanDoc = true
         $("#warning_parent").hide();
         $("#warning_parent_acct").hide();
         $(`#file_loader_icon_${button}`).hide();
@@ -1086,14 +1088,14 @@ const proceedScan = async (fileObj, button, pageid) => {
     });
 };
 
-const fileCheck = (file, button, pageid) => {
-  fileBlurStatus = true;
+const fileCheck = (file, button, pageid, formData, fileName) => {
+
   console.log(button);
   var _URL = window.URL || window.webkitURL;
   console.log("FILE OBJECT -> ", file);
   var img = new Image();
   console.log("Before on load --> ");
-  img.onload = function () {
+  img.onload = async function () {
     console.log("inside image load --> ");
     console.log(this.width + " " + this.height);
     if (this.width < 400 && this.height < 400) {
@@ -1112,11 +1114,12 @@ const fileCheck = (file, button, pageid) => {
 
       $("#upload_warning").text("Sorry, we noticed that your uploaded documents are unreadable. Please reupload a clearer copy of your documents to proceed.");
       console.log("Image is bad");
-      fileBlurStatus = true;
+
     } else {
       console.log("This is right JPG");
-      proceedScan(file, button);
-      fileBlurStatus = false;
+      await proceedScan(file, button);
+      if (scanDoc == true) { handleFileUpload(formData, fileName); scanDoc = false }
+
     }
   };
   img.onerror = function () {
@@ -1124,7 +1127,7 @@ const fileCheck = (file, button, pageid) => {
     alert("not a valid file: " + file.type);
   };
   img.src = _URL.createObjectURL(file);
-  return fileBlurStatus;
+
 };
 
 const isFileSizeValid = (file) => {
@@ -1150,23 +1153,22 @@ file1.onchange = async function (e) {
       var sizevalid = isFileSizeValid(file, buttonNum);
       if (sizevalid) {
         if (ext == "jpg") {
-          var isFileBlur = fileCheck(file, buttonNum, pageID);
-          if (isFileBlur == false) {
-            let fileName = referenceNumber + "-" + docType + "-" + tranType;
 
-            console.log("setting file data : ");
-            let accident = {};
-            accident['BeneficiaryNo'] = beneficiaryCount,
-              accident["Filename"] = `${fileName}.pdf`,
-              accident["DocType"] = "PDF",
-              accident["DocTypeCode"] = docType,
-              accident["DocumentDescription"] = "Front copy of doc"
+          let fileName = referenceNumber + "-" + docType + "-" + tranType;
 
-            addFileToList(accident, `${fileName}.pdf`);
-            const formData = new FormData()
-            formData.append('file', file, fileName + `.${ext}`);
-            handleFileUpload(formData, fileName);
-          }
+          console.log("setting file data : ");
+          let accident = {};
+          accident['BeneficiaryNo'] = beneficiaryCount,
+            accident["Filename"] = `${fileName}.pdf`,
+            accident["DocType"] = "PDF",
+            accident["DocTypeCode"] = docType,
+            accident["DocumentDescription"] = "Front copy of doc"
+
+          addFileToList(accident, `${fileName}.pdf`);
+          const formData = new FormData()
+          formData.append('file', file, fileName + `.${ext}`);
+          fileCheck(file, buttonNum, pageID, formData, fileName);
+
         }
         else {
           proceedScan(file, buttonNum, pageID);
@@ -1223,22 +1225,21 @@ file2.onchange = async function (e) {
       var sizevalid = isFileSizeValid(file, buttonNum);
       if (sizevalid) {
         if (ext == "jpg") {
-          var isFileBlur = fileCheck(file, buttonNum, pageId);
-          if (isFileBlur == false) {
-            let fileName = referenceNumber + "-" + docType + "-" + tranType;
 
-            let accident = {};
-            accident['BeneficiaryNo'] = beneficiaryCount,
-              accident["Filename"] = `${fileName}.pdf`,
-              accident["DocType"] = "PDF",
-              accident["DocTypeCode"] = docType,
-              accident["DocumentDescription"] = "Back copy of doc"
+          let fileName = referenceNumber + "-" + docType + "-" + tranType;
 
-            addFileToList(accident, `${fileName}.pdf`);
-            const formData = new FormData()
-            formData.append('file', file, fileName + `.${ext}`)
-            handleFileUpload(formData, fileName);
-          }
+          let accident = {};
+          accident['BeneficiaryNo'] = beneficiaryCount,
+            accident["Filename"] = `${fileName}.pdf`,
+            accident["DocType"] = "PDF",
+            accident["DocTypeCode"] = docType,
+            accident["DocumentDescription"] = "Back copy of doc"
+
+          addFileToList(accident, `${fileName}.pdf`);
+          const formData = new FormData()
+          formData.append('file', file, fileName + `.${ext}`)
+          fileCheck(file, buttonNum, pageId, formData, fileName);
+
         }
         else {
           proceedScan(file, buttonNum, pageId);
@@ -1294,23 +1295,22 @@ file3.onchange = async function (e) {
       var sizevalid = isFileSizeValid(file, buttonNum);
       if (sizevalid) {
         if (ext == "jpg") {
-          var isFileBlur = fileCheck(file, buttonNum, pageId);
-          if (isFileBlur == false) {
-            let fileName = referenceNumber + "-" + docType + "-" + tranType;
 
-            let accident = {};
-            accident['BeneficiaryNo'] = beneficiaryCount,
-              accident["Filename"] = `${fileName}.pdf`,
-              accident["DocType"] = "PDF",
-              accident["DocTypeCode"] = docType,
-              accident["DocumentDescription"] = "Attending Physician’s Statement"
+          let fileName = referenceNumber + "-" + docType + "-" + tranType;
+
+          let accident = {};
+          accident['BeneficiaryNo'] = beneficiaryCount,
+            accident["Filename"] = `${fileName}.pdf`,
+            accident["DocType"] = "PDF",
+            accident["DocTypeCode"] = docType,
+            accident["DocumentDescription"] = "Attending Physician’s Statement"
 
 
-            addFileToList(accident, `${fileName}.pdf`);
-            const formData = new FormData()
-            formData.append('file', file, fileName + `.${ext}`)
-            handleFileUpload(formData, fileName);
-          }
+          addFileToList(accident, `${fileName}.pdf`);
+          const formData = new FormData()
+          formData.append('file', file, fileName + `.${ext}`)
+          fileCheck(file, buttonNum, pageId, formData, fileName);
+
         }
         else {
           proceedScan(file, buttonNum, pageId);
@@ -1366,23 +1366,22 @@ file4.onchange = async function (e) {
       var sizevalid = isFileSizeValid(file, buttonNum);
       if (sizevalid) {
         if (ext == "jpg") {
-          var isFileBlur = fileCheck(file, buttonNum, pageId);
-          if (isFileBlur == false) {
-            let fileName = referenceNumber + "-" + docType + "-" + tranType;
 
-            let accident = {};
-            accident['BeneficiaryNo'] = beneficiaryCount,
-              accident["Filename"] = `${fileName}.pdf`,
-              accident["DocType"] = "PDF",
-              accident["DocTypeCode"] = docType,
-              accident["DocumentDescription"] = "Police or Narration Report"
+          let fileName = referenceNumber + "-" + docType + "-" + tranType;
+
+          let accident = {};
+          accident['BeneficiaryNo'] = beneficiaryCount,
+            accident["Filename"] = `${fileName}.pdf`,
+            accident["DocType"] = "PDF",
+            accident["DocTypeCode"] = docType,
+            accident["DocumentDescription"] = "Police or Narration Report"
 
 
-            addFileToList(accident, `${fileName}.pdf`);
-            const formData = new FormData()
-            formData.append('file', file, fileName + `.${ext}`)
-            handleFileUpload(formData, fileName);
-          }
+          addFileToList(accident, `${fileName}.pdf`);
+          const formData = new FormData()
+          formData.append('file', file, fileName + `.${ext}`)
+          fileCheck(file, buttonNum, pageId, formData, fileName);
+
         }
         else {
           proceedScan(file, buttonNum, pageId);
@@ -1439,23 +1438,22 @@ file5.onchange = async function (e) {
       var sizevalid = isFileSizeValid(file, buttonNum);
       if (sizevalid) {
         if (ext == "jpg") {
-          var isFileBlur = fileCheck(file, buttonNum, pageId);
-          if (isFileBlur == false) {
-            let fileName = referenceNumber + "-" + docType + "-" + tranType;
 
-            let accident = {};
-            accident['BeneficiaryNo'] = beneficiaryCount,
-              accident["Filename"] = `${fileName}.pdf`,
-              accident["DocType"] = "PDF",
-              accident["DocTypeCode"] = docType,
-              accident["DocumentDescription"] = "Official Receipts (ORs)"
+          let fileName = referenceNumber + "-" + docType + "-" + tranType;
+
+          let accident = {};
+          accident['BeneficiaryNo'] = beneficiaryCount,
+            accident["Filename"] = `${fileName}.pdf`,
+            accident["DocType"] = "PDF",
+            accident["DocTypeCode"] = docType,
+            accident["DocumentDescription"] = "Official Receipts (ORs)"
 
 
-            addFileToList(accident, `${fileName}.pdf`);
-            const formData = new FormData()
-            formData.append('file', file, fileName + `.${ext}`)
-            handleFileUpload(formData, fileName);
-          }
+          addFileToList(accident, `${fileName}.pdf`);
+          const formData = new FormData()
+          formData.append('file', file, fileName + `.${ext}`)
+          fileCheck(file, buttonNum, pageId, formData, fileName);
+
         }
         else {
           proceedScan(file, buttonNum, pageId);
@@ -1512,23 +1510,22 @@ file6.onchange = async function (e) {
       var sizevalid = isFileSizeValid(file, buttonNum);
       if (sizevalid) {
         if (ext == "jpg") {
-          var isFileBlur = fileCheck(file, buttonNum, pageId);
-          if (isFileBlur == false) {
-            let fileName = referenceNumber + "-" + docType + "-" + tranType;
 
-            console.log("setting file data : ");
-            let accident = {};
-            accident['BeneficiaryNo'] = beneficiaryCount,
-              accident["Filename"] = `${fileName}.pdf`,
-              accident["DocType"] = "PDF",
-              accident["DocTypeCode"] = docType,
-              accident["DocumentDescription"] = "Proof of Bank Account"
+          let fileName = referenceNumber + "-" + docType + "-" + tranType;
 
-            addFileToList(accident, `${fileName}.pdf`);
-            const formData = new FormData()
-            formData.append('file', file, fileName + `.${ext}`);
-            handleFileUpload(formData, fileName);
-          }
+          console.log("setting file data : ");
+          let accident = {};
+          accident['BeneficiaryNo'] = beneficiaryCount,
+            accident["Filename"] = `${fileName}.pdf`,
+            accident["DocType"] = "PDF",
+            accident["DocTypeCode"] = docType,
+            accident["DocumentDescription"] = "Proof of Bank Account"
+
+          addFileToList(accident, `${fileName}.pdf`);
+          const formData = new FormData()
+          formData.append('file', file, fileName + `.${ext}`);
+          fileCheck(file, buttonNum, pageId, formData, fileName);
+
         }
         else {
           proceedScan(file, buttonNum, pageId);
@@ -1582,13 +1579,14 @@ file7.onchange = async function (e) {
       var sizevalid = isFileSizeValid(file, buttonNum);
       if (sizevalid) {
         if (ext == "jpg") {
-          var isFileBlur = fileCheck(file, buttonNum);
-          if (isFileBlur == false) {
-            file1Buffer = await getBuffer(file);
-            console.log("file buffer : ")
-            console.log(file1Buffer);
-            filesMap["file7"] = file1Buffer;
-          }
+          // var isFileBlur = fileCheck(file, buttonNum);
+          // if (isFileBlur == false) {
+          fileCheck(file, buttonNum);
+          file1Buffer = await getBuffer(file);
+          console.log("file buffer : ")
+          console.log(file1Buffer);
+          filesMap["file7"] = file1Buffer;
+          // }
         }
         else {
           proceedScan(file, buttonNum);
