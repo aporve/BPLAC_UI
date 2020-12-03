@@ -1718,7 +1718,7 @@ const proceedScan = async (fileObj, button, pageid) => {
         });
 };
 const fileCheck = (file, button, pageid, formData, fileName) => {
-    fileBlurStatus = true;
+ 
     console.log(button);
     var _URL = window.URL || window.webkitURL;
     console.log("FILE OBJECT -> ", file);
@@ -1753,7 +1753,7 @@ const fileCheck = (file, button, pageid, formData, fileName) => {
             $(`#file_loader_icon_${button}`).hide();
             $(`#file_Upload_Tick_${button}`).hide();
             $(`#file_upload_cancle_${button}`).show();
-            fileBlurStatus = true;
+          
 
         } else {
             console.log("This is right JPG");
@@ -1769,7 +1769,7 @@ const fileCheck = (file, button, pageid, formData, fileName) => {
         alert("not a valid file: " + file.type);
     };
     img.src = _URL.createObjectURL(file);
-    return fileBlurStatus;
+  
 };
 
 const isFileSizeValid = (file) => {
