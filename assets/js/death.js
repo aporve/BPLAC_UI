@@ -3959,7 +3959,7 @@ function getBankDetails() {
                             $(this).attr('selected', 'selected');
                         }
                     });
-                  
+
                     if (field_Currency.toLowerCase() == "peso") {
 
                         $("#field_Bank").html(
@@ -4000,7 +4000,7 @@ function getBankDetails() {
 
 
 function bankTranfer() {
-   
+
     document.getElementById('ref_number').innerHTML = referenceNumber
     getBankDetails();
     trackBenificiary = 0;
@@ -4579,7 +4579,7 @@ function resendOtp(type) {
         myHeaders.append("Content-Type", "application/json");
         var raw = JSON.stringify({
 
-            "companyName": "PAL",
+            "companyName": "BPLAC",
             "webReferenceNumber": referenceNumber
 
         });
