@@ -12,10 +12,12 @@ var docsPending;
 var docsReceived;
 var policyNumber;
 var claimantFirstName;
-var denialTag;
+// var denialTag;
 var claimAmount;
 var currency;
 var requirementsList = [];
+var sourceSystem;
+var isFallout;
 var surveyTag;
 var referenceNumber = null;
 
@@ -137,14 +139,11 @@ function trackProgress() {
     };
     fetch("http://localhost:3000/claim_status", requestOptions).then((response) => response.json())
         .then(response => {
-
-
-
             if (response.returnCode != '0') {
                 $('#refNoWarning').modal('show');
             }
             else {
-                if (response.type.toLowerCase() == 'death') {
+                if (response.type.toLowerCase().trim() == 'death') {
                     claim_type = response.type
                 }
                 else {
@@ -158,19 +157,23 @@ function trackProgress() {
                 docsReceived = response.docsReceived;
                 policyNumber = response.policyNumber;
                 claimantFirstName = response.claimantFirstName;
-                denialTag = response.denialTag;
+                // denialTag = response.denialTag;
+                sourceSystem = response.sourceSystem;
+                isFallout = response.isFallout;
                 claimAmount = response.claimAmount;
                 currency = response.currency;
                 requirementsList = response.requirementsList;
                 surveyTag = response.surveyTag;
-                if (claimStatus.toLowerCase() == 'denied' || claimStatus.toLowerCase() == 'approved' && surveyTag == 'N') {
+                if (claimStatus.toLowerCase().trim() == 'denied' || claimStatus.toLowerCase().trim() == 'approved' && surveyTag == 'N') {
                     $('#customer_survey').show()
                 }
                 else {
 
                     $('#customer_survey').hide()
                 }
-                document.getElementById('name').innerHTML = claimantFirstName;
+                // document.getElementById('name').innerHTML = claimantFirstName;
+
+                document.getElementById('payment_amount').innerHTML = currency + ' ' + claimAmount;
                 // document.getElementById('currency').innerHTML = currency;
                 // document.getElementById('net_amount').innerHTML = claimAmount;
                 displayDateForClaimStatus()
@@ -231,7 +234,7 @@ function trackProgress() {
 
 // to set header title and image for claim status screen
 function setClaimProgressScreen() {
-    switch (claim_type.toLowerCase()) {
+    switch (claim_type.toLowerCase().trim()) {
         case 'accident':
             setClaimProgressScreenHeader('accident')
             break;
@@ -271,6 +274,117 @@ function setClaimProgressScreenHeader(title) {
 
 // functions to set the message for each claim status //
 function setAccidentClaimStatusMsg() {
+    if (sourceSystem.toLowerCase().trim() == 'tips') {
+
+        if (docsPending == 'Y') {
+            var finalDocsList = '';
+            requirementsList.forEach(function (item) {
+                finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p>' + item.name + '</p> </div>'
+
+            });
+
+            document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR OTHER CLAIMS DOCUMENTS</h3> <br /><p>Additional Claims Documents</p><br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We have reviewed your initial claim request submission and identified that we may also need the following documents for us to proceed: </p> <br /> <p class="font-weight-normal request-font"> <div style="padding-left: 10px;"> ' + finalDocsList + ' </div> </p> <br /> <p class="font-weight-normal request-font"> Don’t worry, you can easily submit these documents to our BSE at any BPI or BPI Family Savings Bank branch so we can proceed with your claim request. You may also visit Vibe Customer Service Center at GF BPI-Philam Makati, 6811 Ayala Ave., 1226 Makati. </p> </div>';
+            document.getElementById("turnaround-time-ref").style.display = "block";
+            document.getElementById("payment-ref").style.display = "none";
+            twoStepperActive();
+        }
+        else {
+            if (claimStatus.toLowerCase().trim() == 'received') {
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST IS BEING PROCESSED</h3> <br /> <p class="font-weight-justy request-font"> We have received your claim request and it is now in process. Kindly expect an SMS update on the status of your request in 2 working days . </p> <br /> <p class="font-weight-justy request-font"> Should additional requirements be needed, we will reach out to you immediately. </p> <br /> <p class="font-weight-normal request-font"> To check the status of your claims request, please type in your reference number ' + transactionNumber + ' <a href="main.html">here</a>. </p> </div> '
+                document.getElementById("turnaround-time-ref").style.display = "block";
+                document.getElementById("payment-ref").style.display = "none";
+                twoStepperActive();
+            }
+            else if (claimStatus.toLowerCase().trim() == 'approved') {
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN APPROVED</h3> <br /> <p class="font-weight-justy request-font"> An update on your claim request. </p> <br /> <p class="font-weight-justy request-font"> Hi, ' + claimantFirstName + '. You will be pleased to know that your claim request for your BPI-Philam policy has been approved. </p> <br /> <p> Kindly expect receipt of your benefit through your chosen payout method. You will receive an update when your benefit is ready for release. </p> <br /> <p class="font-weight-normal request-font"> This information has been sent as well via SMS for your reference. </p> </div> '
+
+                document.getElementById("turnaround-time-ref").style.display = "none";
+                document.getElementById("payment-ref").style.display = "block";
+                allStepperActive()
+            }
+            else if (claimStatus.toLowerCase().trim() == 'denied1') {
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p class="font-weight-justy request-font"> An update on your claim request </p> <br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We have reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. Your policy doesn’t cover Accident. </p> <br /> <p> We understand that you’re going through a tough time, ' + claimantFirstName + '. While we can’t release a payment for this claim, we can assure you that your life insurance coverage remains intact for the future. </p> <br /> <p> If you have any questions, you may reach out to us by chatting with Bessie the chatbot at m.me/BessieofBPIPhilam. You may also email us at BPI Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div>'
+                document.getElementById("turnaround-time-ref").style.display = "none";
+                document.getElementById("payment-ref").style.display = "none";
+
+                allStepperActive()
+            }
+            else if (claimStatus.toLowerCase().trim() == 'denied2') {
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p class="font-weight-justy request-font"> An update on your claim request </p> <br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We have reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. The circumstances that led to your current condition are not included in the provisions of your current BPI-Philam policy. </p> <br /> <p> We understand that you’re going through a tough time, ' + claimantFirstName + '. While we can’t release a payment for this claim, we can assure you that your life insurance coverage remains intact for the future. </p> <br /> <p> If you have any questions, you may reach out to us by chatting with Bessie the chatbot at m.me/BessieofBPIPhilam. You may also email us at BPI Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div> '
+                document.getElementById("turnaround-time-ref").style.display = "none";
+                document.getElementById("payment-ref").style.display = "none";
+                allStepperActive()
+            }
+            else if (claimStatus.toLowerCase().trim() == 'denied3') {
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p class="font-weight-justy request-font"> An update on your claim request </p> <br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We have reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. Your current BPI-Philam policy does not cover the condition for which you are claiming a benefit. </p> <br /> <p> We understand that you’re going through a tough time, ' + claimantFirstName + '. While we can’t release a payment for this claim, we can assure you that your life insurance coverage remains intact for the future. </p> <br /> <p> If you have any questions, you may reach out to us by chatting with Bessie the chatbot at m.me/BessieofBPIPhilam. You may also email us at BPI Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div>'
+                document.getElementById("turnaround-time-ref").style.display = "none";
+                document.getElementById("payment-ref").style.display = "none";
+                allStepperActive()
+            }
+            else if (claimStatus.toLowerCase().trim() == 'denied4') {
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p class="font-weight-justy request-font"> An update on your claim request </p> <br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We have reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. Your coverage and all its benefits have ended last //Lapsation Date - Month DD, YYYY// due to non-payment of premium dues. </p> <br /> <p> We wish you a speedy recovery. </p> <br /> <p> If you have any questions, or would like to reinstate your policy, you may reach out to us by chatting with Bessie the chatbot at m.me/BessieofBPIPhilam. You may also email us at BPI Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div> '
+                document.getElementById("turnaround-time-ref").style.display = "none";
+                document.getElementById("payment-ref").style.display = "none";
+                allStepperActive()
+            }
+
+        }
+    }
+    else if (sourceSystem.toLowerCase().trim() == 'cms') {
+        if (docsPending == 'Y') {
+            var finalDocsList = '';
+            requirementsList.forEach(function (item) {
+                finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p>' + item.name + '</p> </div>'
+
+            });
+
+            document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR OTHER CLAIMS DOCUMENTS</h3> <br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We have reviewed your initial claim request submission and need the documents listed below to proceed with the assessment: </p> <br /> <p class="font-weight-normal request-font"> <div style="padding-left: 10px;"> ' + finalDocsList + ' </div> </p> <br /> <p> Don&#39;t worry, your Bancassurance Sales Executive at your nearest BPI or BPI Family Savings Bank may assist you in the submission.You may also submit via Vibe Customer Service Center at GF BPI - Philam Makati, 6811 Ayala Ave., 1226 Makati.If you have any questions regarding your claim request, please email us at BPI - Philam_CustomerService@aia.com. </p > <br /> </div >';
+            document.getElementById("turnaround-time-ref").style.display = "block";
+            document.getElementById("payment-ref").style.display = "none";
+            twoStepperActive();
+        }
+        else {
+            if (claimStatus.toLowerCase().trim() == 'received') {
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST IS BEING PROCESSED</h3> <br /> <p class="font-weight-justy request-font"> We have received your claim request and it is now in process. Kindly expect an SMS update on the status of your request in 2 working days . </p> <br /> <p class="font-weight-justy request-font"> Should additional requirements be needed, we will reach out to you immediately. </p> <br /> <p class="font-weight-normal request-font"> To check the status of your claims request, please type in your reference number ' + transactionNumber + ' <a href="main.html">here</a>. </p> </div> '
+                document.getElementById("turnaround-time-ref").style.display = "block";
+                document.getElementById("payment-ref").style.display = "none";
+                twoStepperActive();
+            }
+            else if (claimStatus.toLowerCase().trim() == 'approved') {
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN APPROVED</h3> <br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We are happy to inform you that we have approved your claim request for your BPI-Philam policy no. ' + policyNumber + '. </p> <br /> <p class="font-weight-normal request-font"> You will receive ' + currency + ' ' + claimAmount + ' through your chosen payout method. Please expect an update from us on the release of your benefit. </p> <br /> </div> '
+
+                document.getElementById("turnaround-time-ref").style.display = "none";
+                document.getElementById("payment-ref").style.display = "block";
+                allStepperActive()
+            }
+            else if (claimStatus.toLowerCase().trim() == 'denied1') {
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /><p>An update on your claim request</p><br/> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We reviewed the documents you submitted and regret that we are unable to grant your claim request. Your BPI-Philam policy does not have Accident coverage. </p> <br /> <p class="font-weight-normal request-font"> We understand that you&#39;re going through a tough time, ' + claimantFirstName + '.While we can&#39;t release a payment for this claim, we assure you that your life insurance coverage remains intact. </p> <br /> <p class="font-weight-normal request-font"> If you wish to discuss the details of your claim, you may reach out to your Bancassurance Sales Executive or chat with Bessie at m.me/BessieofBPIPhilam. You may also email us at BPI-Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div>'
+                document.getElementById("turnaround-time-ref").style.display = "none";
+                document.getElementById("payment-ref").style.display = "none";
+
+                allStepperActive()
+            }
+            else if (claimStatus.toLowerCase().trim() == 'denied2') {
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p>An update on your claim request</p></br> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We reviewed the documents you submitted and regret that we are unable to grant your claim request. The circumstances that led to your condition are not included in the provisions of your BPI-Philam policy. </p> <br /> <p class="font-weight-normal request-font"> We understand that you&#39;re going through a tough time, ' + claimantFirstName + '.While we can&#39;t release a payment for this claim, we assure you that your life insurance coverage remains intact. </p> <br /> <p class="font-weight-normal request-font"> If you wish to discuss the details of your claim, you may reach out to your Bancassurance Sales Executive or chat with Bessie at m.me/BessieofBPIPhilam. You may also email us at BPI-Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div>'
+                document.getElementById("turnaround-time-ref").style.display = "none";
+                document.getElementById("payment-ref").style.display = "none";
+                allStepperActive()
+            }
+            else if (claimStatus.toLowerCase().trim() == 'denied3') {
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p>An update on your claim request</p><br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We reviewed the documents you submitted and regret that we are unable to grant your claim request. The circumstances that led to your condition are not included in the provisions of your BPI-Philam policy. </p> <br /> <p class="font-weight-normal request-font"> We understand that youre going through a tough time, ' + claimantFirstName + '.While we can&#39;t release a payment for this claim, we assure you that your life insurance coverage remains intact. </p> <br /> <p class="font-weight-normal request-font"> If you wish to discuss the details of your claim, you may reach out to your Bancassurance Sales Executive or chat with Bessie at m.me/BessieofBPIPhilam. You may also email us at BPI-Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div> '
+                document.getElementById("turnaround-time-ref").style.display = "none";
+                document.getElementById("payment-ref").style.display = "none";
+                allStepperActive()
+            }
+            else if (claimStatus.toLowerCase().trim() == 'denied4') {
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p>An update on your claim request</p><br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. Your policy&#39;s coverage and all its benefits have ended last //Lapsation Date// due to non-payment of premium dues. </p> <br /> <p class="font-weight-normal request-font"> We understand that you&#39;re going through a tough time, ' + claimantFirstName + '. If you wish reinstate your policy, your Bancassurance Sales Executive will be ready to assist you. </p> <br /> <p class="font-weight-normal request-font"> You may also chat with Bessie at m.me/BessieofBPIPhilam, email us at at BPI-Philam_CustomerService@aia.com, or call us at (02) 8528-5501. </p> <br /> </div> '
+                document.getElementById("turnaround-time-ref").style.display = "none";
+                document.getElementById("payment-ref").style.display = "none";
+                allStepperActive()
+            }
+
+        }
+    }
 
     // switch (claim_msg_type) {
     //     case 'A-1':
@@ -308,25 +422,25 @@ function setAccidentClaimStatusMsg() {
     //     default: document.getElementById('claim-msg-text').innerHTML = 'No message found'
     //         break;
     // }
-    debugger
-    if (docsPending == 'Y') {
-        var finalDocsList = '';
-        requirementsList.forEach(function (item) {
-            finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p>' + item.name + '</p> </div>'
+    // debugger
+    // if (docsPending == 'Y') {
+    //     var finalDocsList = '';
+    //     requirementsList.forEach(function (item) {
+    //         finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p>' + item.name + '</p> </div>'
 
-        });
-        document.getElementById('docs-list').innerHTML = finalDocsList
-        document.getElementById('claim-msg-text').innerHTML = document.getElementById('A-1').innerHTML;
-        document.getElementById("turnaround-time-ref").style.display = "block";
-        document.getElementById("payment-ref").style.display = "none";
-        twoStepperActive()
-    }
-    else if (docsPending == 'N') {
-        document.getElementById('claim-msg-text').innerHTML = document.getElementById('A-6').innerHTML;
-        document.getElementById("payment-ref").style.display = "block"; // to display payment box
-        document.getElementById("turnaround-time-ref").style.display = "none";
-        allStepperActive()
-    }
+    //     });
+    //     document.getElementById('docs-list').innerHTML = finalDocsList
+    //     document.getElementById('claim-msg-text').innerHTML = document.getElementById('A-1').innerHTML;
+    //     document.getElementById("turnaround-time-ref").style.display = "block";
+    //     document.getElementById("payment-ref").style.display = "none";
+    //     twoStepperActive()
+    // }
+    // else if (docsPending == 'N') {
+    //     document.getElementById('claim-msg-text').innerHTML = document.getElementById('A-6').innerHTML;
+    //     document.getElementById("payment-ref").style.display = "block"; // to display payment box
+    //     document.getElementById("turnaround-time-ref").style.display = "none";
+    //     allStepperActive()
+    // }
 
 
 
@@ -369,47 +483,304 @@ function setAccidentClaimStatusMsg() {
     // }
 }
 function setIllnessClaimStatusMsg() {
-    switch (claim_msg_type) {
-        case 'I-1':
-            document.getElementById('claim-msg-text').innerHTML = document.getElementById('I-1').innerHTML;
-            document.getElementById("turnaround-time-ref").style.display = "none";
+    if (sourceSystem.toLowerCase().trim() == 'tips') {
+
+        if (docsPending == 'Y') {
+
+            twoStepperActive();
+            var finalDocsList = '';
+            requirementsList.forEach(function (item) {
+                finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p>' + item.name + '</p> </div>'
+
+            });
+            document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR OTHER CLAIMS DOCUMENTS</h3> <br /><p>Additional Claims Documents</p><br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We have reviewed your initial claim request submission and identified that we may also need the following documents for us to proceed: </p> <br /> <p class="font-weight-normal request-font"> <div style="padding-left: 10px;"> ' + finalDocsList + ' </div> </p> <br /> <p class="font-weight-normal request-font"> Don’t worry, you can easily submit these documents to our BSE at any BPI or BPI Family Savings Bank branch so we can proceed with your claim request. You may also visit Vibe Customer Service Center at GF BPI-Philam Makati, 6811 Ayala Ave., 1226 Makati. </p> </div>';
+            document.getElementById("turnaround-time-ref").style.display = "block";
             document.getElementById("payment-ref").style.display = "none";
-            twoStepperActive()
-            break;
-        case 'I-2':
-            document.getElementById('claim-msg-text').innerHTML = document.getElementById('I-2').innerHTML;
-            document.getElementById("payment-ref").style.display = "block"; // to display payment box
-            document.getElementById("turnaround-time-ref").style.display = "none";
-            allStepperActive()
-            break;
-        case 'I-3':
-            document.getElementById('claim-msg-text').innerHTML = document.getElementById('I-3').innerHTML;
-            document.getElementById("payment-ref").style.display = "block";
-            document.getElementById("turnaround-time-ref").style.display = "none";
-            allStepperActive()
-            break;
-        default: document.getElementById('claim-msg-text').innerHTML = 'No message found'
-            break;
+        }
+        else {
+            if (claimStatus.toLowerCase().trim() == 'received') {
+                document.getElementById('claim-msg-text').innerHTML = ' <div> <h3>YOUR REQUEST IS BEING PROCESSED</h3> <br /> <p class="font-weight-justy request-font"> Hang in there as we are now processing your request. Kindly expect an SMS update from us within 1 to 2 working days on the status of your request. </p> <br /> <p class="font-weight-normal request-font"> If we would need additional documents to support your request, we will reach out to you immediately. </p> <br /> <p class="font-weight-normal request-font"> You may also check the progress of your request <a href="main.html">here</a>. Just type in your reference number ' + transactionNumber + ' to view the status of your request. </p> </div>'
+                document.getElementById("turnaround-time-ref").style.display = "block";
+                document.getElementById("payment-ref").style.display = "none";
+                twoStepperActive();
+            }
+            else if (claimStatus.toLowerCase().trim() == 'approved') {
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN APPROVED</h3> <br /> <p class="font-weight-justy request-font"> An update on your claim request. </p> <br /> <p class="font-weight-justy request-font"> Hi, ' + claimantFirstName + '. You will be pleased to know that your claim request for your BPI-Philam policy has been approved. </p> <br /> <p> Kindly expect receipt of your benefit through your chosen payout method. You will receive an update when your benefit is ready for release. </p> <br /> <p class="font-weight-normal request-font"> This information has been sent as well via SMS for your reference. </p> </div> '
+
+                document.getElementById("turnaround-time-ref").style.display = "none";
+                document.getElementById("payment-ref").style.display = "block";
+                allStepperActive()
+            }
+            else if (claimStatus.toLowerCase().trim() == 'denied1') {
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p class="font-weight-justy request-font"> An update on your claim request </p> <br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We have reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. Your policy doesn’t cover Illness. </p> <br /> <p> We understand that you’re going through a tough time, ' + claimantFirstName + '. While we can’t release a payment for this claim, we can assure you that your life insurance coverage remains intact for the future. </p> <br /> <p> If you have any questions, you may reach out to us by chatting with Bessie the chatbot at m.me/BessieofBPIPhilam. You may also email us at BPI Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div>'
+                document.getElementById("turnaround-time-ref").style.display = "none";
+                document.getElementById("payment-ref").style.display = "none";
+
+                allStepperActive()
+            }
+            else if (claimStatus.toLowerCase().trim() == 'denied2') {
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p class="font-weight-justy request-font"> An update on your claim request </p> <br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We have reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. The circumstances that led to your current condition are not included in the provisions of your current BPI-Philam policy. </p> <br /> <p> We understand that you’re going through a tough time, ' + claimantFirstName + '. While we can’t release a payment for this claim, we can assure you that your life insurance coverage remains intact for the future. </p> <br /> <p> If you have any questions, you may reach out to us by chatting with Bessie the chatbot at m.me/BessieofBPIPhilam. You may also email us at BPI Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div> '
+                document.getElementById("turnaround-time-ref").style.display = "none";
+                document.getElementById("payment-ref").style.display = "none";
+                allStepperActive()
+            }
+            else if (claimStatus.toLowerCase().trim() == 'denied3') {
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p class="font-weight-justy request-font"> An update on your claim request </p> <br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We have reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. Your current BPI-Philam policy does not cover the condition for which you are claiming a benefit. </p> <br /> <p> We understand that you’re going through a tough time, ' + claimantFirstName + '. While we can’t release a payment for this claim, we can assure you that your life insurance coverage remains intact for the future. </p> <br /> <p> If you have any questions, you may reach out to us by chatting with Bessie the chatbot at m.me/BessieofBPIPhilam. You may also email us at BPI Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div>'
+                document.getElementById("turnaround-time-ref").style.display = "none";
+                document.getElementById("payment-ref").style.display = "none";
+                allStepperActive()
+            }
+            else if (claimStatus.toLowerCase().trim() == 'denied4') {
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p class="font-weight-justy request-font"> An update on your claim request </p> <br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We have reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. Your coverage and all its benefits have ended last //Lapsation Date - Month DD, YYYY// due to non-payment of premium dues. </p> <br /> <p> We wish you a speedy recovery. </p> <br /> <p> If you have any questions, or would like to reinstate your policy, you may reach out to us by chatting with Bessie the chatbot at m.me/BessieofBPIPhilam. You may also email us at BPI Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div> '
+                document.getElementById("turnaround-time-ref").style.display = "none";
+                document.getElementById("payment-ref").style.display = "none";
+                allStepperActive()
+            }
+        }
+    }
+    else if (sourceSystem.toLowerCase().trim() == 'cms') {
+        if (docsPending == 'Y') {
+            var finalDocsList = '';
+            requirementsList.forEach(function (item) {
+                finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p>' + item.name + '</p> </div>'
+
+            });
+
+            document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR OTHER CLAIMS DOCUMENTS</h3> <br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We have reviewed your initial claim request submission and need the documents listed below to proceed with the assessment: </p> <br /> <p class="font-weight-normal request-font"> <div style="padding-left: 10px;"> ' + finalDocsList + ' </div> </p> <br /> <p> Don&#39;t worry, your Bancassurance Sales Executive at your nearest BPI or BPI Family Savings Bank may assist you in the submission.You may also submit via Vibe Customer Service Center at GF BPI - Philam Makati, 6811 Ayala Ave., 1226 Makati.If you have any questions regarding your claim request, please email us at BPI - Philam_CustomerService@aia.com. </p > <br /> </div >';
+            document.getElementById("turnaround-time-ref").style.display = "block";
+            document.getElementById("payment-ref").style.display = "none";
+            twoStepperActive();
+        }
+        else {
+            if (claimStatus.toLowerCase().trim() == 'received') {
+                document.getElementById('claim-msg-text').innerHTML = ' <div> <h3>YOUR REQUEST IS BEING PROCESSED</h3> <br /> <p class="font-weight-justy request-font"> Hang in there as we are now processing your request. Kindly expect an SMS update from us within 1 to 2 working days on the status of your request. </p> <br /> <p class="font-weight-normal request-font"> If we would need additional documents to support your request, we will reach out to you immediately. </p> <br /> <p class="font-weight-normal request-font"> You may also check the progress of your request <a href="main.html">here</a>. Just type in your reference number ' + transactionNumber + ' to view the status of your request. </p> </div>'
+                document.getElementById("turnaround-time-ref").style.display = "block";
+                document.getElementById("payment-ref").style.display = "none";
+                twoStepperActive();
+            }
+            else if (claimStatus.toLowerCase().trim() == 'approved') {
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN APPROVED</h3> <br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We are happy to inform you that we have approved your claim request for your BPI-Philam policy no. ' + policyNumber + '. </p> <br /> <p class="font-weight-normal request-font"> You will receive ' + currency + ' ' + claimAmount + ' through your chosen payout method. Please expect an update from us on the release of your benefit. </p> <br /> </div> '
+
+                document.getElementById("turnaround-time-ref").style.display = "none";
+                document.getElementById("payment-ref").style.display = "block";
+                allStepperActive()
+            }
+            else if (claimStatus.toLowerCase().trim() == 'denied1') {
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /><p>An update on your claim request</p><br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We reviewed the documents you submitted and regret that we are unable to grant your claim request. Your BPI-Philam policy does not have Illness coverage. </p> <br /> <p class="font-weight-normal request-font"> We understand that you&#39;re going through a tough time, ' + claimantFirstName + '.While we can&#39;t release a payment for this claim, we assure you that your life insurance coverage remains intact. </p> <br /> <p class="font-weight-normal request-font"> If you wish to discuss the details of your claim, you may reach out to your Bancassurance Sales Executive or chat with Bessie at m.me/BessieofBPIPhilam. You may also email us at BPI-Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div>'
+                document.getElementById("turnaround-time-ref").style.display = "none";
+                document.getElementById("payment-ref").style.display = "none";
+
+                allStepperActive()
+            }
+            else if (claimStatus.toLowerCase().trim() == 'denied2') {
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p>An update on your claim request</p><br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We reviewed the documents you submitted and regret that we are unable to grant your claim request. The circumstances that led to your condition are not included in the provisions of your BPI-Philam policy. </p> <br /> <p class="font-weight-normal request-font"> We understand that you&#39;re going through a tough time, ' + claimantFirstName + '.While we can&#39;t release a payment for this claim, we assure you that your life insurance coverage remains intact. </p> <br /> <p class="font-weight-normal request-font"> If you wish to discuss the details of your claim, you may reach out to your Bancassurance Sales Executive or chat with Bessie at m.me/BessieofBPIPhilam. You may also email us at BPI-Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div>'
+                document.getElementById("turnaround-time-ref").style.display = "none";
+                document.getElementById("payment-ref").style.display = "none";
+                allStepperActive()
+            }
+            else if (claimStatus.toLowerCase().trim() == 'denied3') {
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p>An update on your claim request</p><br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We reviewed the documents you submitted and regret that we are unable to grant your claim request. The circumstances that led to your condition are not included in the provisions of your BPI-Philam policy. </p> <br /> <p class="font-weight-normal request-font"> We understand that youre going through a tough time, ' + claimantFirstName + '.While we can&#39;t release a payment for this claim, we assure you that your life insurance coverage remains intact. </p> <br /> <p class="font-weight-normal request-font"> If you wish to discuss the details of your claim, you may reach out to your Bancassurance Sales Executive or chat with Bessie at m.me/BessieofBPIPhilam. You may also email us at BPI-Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div> '
+                document.getElementById("turnaround-time-ref").style.display = "none";
+                document.getElementById("payment-ref").style.display = "none";
+                allStepperActive()
+            }
+            else if (claimStatus.toLowerCase().trim() == 'denied4') {
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p>An update on your claim request</p><br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. Your policy&#39;s coverage and all its benefits have ended last //Lapsation Date// due to non-payment of premium dues. </p> <br /> <p class="font-weight-normal request-font"> We understand that you&#39;re going through a tough time, ' + claimantFirstName + '. If you wish reinstate your policy, your Bancassurance Sales Executive will be ready to assist you. </p> <br /> <p class="font-weight-normal request-font"> You may also chat with Bessie at m.me/BessieofBPIPhilam, email us at at BPI-Philam_CustomerService@aia.com, or call us at (02) 8528-5501. </p> <br /> </div> '
+                document.getElementById("turnaround-time-ref").style.display = "none";
+                document.getElementById("payment-ref").style.display = "none";
+                allStepperActive()
+            }
+
+        }
     }
 
+
+
+    // switch (claim_msg_type) {
+    //     case 'I-1':
+    //         document.getElementById('claim-msg-text').innerHTML = document.getElementById('I-1').innerHTML;
+    //         document.getElementById("turnaround-time-ref").style.display = "none";
+    //         document.getElementById("payment-ref").style.display = "none";
+    //         twoStepperActive()
+    //         break;
+    //     case 'I-2':
+    //         document.getElementById('claim-msg-text').innerHTML = document.getElementById('I-2').innerHTML;
+    //         document.getElementById("payment-ref").style.display = "block"; // to display payment box
+    //         document.getElementById("turnaround-time-ref").style.display = "none";
+    //         allStepperActive()
+    //         break;
+    //     case 'I-3':
+    //         document.getElementById('claim-msg-text').innerHTML = document.getElementById('I-3').innerHTML;
+    //         document.getElementById("payment-ref").style.display = "block";
+    //         document.getElementById("turnaround-time-ref").style.display = "none";
+    //         allStepperActive()
+    //         break;
+    //     default: document.getElementById('claim-msg-text').innerHTML = 'No message found'
+    //         break;
+    // }
+
 }
+
+
 function setDeathClaimStatusMsg() {
-    switch (claim_msg_type) {
-        case 'D-1':
-            document.getElementById('claim-msg-text').innerHTML = document.getElementById('D-1').innerHTML;
-            document.getElementById("payment-ref").style.display = "block";
-            document.getElementById("turnaround-time-ref").style.display = "none";
-            allStepperActive()
-            break;
-        case 'D-2':
-            document.getElementById('claim-msg-text').innerHTML = document.getElementById('D-2').innerHTML;
-            document.getElementById("payment-ref").style.display = "block";
-            document.getElementById("turnaround-time-ref").style.display = "none";
-            allStepperActive()
-            break;
-        default: 'No message'
-            break;
+    if (sourceSystem.toLowerCase().trim() == 'tips') {
+
+        if (docsPending == 'Y') {
+            var finalDocsList = '';
+            requirementsList.forEach(function (item) {
+                finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p>' + item.name + '</p> </div>'
+
+            });
+            document.getElementById('claim-msg-text').innerHTML = '<div> <h3>YOUR OTHER CLAIMS DOCUMENTS</h3>  <br /><p>Our sincerest condolences for your loss. </p><br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '.We have reviewed your initial claim request submission and identified that we may need the following documents for us to proceed: </p > <br /> <p class="font-weight-normal request-font"> <div style="padding-left: 10px;"> ' + finalDocsList + '</div> </p> <br /> <p class="font-weight-normal request-font"> You can easily submit these documents to our BSE at any BPI or BPI Family Savings Bank branch so we can proceed with your claim request. You may also visit Vibe Customer Service Center at GF BPI-Philam Makati, 6811 Ayala Ave., 1226 Makati. </p> </div>';
+            document.getElementById("turnaround-time-ref").style.display = "block";
+            document.getElementById("payment-ref").style.display = "none";
+            twoStepperActive();
+        }
+        else {
+            if (claimStatus.toLowerCase().trim() == 'received') {
+                if (beneficiaryType.toLowerCase().trim() == 's') {
+                    document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST IS BEING PROCESSED</h3> <br /> <p class="font-weight-justy request-font"> Our sincerest condolences for your loss, ' + claimantFirstName + '. </p> <br /> <p class="font-weight-justy request-font"> We have received your claim request and it is now in process. Kindly expect an SMS update on the status of your request in 2 working days . </p> <br /> <p> Should additional requirements be needed, we will reach out to you immediately. </p> <br /> <p class="font-weight-normal request-font"> To check the status of your claims request, please type in your reference number ' + transactionNumber + ' <a href="main.html">here</a>. </p> </div> '
+                    document.getElementById("turnaround-time-ref").style.display = "block";
+                    document.getElementById("payment-ref").style.display = "none";
+                }
+                else {
+
+                    document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST IS BEING PROCESSED</h3> <br /> <p class="font-weight-justy request-font"> Our sincerest condolences for your loss. </p> <br /> <p class="font-weight-justy request-font"> We have received your claim request and it is now in process. Kindly expect an SMS update on the status of your request in 2 working days . </p> <br /> <p> Should additional requirements be needed, we will reach out to you immediately. </p> <br /> <p class="font-weight-normal request-font"> To check the status of your claims request, please type in your reference number ' + transactionNumber + ' <a href="main.html">here</a>. </p> </div> '
+                    document.getElementById("turnaround-time-ref").style.display = "block";
+                    document.getElementById("payment-ref").style.display = "none";
+
+                }
+                twoStepperActive();
+            }
+            else if (claimStatus.toLowerCase().trim() == 'approved') {
+                if (beneficiaryType.toLowerCase().trim() == 's') {
+                    document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN APPROVED</h3> <br /> <p class="font-weight-justy request-font"> We hope all is well, ' + claimantFirstName + ' </p> <br /> <p class="font-weight-justy request-font"> Your claim request has been approved. Kindly expect receipt of your benefit through your chosen payout method. You will receive an update when your benefit is ready for release. </p> <br /> <p> This information has been sent as well via SMS for your reference. </p> <br /> </div> '
+                    document.getElementById("turnaround-time-ref").style.display = "none";
+                    document.getElementById("payment-ref").style.display = "block";
+                }
+                else {
+                    document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN APPROVED</h3> <br /> <p class="font-weight-justy request-font"> We hope all is well with you and your family. </p> <br /> <p class="font-weight-justy request-font"> Your claim request has been approved. Kindly expect receipt of your benefit through your chosen payout method. You will receive an update when your benefit is ready for release. </p> <br /> <p> This information has been sent as well via SMS for your reference. </p> <br /> </div> '
+                    document.getElementById("turnaround-time-ref").style.display = "none";
+                    document.getElementById("payment-ref").style.display = "none";
+                }
+
+                allStepperActive()
+            }
+            else if (claimStatus.toLowerCase().trim() == 'denied1') {
+
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p class="font-weight-justy request-font"> Our sincerest condolences for your loss. </p> <br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We have reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. The policy you have provided doesn’t cover Death. </p> <br /> <p> We understand that you’re going through a tough time. For assistance, please feel free to reach out to us at BPI Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div> '
+                document.getElementById("turnaround-time-ref").style.display = "none";
+                document.getElementById("payment-ref").style.display = "none";
+
+                allStepperActive()
+            }
+            else if (claimStatus.toLowerCase().trim() == 'denied2') {
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p class="font-weight-justy request-font"> Our sincerest condolences for your loss. </p> <br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We have reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. The circumstances that led to the condition of the policy insured are not included in the provisions of policy. </p> <br /> <p> We understand that you’re going through a tough time. For assistance, please feel free to reach out to us at BPI Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div>'
+                document.getElementById("turnaround-time-ref").style.display = "none";
+                document.getElementById("payment-ref").style.display = "none";
+                allStepperActive()
+            }
+            else if (claimStatus.toLowerCase().trim() == 'denied3') {
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p class="font-weight-justy request-font"> Our sincerest condolences for your loss. </p> <br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We have reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. The BPI-Philam policy you provided does not cover the condition for which you are claiming a benefit. </p> <br /> <p> We understand that you’re going through a tough time. For assistance, please feel free to reach out to us at BPI Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div> '
+                document.getElementById("turnaround-time-ref").style.display = "none";
+                document.getElementById("payment-ref").style.display = "none";
+                allStepperActive()
+            }
+            else if (claimStatus.toLowerCase().trim() == 'denied4') {
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p class="font-weight-justy request-font"> Our sincerest condolences for your loss. </p> <br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We have reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. The BPI-Philam policy you provided and its benefits have ended last //Lapsation Date - Month DD, YYYY// due to non-payment of premium dues. </p> <br /> <p> We understand that you’re going through a tough time. For assistance, please feel free to reach out to us at BPI Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div> '
+                document.getElementById("turnaround-time-ref").style.display = "none";
+                document.getElementById("payment-ref").style.display = "none";
+                allStepperActive()
+            }
+        }
     }
+    else if (sourceSystem.toLowerCase().trim() == 'cms') {
+        if (docsPending == 'Y') {
+            var finalDocsList = '';
+            requirementsList.forEach(function (item) {
+                finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p>' + item.name + '</p> </div>'
+
+            });
+
+            document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR OTHER CLAIMS DOCUMENTS</h3> <br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We have reviewed your initial claim request submission and need the documents listed below to proceed with the assessment: </p> <br /> <p class="font-weight-normal request-font"> <div style="padding-left: 10px;"> ' + finalDocsList + ' </div> </p> <br /> <p> Don&#39;t worry, your Bancassurance Sales Executive at your nearest BPI or BPI Family Savings Bank may assist you in the submission.You may also submit via Vibe Customer Service Center at GF BPI - Philam Makati, 6811 Ayala Ave., 1226 Makati.If you have any questions regarding your claim request, please email us at BPI - Philam_CustomerService@aia.com. </p > <br /> </div > ';
+            document.getElementById("turnaround-time-ref").style.display = "block";
+            document.getElementById("payment-ref").style.display = "none";
+            twoStepperActive();
+        }
+        else {
+            if (claimStatus.toLowerCase().trim() == 'received') {
+                if (beneficiaryType.toLowerCase().trim() == 's') {
+                    document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST IS BEING PROCESSED</h3> <br /> <p class="font-weight-justy request-font"> Our sincerest condolences for your loss, ' + claimantFirstName + '. </p> <br /> <p class="font-weight-justy request-font"> We have received your claim request and it is now in process. Kindly expect an SMS update on the status of your request in 2 working days . </p> <br /> <p> Should additional requirements be needed, we will reach out to you immediately. </p> <br /> <p class="font-weight-normal request-font"> To check the status of your claims request, please type in your reference number ' + transactionNumber + ' <a href="main.html">here</a>. </p> </div> '
+                    document.getElementById("turnaround-time-ref").style.display = "block";
+                    document.getElementById("payment-ref").style.display = "none";
+                }
+                else {
+
+                    document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST IS BEING PROCESSED</h3> <br /> <p class="font-weight-justy request-font"> Our sincerest condolences for your loss. </p> <br /> <p class="font-weight-justy request-font"> We have received your claim request and it is now in process. Kindly expect an SMS update on the status of your request in 2 working days . </p> <br /> <p> Should additional requirements be needed, we will reach out to you immediately. </p> <br /> <p class="font-weight-normal request-font"> To check the status of your claims request, please type in your reference number ' + transactionNumber + ' <a href="main.html">here</a>. </p> </div> '
+                    document.getElementById("turnaround-time-ref").style.display = "block";
+                    document.getElementById("payment-ref").style.display = "none";
+
+                }
+                twoStepperActive();
+            }
+            else if (claimStatus.toLowerCase().trim() == 'approved') {
+                if (beneficiaryType.toLowerCase().trim() == 's') {
+                    document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN APPROVED</h3> <br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. Your claim request for BPI-Philam policy no. ' + policyNumber + ' has been approved. </p> <br /> <p class="font-weight-normal request-font"> You will receive the benefit of ' + currency + ' ' + claimAmount + ' through your chosen payout method. Please expect an update from us on the release of your benefit. </p> <br /> <p class="font-weight-normal request-font"> This information has been sent to you via SMS as well for your reference. </p> <br /> </div> '
+                    document.getElementById("turnaround-time-ref").style.display = "none";
+                    document.getElementById("payment-ref").style.display = "block";
+                }
+                else {
+                    document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN APPROVED</h3> <br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We would like to let you know that your claim request for BPI-Philam policy no. ' + policyNumber + ' has been approved . </p> <br /> <p class="font-weight-normal request-font"> You will receive the policy benefit through your chosen payout method. Please expect an update from us on when this will be released. </p> <br /> <p class="font-weight-normal request-font"> This information has been sent to you via SMS as well for your reference. </p> <br /> </div> '
+                    document.getElementById("turnaround-time-ref").style.display = "none";
+                    document.getElementById("payment-ref").style.display = "none";
+                }
+                allStepperActive()
+            }
+            else if (claimStatus.toLowerCase().trim() == 'denied1') {
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p>An update on your claim request</p><br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. The BPI-Philam policy contract does not have Death coverage. </p> <br /> <p class="font-weight-normal request-font"> We are sorry that this news is coming to you at a tough time, ' + claimantFirstName + '. If you wish to discuss the details of your claim, you may reach out to your Bancassurance Sales Executive or chat with Bessie at m.me/BessieofBPIPhilam. You may also email us at BPI-Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div> '
+                document.getElementById("turnaround-time-ref").style.display = "none";
+                document.getElementById("payment-ref").style.display = "none";
+
+                allStepperActive()
+            }
+            else if (claimStatus.toLowerCase().trim() == 'denied2') {
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p>An update on your claim request</p><br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. The circumstances that led to the claim are not included in the provisions of the BPI-Philam policy. </p> <br /> <p class="font-weight-normal request-font"> We are sorry that this news is coming to you at a tough time, ' + claimantFirstName + '. If you wish to discuss the details of your claim, you may reach out to your Bancassurance Sales Executive or chat with Bessie at m.me/BessieofBPIPhilam. You may also email us at BPI-Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div> '
+                document.getElementById("turnaround-time-ref").style.display = "none";
+                document.getElementById("payment-ref").style.display = "none";
+                allStepperActive()
+            }
+            else if (claimStatus.toLowerCase().trim() == 'denied3') {
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p>An update on your claim request</p><br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. The circumstances that led to the claim are not included in the provisions of the BPI-Philam policy. </p> <br /> <p class="font-weight-normal request-font"> We are sorry that this news is coming to you at a tough time, ' + claimantFirstName + '. If you wish to discuss the details of your claim, you may reach out to your Bancassurance Sales Executive or chat with Bessie at m.me/BessieofBPIPhilam. You may also email us at BPI-Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div> '
+                document.getElementById("turnaround-time-ref").style.display = "none";
+                document.getElementById("payment-ref").style.display = "none";
+                allStepperActive()
+            }
+            else if (claimStatus.toLowerCase().trim() == 'denied4') {
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p>An update on your claim request</p><br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. Your poliyc&#39;s coverage and all its benefits have ended last //Lapsation Date// due to non-payment of premium. </p> <br /> <p class="font-weight-normal request-font"> We are sorry that this news is coming to you at a tough time, ' + claimantFirstName + '. If you wish to discuss the details of your claim, you may reach out to your Bancassurance Sales Executive or chat with Bessie at m.me/BessieofBPIPhilam. You may also email us at BPI-Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div> '
+                document.getElementById("turnaround-time-ref").style.display = "none";
+                document.getElementById("payment-ref").style.display = "none";
+                allStepperActive()
+            }
+
+        }
+    }
+
+    // switch (claim_msg_type) {
+    //     case 'D-1':
+    //         document.getElementById('claim-msg-text').innerHTML = document.getElementById('D-1').innerHTML;
+    //         document.getElementById("payment-ref").style.display = "block";
+    //         document.getElementById("turnaround-time-ref").style.display = "none";
+    //         allStepperActive()
+    //         break;
+    //     case 'D-2':
+    //         document.getElementById('claim-msg-text').innerHTML = document.getElementById('D-2').innerHTML;
+    //         document.getElementById("payment-ref").style.display = "block";
+    //         document.getElementById("turnaround-time-ref").style.display = "none";
+    //         allStepperActive()
+    //         break;
+    //     default: 'No message'
+    //         break;
+    // }
 }
 // functions to set the message for each claim status //
 
@@ -598,7 +969,7 @@ function selectAnswer(quesn_num, id, selectedOption) {
 function submit_survey() {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-    var raw = JSON.stringify({ "companyName": "BPLAC", "TIPSReferenceNumber": referenceNumber, 'surveyQuestion1': surveyAns1, 'surveyQuestion2': surveyAns2, 'surveyQuestion3': surveyAns3 });
+    var raw = JSON.stringify({ "companyName": "BPLAC", "TIPSReferenceNumber": referenceNumber, 'surveyQuestion1': surveyAns1, 'surveyQuestion2': surveyAns2, 'surveyQuestion3': surveyAns3, "sourceSystem": sourceSystem, });
     var requestOptions = {
         method: 'POST',
         headers: myHeaders,
