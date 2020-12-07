@@ -37,13 +37,15 @@ form_Bank.addEventListener('submit', handleAccountInfo);
         animation: true
     })
 }) */
-window.addEventListener('message', function () {
+window.addEventListener('message', function (event) {
   // stepperFormEl = document.querySelector('#stepperForm')
   // stepperForm = new Stepper(stepperFormEl, {
   //     animation: true
   // })
   console.log("receiving hello event in acc JS.")
+  console.log(event)
 })
+
 document.addEventListener('otp', function () {
   // stepperFormEl = document.querySelector('#stepperForm')
   // stepperForm = new Stepper(stepperFormEl, {
