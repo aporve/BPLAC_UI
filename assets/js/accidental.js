@@ -37,12 +37,19 @@ form_Bank.addEventListener('submit', handleAccountInfo);
         animation: true
     })
 }) */
+document.addEventListener('hello', function () {
+  // stepperFormEl = document.querySelector('#stepperForm')
+  // stepperForm = new Stepper(stepperFormEl, {
+  //     animation: true
+  // })
+  console.log("receiving hello event in acc JS.")
+})
 document.addEventListener('otp', function () {
   // stepperFormEl = document.querySelector('#stepperForm')
   // stepperForm = new Stepper(stepperFormEl, {
   //     animation: true
   // })
-  console.log("receiving event in acc JS.")
+  console.log("receiving otp event in acc JS.")
 })
 
 function myDisable() {
