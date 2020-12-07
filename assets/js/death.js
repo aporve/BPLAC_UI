@@ -45,10 +45,10 @@ let botId = url.searchParams.get('botId');
 
 $('#privacy_consent_1').prop('checked', true);
 $('#privacy_consent_2').prop('checked', true);
-$('#privacy_consent_3').prop('checked', true);
+// $('#privacy_consent_3').prop('checked', true);
 $('#privacy_consent_beneficiary_1').prop('checked', true);
 $('#privacy_consent_beneficiary_2').prop('checked', true);
-$('#privacy_consent_beneficiary_3').prop('checked', true);
+// $('#privacy_consent_beneficiary_3').prop('checked', true);
 
 let basicInformation = {};
 let InsuredInformation = {};
@@ -1511,7 +1511,7 @@ function handleForm(event) {
             privacy_checkbox: $('#invalidCheck_privacy').is(':checked'),
             privacy_consent_1: $("#privacy_consent_1").is(":checked"),
             privacy_consent_2: $("#privacy_consent_2").is(":checked"),
-            privacy_consent_3: $("#privacy_consent_3").is(":checked")
+            // privacy_consent_3: $("#privacy_consent_3").is(":checked")
         }
 
         InsuredInformation["FirstName"] = field_firstName;
@@ -2770,7 +2770,7 @@ function addBeneficiary(event) {
         buttonCount = (buttonCount + 1);
         $('#privacy_consent_1').prop('checked', false);
         $('#privacy_consent_2').prop('checked', false);
-        $('#privacy_consent_3').prop('checked', false);
+        // $('#privacy_consent_3').prop('checked', false);
 
         $("#step1").addClass("active");
         $("#step2").removeClass("active");
@@ -2886,7 +2886,7 @@ function addBeneficiaryNew(event) {
 
             $('#privacy_consent_1').prop('checked', false);
             $('#privacy_consent_2').prop('checked', false);
-            $('#privacy_consent_3').prop('checked', false);
+            // $('#privacy_consent_3').prop('checked', false);
             $("#step1").addClass("active");
             $("#step2").removeClass("active");
             $("#step2>div").removeClass("active");
@@ -2925,7 +2925,7 @@ function screen() {
         if (isEmpty(data1) == true) {
             $('#privacy_consent_1').prop('checked', false);
             $('#privacy_consent_2').prop('checked', false);
-            $('#privacy_consent_3').prop('checked', false);
+            // $('#privacy_consent_3').prop('checked', false);
             $('#invalidCheck_privacyAddBeneficiary').prop('checked', false);
             $('#invalidCheck_basicAddBeneficiary').prop('checked', false);
             $("#step2").removeClass("active");
@@ -2937,7 +2937,7 @@ function screen() {
             if (trackaddBenificiary1 == 0) {
                 $('#privacy_consent_1').prop('checked', false);
                 $('#privacy_consent_2').prop('checked', false);
-                $('#privacy_consent_3').prop('checked', false);
+                // $('#privacy_consent_3').prop('checked', false);
                 /*  $("#step2").removeClass("active");
                  $("#step2>div").removeClass("active"); */
                 $("#step2").addClass("active");
@@ -2950,7 +2950,7 @@ function screen() {
             } else if ((trackaddBenificiary1 == 1) && (bpiCount == 0)) {
                 $('#privacy_consent_1').prop('checked', false);
                 $('#privacy_consent_2').prop('checked', false);
-                $('#privacy_consent_3').prop('checked', false);
+                // $('#privacy_consent_3').prop('checked', false);
                 $("#step2").addClass("active");
                 $("#step2>div").addClass("active");
                 $("#step3").remove("active");
@@ -2989,7 +2989,7 @@ function screen() {
         if (isEmpty(data2) == true) {
             $('#privacy_consent_1').prop('checked', false);
             $('#privacy_consent_2').prop('checked', false);
-            $('#privacy_consent_3').prop('checked', false);
+            // $('#privacy_consent_3').prop('checked', false);
             $('#invalidCheck_privacyAddBeneficiary').prop('checked', false);
             $('#invalidCheck_basicAddBeneficiary').prop('checked', false);
             $("#step2").removeClass("active");
@@ -3001,7 +3001,7 @@ function screen() {
             if (trackaddBenificiary2 == 0) {
                 $('#privacy_consent_1').prop('checked', false);
                 $('#privacy_consent_2').prop('checked', false);
-                $('#privacy_consent_3').prop('checked', false);
+                // $('#privacy_consent_3').prop('checked', false);
                 /*  $("#step2").removeClass("active");
                  $("#step2>div").removeClass("active"); */
                 $("#step2").addClass("active");
@@ -3014,7 +3014,7 @@ function screen() {
             } else if ((trackaddBenificiary2 == 1) && (bpiCount == 0)) {
                 $('#privacy_consent_1').prop('checked', false);
                 $('#privacy_consent_2').prop('checked', false);
-                $('#privacy_consent_3').prop('checked', false);
+                // $('#privacy_consent_3').prop('checked', false);
                 /*  $("#step2").removeClass("active");
                  $("#step2>div").removeClass("active"); */
                 $("#step2").addClass("active");
@@ -3028,7 +3028,7 @@ function screen() {
                 bpiCount = 0;
                 $('#privacy_consent_1').prop('checked', false);
                 $('#privacy_consent_2').prop('checked', false);
-                $('#privacy_consent_3').prop('checked', false);
+                // $('#privacy_consent_3').prop('checked', false);
                 $("#step2").addClass("active");
                 $("#step2>div").addClass("active");
                 $("#step3").remove("active");
@@ -3042,7 +3042,7 @@ function screen() {
         } else if (isEmpty(uppload_data2) == true) {
             $('#privacy_consent_1').prop('checked', false);
             $('#privacy_consent_2').prop('checked', false);
-            $('#privacy_consent_3').prop('checked', false);
+            // $('#privacy_consent_3').prop('checked', false);
             $("#step2").addClass("active");
             $("#step2>div").addClass("active");
             $("#step3").remove("active");
@@ -3060,7 +3060,7 @@ function screen() {
         if (isEmpty(data3) == true) {
             $('#privacy_consent_1').prop('checked', false);
             $('#privacy_consent_2').prop('checked', false);
-            $('#privacy_consent_3').prop('checked', false);
+            // $('#privacy_consent_3').prop('checked', false);
             $('#invalidCheck_privacyAddBeneficiary').prop('checked', false);
             $('#invalidCheck_basicAddBeneficiary').prop('checked', false);
             $("#step2").removeClass("active");
@@ -3072,7 +3072,7 @@ function screen() {
             if (trackaddBenificiary3 == 0) {
                 $('#privacy_consent_1').prop('checked', false);
                 $('#privacy_consent_2').prop('checked', false);
-                $('#privacy_consent_3').prop('checked', false);
+                // $('#privacy_consent_3').prop('checked', false);
                 /*  $("#step2").removeClass("active");
                  $("#step2>div").removeClass("active"); */
                 $("#step2").addClass("active");
@@ -3085,7 +3085,7 @@ function screen() {
             } else if ((trackaddBenificiary3 == 1) && (bpiCount == 0)) {
                 $('#privacy_consent_1').prop('checked', false);
                 $('#privacy_consent_2').prop('checked', false);
-                $('#privacy_consent_3').prop('checked', false);
+                // $('#privacy_consent_3').prop('checked', false);
                 /*  $("#step2").removeClass("active");
                  $("#step2>div").removeClass("active"); */
                 $("#step2").addClass("active");
@@ -3098,7 +3098,7 @@ function screen() {
                 bpiCount = 0;
                 $('#privacy_consent_1').prop('checked', false);
                 $('#privacy_consent_2').prop('checked', false);
-                $('#privacy_consent_3').prop('checked', false);
+                // $('#privacy_consent_3').prop('checked', false);
                 $("#step2").addClass("active");
                 $("#step2>div").addClass("active");
                 $("#step3").remove("active");
@@ -3112,7 +3112,7 @@ function screen() {
         } else if (isEmpty(uppload_data3) == true) {
             $('#privacy_consent_1').prop('checked', false);
             $('#privacy_consent_2').prop('checked', false);
-            $('#privacy_consent_3').prop('checked', false);
+            // $('#privacy_consent_3').prop('checked', false);
             $("#step2").addClass("active");
             $("#step2>div").addClass("active");
             $("#step3").remove("active");
@@ -3130,7 +3130,7 @@ function screen() {
         if (isEmpty(data4) == true) {
             $('#privacy_consent_1').prop('checked', false);
             $('#privacy_consent_2').prop('checked', false);
-            $('#privacy_consent_3').prop('checked', false);
+            // $('#privacy_consent_3').prop('checked', false);
             $('#invalidCheck_privacyAddBeneficiary').prop('checked', false);
             $('#invalidCheck_basicAddBeneficiary').prop('checked', false);
             $("#step2").removeClass("active");
@@ -3142,7 +3142,7 @@ function screen() {
             if (trackaddBenificiary4 == 0) {
                 $('#privacy_consent_1').prop('checked', false);
                 $('#privacy_consent_2').prop('checked', false);
-                $('#privacy_consent_3').prop('checked', false);
+                // $('#privacy_consent_3').prop('checked', false);
                 $("#step2").addClass("active");
                 $("#step2>div").addClass("active");
                 $("#step3").remove("active");
@@ -3153,7 +3153,7 @@ function screen() {
             } else if ((trackaddBenificiary4 == 1) && (bpiCount == 0)) {
                 $('#privacy_consent_1').prop('checked', false);
                 $('#privacy_consent_2').prop('checked', false);
-                $('#privacy_consent_3').prop('checked', false);
+                // $('#privacy_consent_3').prop('checked', false);
                 $("#step2").addClass("active");
                 $("#step2>div").addClass("active");
                 $("#step3").remove("active");
@@ -3191,7 +3191,7 @@ function screen() {
         if (isEmpty(data5) == true) {
             $('#privacy_consent_1').prop('checked', false);
             $('#privacy_consent_2').prop('checked', false);
-            $('#privacy_consent_3').prop('checked', false);
+            // $('#privacy_consent_3').prop('checked', false);
             $('#invalidCheck_privacyAddBeneficiary').prop('checked', false);
             $('#invalidCheck_basicAddBeneficiary').prop('checked', false);
             $("#step2").removeClass("active");
@@ -3203,7 +3203,7 @@ function screen() {
             if (trackaddBenificiary5 == 0) {
                 $('#privacy_consent_1').prop('checked', false);
                 $('#privacy_consent_2').prop('checked', false);
-                $('#privacy_consent_3').prop('checked', false);
+                // $('#privacy_consent_3').prop('checked', false);
                 /*  $("#step2").removeClass("active");
                  $("#step2>div").removeClass("active"); */
                 $("#step2").addClass("active");
@@ -3215,7 +3215,7 @@ function screen() {
             } else if ((trackaddBenificiary5 == 1) && (bpiCount == 0)) {
                 $('#privacy_consent_1').prop('checked', false);
                 $('#privacy_consent_2').prop('checked', false);
-                $('#privacy_consent_3').prop('checked', false);
+                // $('#privacy_consent_3').prop('checked', false);
                 $("#step2").addClass("active");
                 $("#step2>div").addClass("active");
                 $("#step3").remove("active");
@@ -3226,7 +3226,7 @@ function screen() {
                 bpiCount = 0;
                 $('#privacy_consent_1').prop('checked', false);
                 $('#privacy_consent_2').prop('checked', false);
-                $('#privacy_consent_3').prop('checked', false);
+                // $('#privacy_consent_3').prop('checked', false);
                 $("#step2").addClass("active");
                 $("#step2>div").addClass("active");
                 $("#step3").remove("active");
@@ -3240,7 +3240,7 @@ function screen() {
         } else if (isEmpty(uppload_data5) == true) {
             $('#privacy_consent_1').prop('checked', false);
             $('#privacy_consent_2').prop('checked', false);
-            $('#privacy_consent_3').prop('checked', false);
+            // $('#privacy_consent_3').prop('checked', false);
             $("#step2").addClass("active");
             $("#step2>div").addClass("active");
             $("#step3").remove("active");
@@ -3257,7 +3257,7 @@ function screen() {
         if (isEmpty(data6) == true) {
             $('#privacy_consent_1').prop('checked', false);
             $('#privacy_consent_2').prop('checked', false);
-            $('#privacy_consent_3').prop('checked', false);
+            // $('#privacy_consent_3').prop('checked', false);
             $('#invalidCheck_privacyAddBeneficiary').prop('checked', false);
             $('#invalidCheck_basicAddBeneficiary').prop('checked', false);
             $("#step2").removeClass("active");
@@ -3269,7 +3269,7 @@ function screen() {
             if (trackaddBenificiary6 == 0) {
                 $('#privacy_consent_1').prop('checked', false);
                 $('#privacy_consent_2').prop('checked', false);
-                $('#privacy_consent_3').prop('checked', false);
+                // $('#privacy_consent_3').prop('checked', false);
                 $("#step2").addClass("active");
                 $("#step2>div").addClass("active");
                 $("#step3").remove("active");
@@ -3280,7 +3280,7 @@ function screen() {
             } else if ((trackaddBenificiary6 == 1) && (bpiCount == 0)) {
                 $('#privacy_consent_1').prop('checked', false);
                 $('#privacy_consent_2').prop('checked', false);
-                $('#privacy_consent_3').prop('checked', false);
+                // $('#privacy_consent_3').prop('checked', false);
                 /*  $("#step2").removeClass("active");
                  $("#step2>div").removeClass("active"); */
                 $("#step2").addClass("active");
