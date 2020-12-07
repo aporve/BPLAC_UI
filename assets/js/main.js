@@ -28,6 +28,8 @@ var surveyAns2 = 0;
 var surveyQues3;
 var surveyAns3 = 0;
 var surveyObj = {};
+var survey_form = document.getElementById('customer_survey');
+survey_form.addEventListener('submit', submit_survey);
 function getAccidentPage() {
     console.log('get accident page ');
     window.parent.postMessage(JSON.stringify({
@@ -966,30 +968,65 @@ function selectAnswer(quesn_num, id, selectedOption) {
 
 }
 
-function submit_survey() {
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    var raw = JSON.stringify({ "companyName": "BPLAC", "TIPSReferenceNumber": referenceNumber, 'surveyQuestion1': surveyAns1, 'surveyQuestion2': surveyAns2, 'surveyQuestion3': surveyAns3, "sourceSystem": sourceSystem, });
-    var requestOptions = {
-        method: 'POST',
-        headers: myHeaders,
-        body: raw
-    };
-    fetch("http://localhost:3000/survey", requestOptions).then((response) => response.json())
-        .then(response => {
+function submit_survey(event) {
 
-            if (response.returnCode == '0') {
+    event.preventDefault();
+    var survey_data = {};
+    survey_data['companyName'] = 'BPLAC';
+    survey_data['TIPSReferenceNumber'] = referenceNumber;
+    survey_data['sourceSystem'] = sourceSystem;
+    survey_data['surveyQuestion1'] = surveyAns1;
+    survey_data['surveyQuestion2'] = surveyAns2;
+    survey_data['surveyQuestion3'] = surveyAns3;
 
-                var nodes = document.getElementById("customer_survey").getElementsByTagName('*');
-                for (var i = 0; i < nodes.length; i++) {
-                    nodes[i].disabled = true;
-                    nodes[i].style.cursor = 'no-drop'
-
-                }
-                document.getElementById("customer_survey").style.opacity = '0.65'
+    // let surveyData = {
+    //     stageOne: true,
+    //     type: "survey",
+    //     referenceNumber: referenceNumber,
+    //     data: survey_data
+    // }
+    window.parent.postMessage(JSON.stringify({
+        event_code: 'ym-client-event', data: JSON.stringify({
+            event: {
+                code: "customer_survey",
+                data: JSON.stringify(survey_data)
             }
+        })
+    }), '*');
 
-        }).catch(error => {
-            console.log(error)
-        });
+    var nodes = document.getElementById("customer_survey").getElementsByTagName('*');
+    for (var i = 0; i < nodes.length; i++) {
+        nodes[i].disabled = true;
+        nodes[i].style.cursor = 'no-drop'
+
+    }
+    document.getElementById("customer_survey").style.opacity = '0.65'
+
+
+
+    // var myHeaders = new Headers();
+    // myHeaders.append("Content-Type", "application/json");
+    // var raw = JSON.stringify({ "companyName": "BPLAC", "TIPSReferenceNumber": referenceNumber, 'surveyQuestion1': surveyAns1, 'surveyQuestion2': surveyAns2, 'surveyQuestion3': surveyAns3, "sourceSystem": sourceSystem, });
+    // var requestOptions = {
+    //     method: 'POST',
+    //     headers: myHeaders,
+    //     body: raw
+    // };
+    // fetch("http://localhost:3000/survey", requestOptions).then((response) => response.json())
+    //     .then(response => {
+
+    //         if (response.returnCode == '0') {
+
+    //             var nodes = document.getElementById("customer_survey").getElementsByTagName('*');
+    //             for (var i = 0; i < nodes.length; i++) {
+    //                 nodes[i].disabled = true;
+    //                 nodes[i].style.cursor = 'no-drop'
+
+    //             }
+    //             document.getElementById("customer_survey").style.opacity = '0.65'
+    //         }
+
+    //     }).catch(error => {
+    //         console.log(error)
+    //     });
 }
