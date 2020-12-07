@@ -31,12 +31,15 @@ form_addBank.addEventListener('submit', handleAddBankInfo);
 form.addEventListener('submit', handleForm);
 form_Bank.addEventListener('submit', handleAccountInfo);
 
-/* document.addEventListener('DOMContentLoaded', function () {
-    stepperFormEl = document.querySelector('#stepperForm')
-    stepperForm = new Stepper(stepperFormEl, {
-        animation: true
-    })
-}) */
+document.addEventListener('otp', function () {
+    // stepperFormEl = document.querySelector('#stepperForm')
+    // stepperForm = new Stepper(stepperFormEl, {
+    //     animation: true
+    // })
+    console.log("receiving event in acc JS.")
+})
+
+
   function myDisable() {
   document.getElementById("submit9").disabled = true;
   document.getElementById("submit9").style.cursor = "no-drop";
