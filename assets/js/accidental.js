@@ -37,7 +37,7 @@ form_Bank.addEventListener('submit', handleAccountInfo);
         animation: true
     })
 }) */
-document.addEventListener('hello', function () {
+window.addEventListener('message', function () {
   // stepperFormEl = document.querySelector('#stepperForm')
   // stepperForm = new Stepper(stepperFormEl, {
   //     animation: true
