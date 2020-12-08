@@ -2188,7 +2188,7 @@ var invalidOtp = 0;
 
 // otp timer function
 function otpTimer() {
-  if (resendCount <= 3) {
+  if (resendCount <= 5) {
     $('#otpPopUp').modal('show');
     if (remaining == 120) {
       duration = setInterval(otpTimer, 1000);
@@ -2226,7 +2226,9 @@ function resendOtp(type) {
   //api call for resend otp
   removeTimer();
   resendCount++;
+  
   if (resendCount > 5) {
+    debugger
     $('#otpPopUp').modal('hide');
     $('#invalidOtp').modal('hide');
     $('#maxResendOtp').modal('show');
@@ -2249,20 +2251,22 @@ function resendOtp(type) {
     fetch("http://localhost:3000/resend_otp", requestOptions).then((response) => response.json())
       .then(response => {
         console.log(response)
+      
         if (response.returnCode == '0') { //sucess
-          $('#otpPopUp').modal('hide');
-          $('#requirements').hide();
-          $('#payment').show();
+          $('#invalidOtp').modal('hide');
+          if (type != 'resend') { $('#otpPopUp').modal('show'); }
+          document.getElementById('otp').value = ''
+          otpTimer();
         }
         else {
-          invalidOtp++;
-          if (invalidOtp <= 3) {
-            $('#invalidOtp').modal('show');
-          }
-          else {
-            $('#invalidOtp').modal('hide');
-            $('#maxInvalidOtp').modal('show');
-          }
+          // invalidOtp++;
+          // if (invalidOtp <= 3) {
+          //   $('#invalidOtp').modal('show');
+          // }
+          // else {
+          //   $('#invalidOtp').modal('hide');
+          //   $('#maxInvalidOtp').modal('show');
+          // }
 
         }
 
@@ -2270,10 +2274,10 @@ function resendOtp(type) {
         console.log(error)
       });
 
-    $('#invalidOtp').modal('hide');
-    if (type != 'resend') { $('#otpPopUp').modal('show'); }
-    document.getElementById('otp').value = ''
-    otpTimer();
+    // $('#invalidOtp').modal('hide');
+    // if (type != 'resend') { $('#otpPopUp').modal('show'); }
+    // document.getElementById('otp').value = ''
+    // otpTimer();
   }
   $('#otpExpiry').modal('hide');
 

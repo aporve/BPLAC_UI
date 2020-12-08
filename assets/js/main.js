@@ -6,12 +6,14 @@ var transactionNumber;
 var claim_type;
 var subType;
 var disbursementType;
-var beneficiaryType;
+// var beneficiaryType;
 var claimStatus;
 var docsPending;
 var docsReceived;
 var policyNumber;
 var claimantFirstName;
+var beneficiaryCount;
+var lapsationDate;
 // var denialTag;
 var claimAmount;
 var currency;
@@ -153,7 +155,8 @@ function trackProgress() {
                 }
                 transactionNumber = response.transactionNumber;
                 disbursementType = response.disbursementType;
-                beneficiaryType = response.beneficiaryType;
+                beneficiaryCount = response.beneficiaryCount;
+                lapsationDate = response.lapsationDate;
                 claimStatus = response.claimStatus;
                 docsPending = response.docsPending;
                 docsReceived = response.docsReceived;
@@ -324,7 +327,7 @@ function setAccidentClaimStatusMsg() {
                 allStepperActive()
             }
             else if (claimStatus.toLowerCase().trim() == 'denied4') {
-                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p class="font-weight-justy request-font"> An update on your claim request </p> <br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We have reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. Your coverage and all its benefits have ended last //Lapsation Date - Month DD, YYYY// due to non-payment of premium dues. </p> <br /> <p> We wish you a speedy recovery. </p> <br /> <p> If you have any questions, or would like to reinstate your policy, you may reach out to us by chatting with Bessie the chatbot at m.me/BessieofBPIPhilam. You may also email us at BPI Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div> '
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p class="font-weight-justy request-font"> An update on your claim request </p> <br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We have reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. Your coverage and all its benefits have ended last ' + lapsationDate +' due to non-payment of premium dues. </p> <br /> <p> We wish you a speedy recovery. </p> <br /> <p> If you have any questions, or would like to reinstate your policy, you may reach out to us by chatting with Bessie the chatbot at m.me/BessieofBPIPhilam. You may also email us at BPI Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div> '
                 document.getElementById("turnaround-time-ref").style.display = "none";
                 document.getElementById("payment-ref").style.display = "none";
                 allStepperActive()
@@ -379,7 +382,7 @@ function setAccidentClaimStatusMsg() {
                 allStepperActive()
             }
             else if (claimStatus.toLowerCase().trim() == 'denied4') {
-                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p>An update on your claim request</p><br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. Your policy&#39;s coverage and all its benefits have ended last //Lapsation Date// due to non-payment of premium dues. </p> <br /> <p class="font-weight-normal request-font"> We understand that you&#39;re going through a tough time, ' + claimantFirstName + '. If you wish reinstate your policy, your Bancassurance Sales Executive will be ready to assist you. </p> <br /> <p class="font-weight-normal request-font"> You may also chat with Bessie at m.me/BessieofBPIPhilam, email us at at BPI-Philam_CustomerService@aia.com, or call us at (02) 8528-5501. </p> <br /> </div> '
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p>An update on your claim request</p><br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. Your policy&#39;s coverage and all its benefits have ended last ' + lapsationDate +' due to non-payment of premium dues. </p> <br /> <p class="font-weight-normal request-font"> We understand that you&#39;re going through a tough time, ' + claimantFirstName + '. If you wish reinstate your policy, your Bancassurance Sales Executive will be ready to assist you. </p> <br /> <p class="font-weight-normal request-font"> You may also chat with Bessie at m.me/BessieofBPIPhilam, email us at at BPI-Philam_CustomerService@aia.com, or call us at (02) 8528-5501. </p> <br /> </div> '
                 document.getElementById("turnaround-time-ref").style.display = "none";
                 document.getElementById("payment-ref").style.display = "none";
                 allStepperActive()
@@ -533,7 +536,7 @@ function setIllnessClaimStatusMsg() {
                 allStepperActive()
             }
             else if (claimStatus.toLowerCase().trim() == 'denied4') {
-                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p class="font-weight-justy request-font"> An update on your claim request </p> <br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We have reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. Your coverage and all its benefits have ended last //Lapsation Date - Month DD, YYYY// due to non-payment of premium dues. </p> <br /> <p> We wish you a speedy recovery. </p> <br /> <p> If you have any questions, or would like to reinstate your policy, you may reach out to us by chatting with Bessie the chatbot at m.me/BessieofBPIPhilam. You may also email us at BPI Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div> '
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p class="font-weight-justy request-font"> An update on your claim request </p> <br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We have reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. Your coverage and all its benefits have ended last ' + lapsationDate +' due to non-payment of premium dues. </p> <br /> <p> We wish you a speedy recovery. </p> <br /> <p> If you have any questions, or would like to reinstate your policy, you may reach out to us by chatting with Bessie the chatbot at m.me/BessieofBPIPhilam. You may also email us at BPI Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div> '
                 document.getElementById("turnaround-time-ref").style.display = "none";
                 document.getElementById("payment-ref").style.display = "none";
                 allStepperActive()
@@ -587,7 +590,7 @@ function setIllnessClaimStatusMsg() {
                 allStepperActive()
             }
             else if (claimStatus.toLowerCase().trim() == 'denied4') {
-                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p>An update on your claim request</p><br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. Your policy&#39;s coverage and all its benefits have ended last //Lapsation Date// due to non-payment of premium dues. </p> <br /> <p class="font-weight-normal request-font"> We understand that you&#39;re going through a tough time, ' + claimantFirstName + '. If you wish reinstate your policy, your Bancassurance Sales Executive will be ready to assist you. </p> <br /> <p class="font-weight-normal request-font"> You may also chat with Bessie at m.me/BessieofBPIPhilam, email us at at BPI-Philam_CustomerService@aia.com, or call us at (02) 8528-5501. </p> <br /> </div> '
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p>An update on your claim request</p><br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. Your policy&#39;s coverage and all its benefits have ended last ' + lapsationDate +' due to non-payment of premium dues. </p> <br /> <p class="font-weight-normal request-font"> We understand that you&#39;re going through a tough time, ' + claimantFirstName + '. If you wish reinstate your policy, your Bancassurance Sales Executive will be ready to assist you. </p> <br /> <p class="font-weight-normal request-font"> You may also chat with Bessie at m.me/BessieofBPIPhilam, email us at at BPI-Philam_CustomerService@aia.com, or call us at (02) 8528-5501. </p> <br /> </div> '
                 document.getElementById("turnaround-time-ref").style.display = "none";
                 document.getElementById("payment-ref").style.display = "none";
                 allStepperActive()
@@ -640,7 +643,7 @@ function setDeathClaimStatusMsg() {
         }
         else {
             if (claimStatus.toLowerCase().trim() == 'received') {
-                if (beneficiaryType.toLowerCase().trim() == 's') {
+                if (beneficiaryCount < 1) {
                     document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST IS BEING PROCESSED</h3> <br /> <p class="font-weight-justy request-font"> Our sincerest condolences for your loss, ' + claimantFirstName + '. </p> <br /> <p class="font-weight-justy request-font"> We have received your claim request and it is now in process. Kindly expect an SMS update on the status of your request in 2 working days . </p> <br /> <p> Should additional requirements be needed, we will reach out to you immediately. </p> <br /> <p class="font-weight-normal request-font"> To check the status of your claims request, please type in your reference number ' + transactionNumber + ' <a href="main.html">here</a>. </p> </div> '
                     document.getElementById("turnaround-time-ref").style.display = "block";
                     document.getElementById("payment-ref").style.display = "none";
@@ -655,7 +658,7 @@ function setDeathClaimStatusMsg() {
                 twoStepperActive();
             }
             else if (claimStatus.toLowerCase().trim() == 'approved') {
-                if (beneficiaryType.toLowerCase().trim() == 's') {
+                if (beneficiaryCount < 1) {
                     document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN APPROVED</h3> <br /> <p class="font-weight-justy request-font"> We hope all is well, ' + claimantFirstName + ' </p> <br /> <p class="font-weight-justy request-font"> Your claim request has been approved. Kindly expect receipt of your benefit through your chosen payout method. You will receive an update when your benefit is ready for release. </p> <br /> <p> This information has been sent as well via SMS for your reference. </p> <br /> </div> '
                     document.getElementById("turnaround-time-ref").style.display = "none";
                     document.getElementById("payment-ref").style.display = "block";
@@ -689,7 +692,7 @@ function setDeathClaimStatusMsg() {
                 allStepperActive()
             }
             else if (claimStatus.toLowerCase().trim() == 'denied4') {
-                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p class="font-weight-justy request-font"> Our sincerest condolences for your loss. </p> <br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We have reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. The BPI-Philam policy you provided and its benefits have ended last //Lapsation Date - Month DD, YYYY// due to non-payment of premium dues. </p> <br /> <p> We understand that you’re going through a tough time. For assistance, please feel free to reach out to us at BPI Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div> '
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p class="font-weight-justy request-font"> Our sincerest condolences for your loss. </p> <br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We have reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. The BPI-Philam policy you provided and its benefits have ended last ' + lapsationDate +' due to non-payment of premium dues. </p> <br /> <p> We understand that you’re going through a tough time. For assistance, please feel free to reach out to us at BPI Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div> '
                 document.getElementById("turnaround-time-ref").style.display = "none";
                 document.getElementById("payment-ref").style.display = "none";
                 allStepperActive()
@@ -711,7 +714,7 @@ function setDeathClaimStatusMsg() {
         }
         else {
             if (claimStatus.toLowerCase().trim() == 'received') {
-                if (beneficiaryType.toLowerCase().trim() == 's') {
+                if (beneficiaryCount < 1) {
                     document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST IS BEING PROCESSED</h3> <br /> <p class="font-weight-justy request-font"> Our sincerest condolences for your loss, ' + claimantFirstName + '. </p> <br /> <p class="font-weight-justy request-font"> We have received your claim request and it is now in process. Kindly expect an SMS update on the status of your request in 2 working days . </p> <br /> <p> Should additional requirements be needed, we will reach out to you immediately. </p> <br /> <p class="font-weight-normal request-font"> To check the status of your claims request, please type in your reference number ' + transactionNumber + ' <a href="main.html">here</a>. </p> </div> '
                     document.getElementById("turnaround-time-ref").style.display = "block";
                     document.getElementById("payment-ref").style.display = "none";
@@ -726,7 +729,7 @@ function setDeathClaimStatusMsg() {
                 twoStepperActive();
             }
             else if (claimStatus.toLowerCase().trim() == 'approved') {
-                if (beneficiaryType.toLowerCase().trim() == 's') {
+                if (beneficiaryCount < 1) {
                     document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN APPROVED</h3> <br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. Your claim request for BPI-Philam policy no. ' + policyNumber + ' has been approved. </p> <br /> <p class="font-weight-normal request-font"> You will receive the benefit of ' + currency + ' ' + claimAmount + ' through your chosen payout method. Please expect an update from us on the release of your benefit. </p> <br /> <p class="font-weight-normal request-font"> This information has been sent to you via SMS as well for your reference. </p> <br /> </div> '
                     document.getElementById("turnaround-time-ref").style.display = "none";
                     document.getElementById("payment-ref").style.display = "block";
@@ -758,7 +761,7 @@ function setDeathClaimStatusMsg() {
                 allStepperActive()
             }
             else if (claimStatus.toLowerCase().trim() == 'denied4') {
-                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p>An update on your claim request</p><br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. Your poliyc&#39;s coverage and all its benefits have ended last //Lapsation Date// due to non-payment of premium. </p> <br /> <p class="font-weight-normal request-font"> We are sorry that this news is coming to you at a tough time, ' + claimantFirstName + '. If you wish to discuss the details of your claim, you may reach out to your Bancassurance Sales Executive or chat with Bessie at m.me/BessieofBPIPhilam. You may also email us at BPI-Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div> '
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p>An update on your claim request</p><br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. Your poliyc&#39;s coverage and all its benefits have ended last ' + lapsationDate +' due to non-payment of premium. </p> <br /> <p class="font-weight-normal request-font"> We are sorry that this news is coming to you at a tough time, ' + claimantFirstName + '. If you wish to discuss the details of your claim, you may reach out to your Bancassurance Sales Executive or chat with Bessie at m.me/BessieofBPIPhilam. You may also email us at BPI-Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div> '
                 document.getElementById("turnaround-time-ref").style.display = "none";
                 document.getElementById("payment-ref").style.display = "none";
                 allStepperActive()
@@ -848,35 +851,63 @@ function twoStepperActive() {
 /* -------functions for stepper------ */
 
 function trackProgressDropDown(trackMessagesArr) {
-    //to be reomvesd -testing
-    if (claim_msg_type == 'A-1') {
-        trackMessagesArr = [1, 4, 5, 7, 8] // for testing - to be removed
-    }
-    if (claim_msg_type == 'I-2') {
-        trackMessagesArr = [2, 4, 6, 7, 8, 9, 11] // for testing - to be removed
-    }
 
-    if (claim_msg_type == 'D-2') {
-        trackMessagesArr = [3, 4, 6, 7, 11, 12] // for testing - to be removed
-    }
-    else {
-        trackMessagesArr = [1, 4, 5, 7, 8] // for testing - to be removed
-    }
-    //to be reomved -testing
+    var final_progress_result = ''
+    final_progress_result = '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + progress_msges[0]['msg'] + claim_type.toLowerCase() + '</div></div></div>' +
+        '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + progress_msges[1]['msg'] + '</div></div></div>' +
+        (claim_type == 'Accident' || claim_type == 'Illness' ?
+            '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + 'You have chosen ' + disbursementType + ' as a preferred payout method' + '</div></div></div>' :
+        beneficiaryCount < 1 ?
+                '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + 'You have chosen ' + disbursementType + ' as a preferred payout method' + '</div></div></div>' :
+                '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + 'You have chosen your preferred payout methods.' + '</div></div></div>')
+        + (claimStatus.toLowerCase() == 'received' ?
+            '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + progress_msges[4]['msg'] + '</div></div></div>' : '') +
+        (docsPending.toLowerCase() == 'y' && docsReceived.toLowerCase() == 'n' ?
+            '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + progress_msges[5]['msg'] + '</div></div></div>' :
+            (docsPending.toLowerCase() == 'n' && docsReceived.toLowerCase() == 'y' ?
+                '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + progress_msges[5]['msg'] + '</div></div></div>' +
+                '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + progress_msges[6]['msg'] + '</div></div></div>' : docsPending.toLowerCase() == 'y' && docsReceived.toLowerCase() == 'y' ? '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + progress_msges[5]['msg'] + '</div></div></div>' + '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + progress_msges[6]['msg'] + '</div></div></div>' : ''))
+        + (claimStatus == 'denied1' || claimStatus == 'denied2' || claimStatus == 'denied3' || claimStatus == 'denied4' ?
+            '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + progress_msges[7]['msg'] + '</div></div></div>' :
+            '')
+        + (claimStatus == 'approved' ?
+            '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + progress_msges[8]['msg'] + '</div></div></div>' + '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + progress_msges[11]['msg'] + '</div></div></div>' :
+            '')
+        + (claimStatus == 'approved' && disbursementType == 'CTA' && beneficiaryCount < 1 ?
+            '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + progress_msges[12]['msg'] + '</div></div></div>'
+        : claimStatus == 'approved' && disbursementType == 'PUA' && beneficiaryCount < 1 ? '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + progress_msges[9]['msg'] + '</div></div></div>' : '')
+    document.getElementById('progs-status').innerHTML = final_progress_result
 
-    var finaltext = '';
-    trackMessagesArr.forEach(function (item) {
-        progress_msges.forEach(function (msg) {
-            if (item == msg['id']) {
-                finaltext = finaltext + '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + msg['msg'] + '</div></div></div>'
-                // break;
-            }
+    //--before integration--//
+    // //to be reomvesd -testing
+    // if (claim_msg_type == 'A-1') {
+    //     trackMessagesArr = [1, 4, 5, 7, 8] // for testing - to be removed
+    // }
+    // if (claim_msg_type == 'I-2') {
+    //     trackMessagesArr = [2, 4, 6, 7, 8, 9, 11] // for testing - to be removed
+    // }
 
-        })
+    // if (claim_msg_type == 'D-2') {
+    //     trackMessagesArr = [3, 4, 6, 7, 11, 12] // for testing - to be removed
+    // }
+    // else {
+    //     trackMessagesArr = [1, 4, 5, 7, 8] // for testing - to be removed
+    // }
+    // //to be reomved -testing
 
-    });
-    console.log('finaltext' + finaltext)
-    document.getElementById('progs-status').innerHTML = finaltext // set the populated dropdown details to html
+    // var finaltext = '';
+    // trackMessagesArr.forEach(function (item) {
+    //     progress_msges.forEach(function (msg) {
+    //         if (item == msg['id']) {
+    //             finaltext = finaltext + '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + msg['msg'] + '</div></div></div>'
+    //             // break;
+    //         }
+
+    //     })
+
+    // });
+    // console.log('finaltext' + finaltext)
+    // document.getElementById('progs-status').innerHTML = finaltext // set the populated dropdown details to html
 }
 
 
