@@ -1312,7 +1312,8 @@
                                 </p>
                                 <br />
                                 <p class="font-weight-normal">
-                                    You may also check the progress of your request at <a href="">Status Tracker</a>. Just
+                                    You may also check the progress of your request at <a href="">Status Tracker</a>.
+                                    Just
                                     type in your reference number to view the status of your
                                     request.
                                 </p>
@@ -1748,7 +1749,7 @@
         </section>
         <!-- otp pop up modal (drop-2 ) -->
         <section class="hide modal fade" id="otpPopUp" tabindex="-1" role="dialog" aria-labelledby="otpPopUp"
-            aria-hidden="true">
+            aria-hidden="true" data-backdrop="static" data-keyboard="false">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-body">
@@ -1770,8 +1771,12 @@
 
                         <div align="right">Time left : <span id="otpTimer"></span></div>
                     </div>
-                    <button type="button" data-dismiss="modal" class="btn btn-danger" onclick="submitOtp(event)"
+
+                    <button id='otp-btn' type="button" class="btn btn-danger" onclick="submitOtp(event)"
                         style="width: 50%; margin: 0 auto 3rem auto;">Submit</button>
+                    <button id='loader-btn' type="button" class="btn btn-danger"
+                        style="width: 50%; margin: 0 auto 3rem auto;padding: 0;display: none"><span
+                            class="loading"></span></button>
                 </div>
 
             </div>
@@ -1780,7 +1785,7 @@
 
         <!-- Empty mobile number  modal (drop-2 ) -->
         <section class="hide modal fade" id="emptyMobileNumPopUp" tabindex="-1" role="dialog"
-            aria-labelledby="emptyMobileNumPopUp" aria-hidden="true">
+            aria-labelledby="emptyMobileNumPopUp" aria-hidden="true" data-backdrop="static" data-keyboard="false">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-body">
@@ -1803,7 +1808,7 @@
 
         <!-- Invalid Otp modal (drop-2 ) -->
         <section class="hide modal fade" id="invalidOtp" tabindex="-1" role="dialog" aria-labelledby="invalidOtp"
-            aria-hidden="true">
+            aria-hidden="true" data-backdrop="static" data-keyboard="false">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-body">
@@ -1827,7 +1832,7 @@
 
         <!--Otp expiry modal (drop-2 ) -->
         <section class="hide modal fade" id="otpExpiry" tabindex="-1" role="dialog" aria-labelledby="otpExpiry"
-            aria-hidden="true">
+            aria-hidden="true" data-backdrop="static" data-keyboard="false">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-body">
@@ -1848,7 +1853,7 @@
 
         <!--Resend otp max number exceed (drop-2 ) -->
         <section class="hide modal fade" id="maxResendOtp" tabindex="-1" role="dialog" aria-labelledby="maxResendOtp"
-            aria-hidden="true">
+            aria-hidden="true" data-backdrop="static" data-keyboard="false">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-body">
@@ -1867,7 +1872,7 @@
 
         <!-- Max Invalid Otp  modal (drop-2 ) -->
         <section class="hide modal fade" id="maxInvalidOtp" tabindex="-1" role="dialog" aria-labelledby="maxInvalidOtp"
-            aria-hidden="true">
+            aria-hidden="true" data-backdrop="static" data-keyboard="false">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-body">

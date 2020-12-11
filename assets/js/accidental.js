@@ -2188,6 +2188,8 @@ var invalidOtp = 0;
 
 // otp timer function
 function otpTimer() {
+  document.getElementById('otp-btn').style.display = 'block'
+  document.getElementById('loader-btn').style.display = 'none'
   if (resendCount <= 5) {
     $('#otpPopUp').modal('show');
     if (remaining == 120) {
@@ -2223,63 +2225,136 @@ function removeTimer() {
 }
 
 function resendOtp(type) {
-  //api call for resend otp
+  
   removeTimer();
   resendCount++;
-  
-  if (resendCount > 5) {
-    debugger
+  if (resendCount > 5) { // on reaching max resend (5 times)
     $('#otpPopUp').modal('hide');
     $('#invalidOtp').modal('hide');
     $('#maxResendOtp').modal('show');
 
   }
   else {
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    var raw = JSON.stringify({
+    document.getElementById('otp-btn').style.display = 'none'
+    document.getElementById('loader-btn').style.display = 'block'
+    var source = 'Accident'
+    var validateOtpPayload = {}
 
+    var raw = JSON.stringify({
       "companyName": "BPLAC",
       "webReferenceNumber": referenceNumber
 
     });
-    var requestOptions = {
-      method: 'POST',
-      headers: myHeaders,
-      body: raw
-    };
-    fetch("http://localhost:3000/resend_otp", requestOptions).then((response) => response.json())
-      .then(response => {
-        console.log(response)
-      
-        if (response.returnCode == '0') { //sucess
-          $('#invalidOtp').modal('hide');
-          if (type != 'resend') { $('#otpPopUp').modal('show'); }
-          document.getElementById('otp').value = ''
-          otpTimer();
+
+    validateOtpPayload['source'] = source;
+    validateOtpPayload['data'] = raw;
+    window.parent.postMessage(JSON.stringify({
+      event_code: 'ym-client-event', data: JSON.stringify({
+        event: {
+          code: "resetOtp",
+          data: validateOtpPayload
+        }
+      })
+    }), '*');
+
+    window.addEventListener('message', function (eventData) {
+
+      console.log("receiving otp event in acc")
+      // console.log(event.data.event_code)
+      try {
+
+        if (eventData.data) {
+          let event = JSON.parse(eventData.data);
+          if (event.event_code == 'resetResponse') { //sucess
+
+            console.log(event.data)
+            if (event.data.returnCode == '0') {
+              $('#invalidOtp').modal('hide');
+              if (type != 'resend') { $('#otpPopUp').modal('show'); }
+              document.getElementById('otp').value = ''
+              otpTimer();
+            }
+            else {
+              // $('#otpPopUp').modal('hide');
+
+            }
+          }
+          else {
+            // $('#otpPopUp').modal('hide');
+          }
         }
         else {
-          // invalidOtp++;
-          // if (invalidOtp <= 3) {
-          //   $('#invalidOtp').modal('show');
-          // }
-          // else {
-          //   $('#invalidOtp').modal('hide');
-          //   $('#maxInvalidOtp').modal('show');
-          // }
-
+          // $('#otpPopUp').modal('hide');
         }
-
-      }).catch(error => {
+      } catch (error) {
         console.log(error)
-      });
+        alert(error);
+        // $('#otpPopUp').modal('hide');
+      }
 
-    // $('#invalidOtp').modal('hide');
-    // if (type != 'resend') { $('#otpPopUp').modal('show'); }
-    // document.getElementById('otp').value = ''
-    // otpTimer();
+    })
+    $('#otpExpiry').modal('hide');
   }
-  $('#otpExpiry').modal('hide');
+
+
+
+  // //api call for resend otp
+  // removeTimer();
+  // resendCount++;
+  
+  // if (resendCount > 5) {
+  //   debugger
+  //   $('#otpPopUp').modal('hide');
+  //   $('#invalidOtp').modal('hide');
+  //   $('#maxResendOtp').modal('show');
+
+  // }
+  // else {
+  //   var myHeaders = new Headers();
+  //   myHeaders.append("Content-Type", "application/json");
+  //   var raw = JSON.stringify({
+
+  //     "companyName": "BPLAC",
+  //     "webReferenceNumber": referenceNumber
+
+  //   });
+  //   var requestOptions = {
+  //     method: 'POST',
+  //     headers: myHeaders,
+  //     body: raw
+  //   };
+  //   fetch("http://localhost:3000/resend_otp", requestOptions).then((response) => response.json())
+  //     .then(response => {
+  //       console.log(response)
+      
+  //       if (response.returnCode == '0') { //sucess
+  //         $('#invalidOtp').modal('hide');
+  //         if (type != 'resend') { $('#otpPopUp').modal('show'); }
+  //         document.getElementById('otp').value = ''
+  //         otpTimer();
+  //       }
+  //       else {
+  //         // invalidOtp++;
+  //         // if (invalidOtp <= 3) {
+  //         //   $('#invalidOtp').modal('show');
+  //         // }
+  //         // else {
+  //         //   $('#invalidOtp').modal('hide');
+  //         //   $('#maxInvalidOtp').modal('show');
+  //         // }
+
+  //       }
+
+  //     }).catch(error => {
+  //       console.log(error)
+  //     });
+
+  //   // $('#invalidOtp').modal('hide');
+  //   // if (type != 'resend') { $('#otpPopUp').modal('show'); }
+  //   // document.getElementById('otp').value = ''
+  //   // otpTimer();
+  // }
+  // $('#otpExpiry').modal('hide');
 
   //--befre api intgrtn--//
   // removeTimer();
@@ -2301,47 +2376,126 @@ function resendOtp(type) {
 }
 
 function submitOtp() {
-
-  //--api call fro submit otp--//
+  document.getElementById('otp-btn').style.display = 'none'
+  document.getElementById('loader-btn').style.display = 'block'
   removeTimer();
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
+  // $('#three-dot-loader').show()
+  var source = 'Accident'
   var raw = JSON.stringify({
     "oneTimePINInformation": {
       "companyName": "BPLAC",
       "webReferenceNumber": referenceNumber,
       "oneTimePIN": document.getElementById('otp').value
     }
+
   });
-  var requestOptions = {
-    method: 'POST',
-    headers: myHeaders,
-    body: raw
-  };
-  fetch("http://localhost:3000/otp_verification", requestOptions).then((response) => response.json())
-    .then(response => {
-      console.log(response)
-      if (response.returnCode == '0') { //sucess
-        $('#otpPopUp').modal('hide');
-        $('#requirements').hide();
-        $('#payment').show();
-        otpSubmitted = true;
+
+  var validateOtpPayload = {}
+  validateOtpPayload['source'] = source;
+  validateOtpPayload['data'] = raw;
+
+  window.parent.postMessage(JSON.stringify({
+    event_code: 'ym-client-event', data: JSON.stringify({
+      event: {
+        code: "validateOtp",
+        data: validateOtpPayload,
+
       }
-      else {
-        invalidOtp++;
-        if (invalidOtp < 3) {
-          $('#invalidOtp').modal('show');
+    })
+  }), '*');
+
+  // document.getElementById('time-left').style.display = 'none'
+  window.addEventListener('message', function (eventData) {
+
+    console.log("receiving otp event in acc")
+    // console.log(event.data.event_code)
+    try {
+      if (eventData.data) {
+
+        let event = JSON.parse(eventData.data);
+        if (event.event_code == 'validationResponse') { //sucess
+          console.log(event.data)
+          if (event.data.returnCode == '0') {
+            // $('#cover-spin').hide(0)
+
+            $('#otpPopUp').modal('hide');
+            $('#requirements').hide();
+            $('#payment').show();
+            otpSubmitted = true;
+            document.getElementById('otp').value = '';
+          }
+          else if (event.data.returnCode == '1' || event.data.returnCode == '2') {
+            invalidOtp++;
+            if (invalidOtp < 3) {
+              $('#otpPopUp').modal('hide');
+              $('#invalidOtp').modal('show');
+            }
+            else {
+              $('#otpPopUp').modal('hide');
+              $('#invalidOtp').modal('hide');
+              $('#maxInvalidOtp').modal('show');
+            }
+            document.getElementById('otp').value = '';
+            // $('#cover-spin').hide(0)
+          }
+          else {
+            alert(event.data?.returnMessage);
+          }
+
         }
         else {
-          $('#invalidOtp').modal('hide');
-          $('#maxInvalidOtp').modal('show');
+
         }
       }
-
-    }).catch(error => {
+    } catch (error) {
       console.log(error)
-    });
-  document.getElementById('otp').value = '';
+    }
+
+  })
+
+
+
+
+  //--api call fro submit otp--//
+  // removeTimer();
+  // var myHeaders = new Headers();
+  // myHeaders.append("Content-Type", "application/json");
+  // var raw = JSON.stringify({
+  //   "oneTimePINInformation": {
+  //     "companyName": "BPLAC",
+  //     "webReferenceNumber": referenceNumber,
+  //     "oneTimePIN": document.getElementById('otp').value
+  //   }
+  // });
+  // var requestOptions = {
+  //   method: 'POST',
+  //   headers: myHeaders,
+  //   body: raw
+  // };
+  // fetch("http://localhost:3000/otp_verification", requestOptions).then((response) => response.json())
+  //   .then(response => {
+  //     console.log(response)
+  //     if (response.returnCode == '0') { //sucess
+  //       $('#otpPopUp').modal('hide');
+  //       $('#requirements').hide();
+  //       $('#payment').show();
+  //       otpSubmitted = true;
+  //     }
+  //     else {
+  //       invalidOtp++;
+  //       if (invalidOtp < 3) {
+  //         $('#invalidOtp').modal('show');
+  //       }
+  //       else {
+  //         $('#invalidOtp').modal('hide');
+  //         $('#maxInvalidOtp').modal('show');
+  //       }
+  //     }
+
+  //   }).catch(error => {
+  //     console.log(error)
+  //   });
+  // document.getElementById('otp').value = '';
 
   //--api call fro submit otp--//
 
