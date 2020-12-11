@@ -1107,13 +1107,13 @@ function selectAnswer(quesn_num, id, selectedOption) {
 function submit_survey(event) {
 
     event.preventDefault();
-    var survey_data = {};
-    survey_data['companyName'] = 'BPLAC';
-    survey_data['TIPSReferenceNumber'] = referenceNumber;
-    survey_data['sourceSystem'] = sourceSystem;
-    survey_data['surveyQuestion1'] = surveyAns1;
-    survey_data['surveyQuestion2'] = surveyAns2;
-    survey_data['surveyQuestion3'] = surveyAns3;
+    var survey_data = { 'companyName': 'BPLAC', 'TIPSReferenceNumber': referenceNumber, 'sourceSystem': sourceSystem, 'surveyQuestion1': surveyAns1, 'surveyQuestion2': surveyAns2, 'surveyQuestion3': surveyAns3};
+    // survey_data['companyName'] = 'BPLAC';
+    // survey_data['TIPSReferenceNumber'] = referenceNumber;
+    // survey_data['sourceSystem'] = sourceSystem;
+    // survey_data['surveyQuestion1'] = surveyAns1;
+    // survey_data['surveyQuestion2'] = surveyAns2;
+    // survey_data['surveyQuestion3'] = surveyAns3;
 
     // let surveyData = {
     //     stageOne: true,
