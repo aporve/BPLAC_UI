@@ -2185,7 +2185,7 @@ var invalidOtpModal = document.getElementById('invalidOtp');
 var maxResendOtp = document.getElementById('maxResendOtp');
 var invalidOtp = 0;
 
-
+debugger
 // otp timer function
 function otpTimer() {
   document.getElementById('otp-btn').style.display = 'block'
@@ -2215,7 +2215,13 @@ function otpTimer() {
   }
 }
 
+function closeModal() {
+  removeTimer();
+  document.getElementById('otp').value = ''
+  $('#otpPopUp').modal('hide');
+  $('#otpExpiry').modal('hide');
 
+}
 // to refresh the otp otp timer
 
 function removeTimer() {
@@ -2525,12 +2531,12 @@ function submitOtp() {
 
 
 // When the user clicks anywhere outside of the modal, close it and remove timer 
-window.onclick = function (event) {
-  if (event.target == otpModal || event.target == otpExpModal || event.target == invalidOtpModal || event.target == maxResendOtp) {
-    console.log(event.target)
-    removeTimer();
-  }
-}
+// window.onclick = function (event) {
+//   if (event.target == otpModal || event.target == otpExpModal || event.target == invalidOtpModal || event.target == maxResendOtp) {
+//     console.log(event.target)
+//     removeTimer();
+//   }
+// }
 
 
 // when user clicks exit button from OTP pop up

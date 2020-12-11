@@ -4707,8 +4707,14 @@ function resendOtp(type) {
     // }
     // $('#otpExpiry').modal('hide');
 }
+function closeModal() {
+    removeTimer();
+    document.getElementById('otp').value = ''
+    $('#otpPopUp').modal('hide');
+    $('#otpExpiry').modal('hide');
 
-
+}
+debugger
 function submitOtp() {
 
     document.getElementById('otp-btn').style.display = 'none'
@@ -4851,12 +4857,12 @@ function submitOtp() {
 }
 
 // When the user clicks anywhere outside of the modal, close it and remove timer 
-window.onclick = function (event) {
-    if (event.target == otpModal || event.target == otpExpModal || event.target == invalidOtpModal || event.target == maxResendOtp) {
-        console.log(event.target)
-        removeTimer();
-    }
-}
+// window.onclick = function (event) {
+//     if (event.target == otpModal || event.target == otpExpModal || event.target == invalidOtpModal || event.target == maxResendOtp) {
+//         console.log(event.target)
+//         removeTimer();
+//     }
+// }
 
 // when user clicks exit button from OTP pop up
 function backToFileClaim() {
