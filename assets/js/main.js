@@ -157,6 +157,7 @@ function trackProgress() {
 
             if (eventData.data) {
                 let event = JSON.parse(eventData.data);
+                console.log(event);
                 if (event.event_code == 'claimStatusResponse') { //sucess
                     console.log(event.data)
                     if (event.data.returnCode == '0') {
@@ -219,7 +220,7 @@ function trackProgress() {
                     }
                 }
                 else {
-                    $('#refNoWarning').modal('show');
+                    // $('#refNoWarning').modal('show');
 
                 }
             } else {
