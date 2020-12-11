@@ -729,7 +729,7 @@ function setIllnessClaimStatusMsg() {
     // }
 
 }
-
+debugger
 
 function setDeathClaimStatusMsg() {
     if (sourceSystem.toLowerCase().trim() == 'tips') {
