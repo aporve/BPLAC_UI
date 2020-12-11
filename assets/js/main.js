@@ -131,79 +131,183 @@ function dummyRefNumberTest() {
 }
 
 function trackProgress() {
-    // api call on clicking GO button from claim status screen
-    var res;
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
+
+    document.getElementById('go-btn').style.display = 'none'
+    document.getElementById('loader-btn').style.display = 'block'
+    var finalPayload = {}
+    var source = 'main';
     var raw = JSON.stringify({ "companyName": "BPLAC", "TIPSReferenceNumber": referenceNumber });
-    var requestOptions = {
-        method: 'POST',
-        headers: myHeaders,
-        body: raw
-    };
-    fetch("http://localhost:3000/claim_status", requestOptions).then((response) => response.json())
-        .then(response => {
-            if (response.returnCode != '0') {
+    finalPayload['source'] = source;
+    finalPayload['data'] = raw;
+    window.parent.postMessage(JSON.stringify({
+        event_code: 'ym-client-event', data: JSON.stringify({
+            event: {
+                code: "getClaimStatus",
+                data: finalPayload
+            }
+        })
+    }), '*');
+
+
+    window.addEventListener('message', function (eventData) {
+
+        console.log("receiving claim status event ")
+        // console.log(event.data.event_code)
+        try {
+
+            if (eventData.data) {
+                let event = JSON.parse(eventData.data);
+                if (event.event_code == 'claimStatusResponse') { //sucess
+                    console.log(event.data)
+                    if (event.data.returnCode == '0') {
+                        document.getElementById('go-btn').style.display = 'block'
+                        document.getElementById('loader-btn').style.display = 'none'
+                        if (event.data.type.toLowerCase() == 'death') {
+                            claim_type = event.data.type
+                        }
+                        else {
+                            claim_type = event.data.subType
+                        }
+                        transactionNumber = event.data.transactionNumber;
+                        disbursementType = event.data.disbursementType;
+                        beneficiaryCount = event.data.beneficiaryCount;
+                        lapsationDate = event.data.lapsationDate;
+                        claimStatus = event.data.claimStatus;
+                        docsPending = event.data.docsPending;
+                        docsReceived = event.data.docsReceived;
+                        policyNumber = event.data.policyNumber;
+                        claimantFirstName = event.data.claimantFirstName;
+                        // denialTag = response.denialTag;
+                        sourceSystem = event.data.sourceSystem;
+                        isFallout = event.data.isFallout;
+                        claimAmount = event.data.claimAmount;
+                        currency = event.data.currency;
+                        requirementsList = event.data.requirementsList;
+                        surveyTag = event.data.surveyTag;
+
+                        //for customer survey
+                        if (claimStatus.toLowerCase() == 'denied' || claimStatus.toLowerCase() == 'approved' && surveyTag == 'N') {
+                            $('#customer_survey').show()
+                        }
+                        else {
+
+                            $('#customer_survey').hide()
+                        }
+                        //for customer survey
+
+
+                        document.getElementById('payment_amount').innerHTML = currency + ' ' + claimAmount;
+
+                        displayDateForClaimStatus() // date to be displayed on top
+                        $("#img_claim").hide();
+                        $("#claim").hide();
+                        $("#reference_No").hide();
+
+                        // document.getElementById('text').innerHTML = document.getElementById('payout-pickup-ill').innerHTML;
+                        // activeProcess()
+                        // activeProcessCircle()
+                        $("#err_recaptcha").text('');
+                        $("#err_recaptcha").hide();
+                        $("#reference-divider").show();
+                        $("#process_confirmation1").show();
+                        setClaimProgressScreen(); // to set header title and image for claim status screen
+                        trackProgressDropDown() // for tracking progress dropdown
+                    }
+                    else {
+                        $('#refNoWarning').modal('show');
+
+                    }
+                }
+                else {
+                    $('#refNoWarning').modal('show');
+
+                }
+            } else {
                 $('#refNoWarning').modal('show');
+
             }
-            else {
-                if (response.type.toLowerCase().trim() == 'death') {
-                    claim_type = response.type
-                }
-                else {
-                    claim_type = response.subType
-                }
-                transactionNumber = response.transactionNumber;
-                disbursementType = response.disbursementType;
-                beneficiaryCount = response.beneficiaryCount;
-                lapsationDate = response.lapsationDate;
-                claimStatus = response.claimStatus;
-                docsPending = response.docsPending;
-                docsReceived = response.docsReceived;
-                policyNumber = response.policyNumber;
-                claimantFirstName = response.claimantFirstName;
-                // denialTag = response.denialTag;
-                sourceSystem = response.sourceSystem;
-                isFallout = response.isFallout;
-                claimAmount = response.claimAmount;
-                currency = response.currency;
-                requirementsList = response.requirementsList;
-                surveyTag = response.surveyTag;
-                if (claimStatus.toLowerCase().trim() == 'denied' || claimStatus.toLowerCase().trim() == 'approved' && surveyTag == 'N') {
-                    $('#customer_survey').show()
-                }
-                else {
+        } catch (error) {
+            alert(error)
 
-                    $('#customer_survey').hide()
-                }
-                // document.getElementById('name').innerHTML = claimantFirstName;
+        }
 
-                document.getElementById('payment_amount').innerHTML = currency + ' ' + claimAmount;
-                // document.getElementById('currency').innerHTML = currency;
-                // document.getElementById('net_amount').innerHTML = claimAmount;
-                displayDateForClaimStatus()
-                $("#img_claim").hide();
-                $("#claim").hide();
-                $("#reference_No").hide();
+    })
 
-                // document.getElementById('text').innerHTML = document.getElementById('payout-pickup-ill').innerHTML;
-                // activeProcess()
-                // activeProcessCircle()
-                $("#err_recaptcha").text('');
-                $("#err_recaptcha").hide();
-                $("#reference-divider").show();
-                $("#process_confirmation1").show();
-                setClaimProgressScreen(); // to set header title and image for claim status screen
-                trackProgressDropDown(trackMessagesArr) // for tracking progress dropdown
-            }
-        }).catch(error => {
-            console.log(error)
-        });
 
-    var response = {};
-    // to show header and description based on claim type
-    claim_msg_type = response['claim-msg-type'] // to set the message shown based on status
-    trackMessagesArr = response['trackMessages']  // to populate dropdown
+
+    // api call on clicking GO button from claim status screen
+    // var res;
+    // var myHeaders = new Headers();
+    // myHeaders.append("Content-Type", "application/json");
+    // var raw = JSON.stringify({ "companyName": "BPLAC", "TIPSReferenceNumber": referenceNumber });
+    // var requestOptions = {
+    //     method: 'POST',
+    //     headers: myHeaders,
+    //     body: raw
+    // };
+    // fetch("http://localhost:3000/claim_status", requestOptions).then((response) => response.json())
+    //     .then(response => {
+    //         if (response.returnCode != '0') {
+    //             $('#refNoWarning').modal('show');
+    //         }
+    //         else {
+    //             if (response.type.toLowerCase().trim() == 'death') {
+    //                 claim_type = response.type
+    //             }
+    //             else {
+    //                 claim_type = response.subType
+    //             }
+    //             transactionNumber = response.transactionNumber;
+    //             disbursementType = response.disbursementType;
+    //             beneficiaryCount = response.beneficiaryCount;
+    //             lapsationDate = response.lapsationDate;
+    //             claimStatus = response.claimStatus;
+    //             docsPending = response.docsPending;
+    //             docsReceived = response.docsReceived;
+    //             policyNumber = response.policyNumber;
+    //             claimantFirstName = response.claimantFirstName;
+    //             // denialTag = response.denialTag;
+    //             sourceSystem = response.sourceSystem;
+    //             isFallout = response.isFallout;
+    //             claimAmount = response.claimAmount;
+    //             currency = response.currency;
+    //             requirementsList = response.requirementsList;
+    //             surveyTag = response.surveyTag;
+    //             if (claimStatus.toLowerCase().trim() == 'denied' || claimStatus.toLowerCase().trim() == 'approved' && surveyTag == 'N') {
+    //                 $('#customer_survey').show()
+    //             }
+    //             else {
+
+    //                 $('#customer_survey').hide()
+    //             }
+    //             // document.getElementById('name').innerHTML = claimantFirstName;
+
+    //             document.getElementById('payment_amount').innerHTML = currency + ' ' + claimAmount;
+    //             // document.getElementById('currency').innerHTML = currency;
+    //             // document.getElementById('net_amount').innerHTML = claimAmount;
+    //             displayDateForClaimStatus()
+    //             $("#img_claim").hide();
+    //             $("#claim").hide();
+    //             $("#reference_No").hide();
+
+    //             // document.getElementById('text').innerHTML = document.getElementById('payout-pickup-ill').innerHTML;
+    //             // activeProcess()
+    //             // activeProcessCircle()
+    //             $("#err_recaptcha").text('');
+    //             $("#err_recaptcha").hide();
+    //             $("#reference-divider").show();
+    //             $("#process_confirmation1").show();
+    //             setClaimProgressScreen(); // to set header title and image for claim status screen
+    //             trackProgressDropDown(trackMessagesArr) // for tracking progress dropdown
+    //         }
+    //     }).catch(error => {
+    //         console.log(error)
+    //     });
+
+    // var response = {};
+    // // to show header and description based on claim type
+    // claim_msg_type = response['claim-msg-type'] // to set the message shown based on status
+    // trackMessagesArr = response['trackMessages']  // to populate dropdown
 
     // var x = dummyRefNumberTest() // for testing
 
@@ -1016,22 +1120,61 @@ function submit_survey(event) {
     //     referenceNumber: referenceNumber,
     //     data: survey_data
     // }
+    var finalPayload = {}
+    var raw = JSON.stringify(survey_data)
+
+    var source = 'main';
+    finalPayload['source'] = source;
+    finalPayload['data'] = raw;
     window.parent.postMessage(JSON.stringify({
         event_code: 'ym-client-event', data: JSON.stringify({
             event: {
-                code: "customer_survey",
-                data: JSON.stringify(survey_data)
+                code: "customerSurvey",
+                data: finalPayload
             }
         })
     }), '*');
+    window.addEventListener('message', function (eventData) {
 
-    var nodes = document.getElementById("customer_survey").getElementsByTagName('*');
-    for (var i = 0; i < nodes.length; i++) {
-        nodes[i].disabled = true;
-        nodes[i].style.cursor = 'no-drop'
+        console.log("receiving survey event in acc")
+        // console.log(event.data.event_code)
+        try {
 
-    }
-    document.getElementById("customer_survey").style.opacity = '0.65'
+            if (eventData.data) {
+                let event = JSON.parse(eventData.data);
+                console.log(event)
+                if (event.event_code == 'surveryResponse') { //sucess
+                    console.log(event.data)
+                    if (event.data.returnCode == '0') {
+                        var nodes = document.getElementById("customer_survey").getElementsByTagName('*');
+                        for (var i = 0; i < nodes.length; i++) {
+                            nodes[i].disabled = true;
+                            nodes[i].style.cursor = 'no-drop'
+
+                        }
+                        document.getElementById("customer_survey").style.opacity = '0.65'
+                    }
+                }
+                else {
+
+                }
+            }
+        } catch (error) {
+            console.log(error)
+        }
+
+    })
+
+
+
+
+    // var nodes = document.getElementById("customer_survey").getElementsByTagName('*');
+    // for (var i = 0; i < nodes.length; i++) {
+    //     nodes[i].disabled = true;
+    //     nodes[i].style.cursor = 'no-drop'
+
+    // }
+    // document.getElementById("customer_survey").style.opacity = '0.65'
 
 
 
@@ -1060,4 +1203,7 @@ function submit_survey(event) {
     //     }).catch(error => {
     //         console.log(error)
     //     });
+}
+function closeModal() {
+    location.reload();
 }
