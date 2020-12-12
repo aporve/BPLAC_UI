@@ -10,7 +10,8 @@
         integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     <link rel="stylesheet" href="./assets/css/styles.css">
     <title>Yellow Messenger</title>
-    <style>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <!-- <style>
         .btnn:hover {
             color: white;
             /* color: #b8123e !important; */
@@ -26,7 +27,7 @@
             text-decoration: unset !important;
             border: 1px solid white !important;
         }
-    </style>
+    </style> -->
 </head>
 
 <body class="d-flex flex-column min-vh-100">
@@ -937,7 +938,7 @@
             <div class="modal-content">
 
                 <div class="modal-body">
-                    <button type="button" class="close" onclick="closeModal()">
+                    <button type="button" class="close"  data-dismiss="modal">
                         ×
                     </button>
                     <p id="p1">We’re sorry, it seems like the reference number you placed does not match what we
@@ -956,7 +957,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  
     <script src="./assets/js/messages.js"></script>
     <script src="./assets/js/main.js"></script>
     <!-- <script>

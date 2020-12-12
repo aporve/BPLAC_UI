@@ -1771,82 +1771,206 @@ function handleAddBankInfo(event) {
 }
 
 function getBankDetails() {
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
+    var finalPayload = {};
+    var source = 'Illness';
+    $('#cover-spin').show(0)
     var raw = JSON.stringify({ "companyName": "BPLAC", "webReferenceNumber": referenceNumber });
-    var requestOptions = {
-        method: 'POST',
-        headers: myHeaders,
-        body: raw
-    };
-    fetch("http://localhost:3000/disbursement_details", requestOptions).then((response) => response.json())
-        .then(response => {
+    finalPayload['source'] = source;
+    finalPayload['data'] = raw;
+    window.parent.postMessage(JSON.stringify({
+        event_code: 'ym-client-event', data: JSON.stringify({
+            event: {
+                code: "getPayoutDetails",
+                data: finalPayload
+            }
+        })
+    }), '*');
 
-            if (response.returnCode == '0') {
-                if (response.accountName != '') {
+    window.addEventListener('message', function (eventData) {
 
-                    document.getElementById('have_bank_details').innerHTML = 'Here are your bank details that we have on file. If you wish to update your bank details, click CHANGE BANK ACCOUNT.'
-                    field_AccountName = response.accountName;
-                    document.getElementById('field_AccountName').value = field_AccountName;
+        console.log("receiving presubmit event in acc")
+        // console.log(event.data.event_code)
+        try {
 
-                    field_AccountNumber = response.maskedAccountNumber.replace(/.(?=.{4})/g, '*');
-                    document.getElementById('field_AccountNumber').value = field_AccountNumber;
+            if (eventData.data) {
+                let event = JSON.parse(eventData.data);
+                console.log(event)
+                if (event.event_code == 'payoutDetails') { //sucess
+                    if (event.data.returnCode == '0') {
+                        $('#proof_BAO_display').hide();
+                        haveBankDetails = true;
+                        $('#cover-spin').hide(0)
+                        document.getElementById('have_bank_details').innerHTML = ' We have your bank details on file.'
+                        field_AccountName = event.data.accountName;
+                        document.getElementById('field_AccountName').value = field_AccountName;
 
-                    field_Bank = response.bankName;
+                        field_AccountNumber = event.data.maskedAccountNumber.replace(/.(?=.{4})/g, '*');
+                        document.getElementById('field_AccountNumber').value = field_AccountNumber;
 
-                    field_Currency = response.accountCurrency;
-                    $("#from_currency option").each(function () {
-                        if ($(this).text() == field_Currency) {
-                            $(this).attr('selected', 'selected');
+                        field_Bank = event.data.bankName;
+                        field_Branch = '';
+                        field_Currency = event.data.accountCurrency;
+                        $("#from_currency option").each(function () {
+                            if ($(this).text() == field_Currency) {
+                                $(this).attr('selected', 'selected');
+                            }
+                        });
+
+
+                        if (field_Currency.toLowerCase() == "peso") {
+
+                            $("#field_Bank").html(
+                                "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option><option value='BPI Family Savings Bank - BFB'>BPI Family Savings Bank - BFB</option>"
+                            );
+                            $("#field_Bank option").each(function () {
+
+                                if ($(this).text().split('-')[1].toLowerCase().trim() == field_Bank.toLowerCase().trim()) {
+
+                                    $(this).attr('selected', 'selected');
+                                }
+                            });
+
+                            $("#field_Bank1").html(
+                                "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option><option value='BPI Family Savings Bank - BFB'>BPI Family Savings Bank - BFB</option>"
+                            );
+                            $("#field_Bank1 option").each(function () {
+
+                                if ($(this).text().split('-')[1].toLowerCase().trim() == field_Bank.toLowerCase().trim()) {
+
+                                    $(this).attr('selected', 'selected');
+                                }
+                            });
                         }
-                    });
+                        else if (field_Currency.toLowerCase() == "usd") {
+                            $("#field_Bank1").html(
+                                "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option>"
+                            );
+                            $("#field_Bank1 option").each(function () {
 
-                    if (field_Currency.toLowerCase() == "peso") {
+                                if ($(this).text().split('-')[1].toLowerCase().trim() == field_Bank.toLowerCase().trim()) {
 
-                        $("#field_Bank").html(
-                            "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option><option value='BPI Family Savings Bank - BFB'>BPI Family Savings Bank - BFB</option>"
-                        );
-                        $("#field_Bank option").each(function () {
+                                    $(this).attr('selected', 'selected');
+                                }
+                            });
 
-                            if ($(this).text().split('-')[1].toLowerCase().trim() == field_Bank.toLowerCase().trim()) {
+                            $("#field_Bank").html(
+                                "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option>"
+                            );
+                            $("#field_Bank option").each(function () {
 
-                                $(this).attr('selected', 'selected');
-                            }
-                        });
+                                if ($(this).text().split('-')[1].toLowerCase().trim() == field_Bank.toLowerCase().trim()) {
+
+                                    $(this).attr('selected', 'selected');
+                                }
+                            });
+                        }
+                        disableBankDetailsOnHavingData()
+                        $('#payment').hide();
+                        $('#account_details').show();
+                        $("#step2").addClass("active");
+                        $("#step2>div").addClass("active");
                     }
-                    else if (field_Currency.toLowerCase() == "usd") {
-                        $("#field_Bank").html(
-                            "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option>"
-                        );
-                        $("#field_Bank option").each(function () {
-
-                            if ($(this).text().split('-')[1].toLowerCase().trim() == field_Bank.toLowerCase().trim()) {
-
-                                $(this).attr('selected', 'selected');
-                            }
-                        });
+                    else if (event.data.returnCode == '1') {
+                        $('#cover-spin').hide(0)
+                        $('#payment').hide();
+                        $('#account_details').show();
+                        $("#step2").addClass("active");
+                        $("#step2>div").addClass("active");
+                        $('#change_bank_account').hide()
                     }
-
-
                 }
-
+                else {
+                    // $('#change_bank_account').hide()
+                }
             }
             else {
                 $('#change_bank_account').hide()
             }
-        }).catch(error => {
+        } catch (error) {
             console.log(error)
-        });
+        }
+
+    })
+
+
+
+
+    // var myHeaders = new Headers();
+    // myHeaders.append("Content-Type", "application/json");
+    // var raw = JSON.stringify({ "companyName": "BPLAC", "webReferenceNumber": referenceNumber });
+    // var requestOptions = {
+    //     method: 'POST',
+    //     headers: myHeaders,
+    //     body: raw
+    // };
+    // fetch("http://localhost:3000/disbursement_details", requestOptions).then((response) => response.json())
+    //     .then(response => {
+
+    //         if (response.returnCode == '0') {
+    //             if (response.accountName != '') {
+
+    //                 document.getElementById('have_bank_details').innerHTML = 'Here are your bank details that we have on file. If you wish to update your bank details, click CHANGE BANK ACCOUNT.'
+    //                 field_AccountName = response.accountName;
+    //                 document.getElementById('field_AccountName').value = field_AccountName;
+
+    //                 field_AccountNumber = response.maskedAccountNumber.replace(/.(?=.{4})/g, '*');
+    //                 document.getElementById('field_AccountNumber').value = field_AccountNumber;
+
+    //                 field_Bank = response.bankName;
+
+    //                 field_Currency = response.accountCurrency;
+    //                 $("#from_currency option").each(function () {
+    //                     if ($(this).text() == field_Currency) {
+    //                         $(this).attr('selected', 'selected');
+    //                     }
+    //                 });
+
+    //                 if (field_Currency.toLowerCase() == "peso") {
+
+    //                     $("#field_Bank").html(
+    //                         "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option><option value='BPI Family Savings Bank - BFB'>BPI Family Savings Bank - BFB</option>"
+    //                     );
+    //                     $("#field_Bank option").each(function () {
+
+    //                         if ($(this).text().split('-')[1].toLowerCase().trim() == field_Bank.toLowerCase().trim()) {
+
+    //                             $(this).attr('selected', 'selected');
+    //                         }
+    //                     });
+    //                 }
+    //                 else if (field_Currency.toLowerCase() == "usd") {
+    //                     $("#field_Bank").html(
+    //                         "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option>"
+    //                     );
+    //                     $("#field_Bank option").each(function () {
+
+    //                         if ($(this).text().split('-')[1].toLowerCase().trim() == field_Bank.toLowerCase().trim()) {
+
+    //                             $(this).attr('selected', 'selected');
+    //                         }
+    //                     });
+    //                 }
+
+
+    //             }
+
+    //         }
+    //         else {
+    //             $('#change_bank_account').hide()
+    //         }
+    //     }).catch(error => {
+    //         console.log(error)
+    //     });
+    
+    
+    
 }
 
 function bankTranfer() {
 
     document.getElementById('ref_number').innerHTML = referenceNumber
     getBankDetails();
-    $('#payment').hide();
-    $('#account_details').show();
-    $("#step2").addClass("active");
-    $("#step2>div").addClass("active");
+  
 }
 
 function pickUp() {
@@ -2312,6 +2436,13 @@ function submitOtp() {
     // }
 
     // document.getElementById('otp').value = ''
+}
+function disableBankDetailsOnHavingData() {
+    document.getElementById('field_AccountName').disabled = true;
+    document.getElementById('field_AccountNumber').disabled = true;
+    document.getElementById('field_Branch').disabled = true;
+    document.getElementById('from_currency').disabled = true;
+    document.getElementById('field_Bank').disabled = true;
 }
 
 debugger
