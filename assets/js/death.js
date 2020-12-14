@@ -26,8 +26,8 @@ let filesMap = {};
 var otpSubmitted = false;
 var scanDoc = false;
 var payoutOption;
-var isChangeInBankDetails='N';
-var isChangeInPayoutOption='N';
+var isChangeInBankDetails = 'N';
+var isChangeInPayoutOption = 'N';
 var file1 = document.getElementById('file_Upload_1');
 var file2 = document.getElementById('file_Upload_2');
 var file3 = document.getElementById('file_Upload_3');
@@ -3565,16 +3565,16 @@ function buttonSubmitClicked(event) {
             $('#requirements').hide();
             $('#process_confirmation').show();
         }
-        window.parent.postMessage(JSON.stringify({
-            event_code: 'ym-client-event', data: JSON.stringify({
-                event: {
-                    code: "finalEvent",
-                    data: JSON.stringify(finalPayload)
-                }
-            })
-        }), '*');
+        // window.parent.postMessage(JSON.stringify({
+        //     event_code: 'ym-client-event', data: JSON.stringify({
+        //         event: {
+        //             code: "finalEvent",
+        //             data: JSON.stringify(finalPayload)
+        //         }
+        //     })
+        // }), '*');
 
-        console.log('upload data --> ', upload_data);
+        // console.log('upload data --> ', upload_data);
     }
 }
 
@@ -4143,7 +4143,7 @@ function getBankDetails() {
 function bankTranfer() {
 
     document.getElementById('ref_number').innerHTML = referenceNumber
-    payoutOption='CTA';
+    payoutOption = 'CTA';
     getBankDetails();
     trackBenificiary = 0;
     $('#payment').hide();
@@ -4181,7 +4181,7 @@ function addBeneficiarybankTranfer() {
 
 function pickUp() {
     document.getElementById('ref_number').innerHTML = referenceNumber
-    payoutOption='PUA';
+    payoutOption = 'PUA';
     trackBenificiary = 1;
     let index = BeneficiaryList.findIndex(ele => ele["BeneficiaryNo"] == "1")
     let benObject = BeneficiaryList[index]
@@ -4674,6 +4674,8 @@ var invalidOtp = 0;
 // otp timer function
 function otpTimer() {
     document.getElementById('otp-btn').style.display = 'block'
+    document.getElementById('otp-invalid-btn').style.display = 'block'
+    document.getElementById('otp-expiry-btn').style.display = 'block'
     document.getElementById('loader-btn').style.display = 'none'
     if (resendCount <= 5) {
         $('#otpPopUp').modal('show');
@@ -4720,6 +4722,17 @@ function resendOtp(type) {
 
     }
     else {
+        if (type == 'otpExpire') {
+            document.getElementById('otp-expiry-btn').style.display = 'none'
+            document.getElementById('loader-btn-expiry').style.display = 'block'
+        }
+        else if (type == 'invalidInput') {
+            document.getElementById('otp-invalid-btn').style.display = 'none'
+            document.getElementById('loader-btn-invalid').style.display = 'block'
+
+        }
+        document.getElementById('otp-btn').style.display = 'none'
+        document.getElementById('loader-btn').style.display = 'block'
         var source = 'Death'
         var validateOtpPayload = {}
         removeTimer();

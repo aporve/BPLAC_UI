@@ -1692,19 +1692,19 @@ function buttonSubmitClicked(event) {
   }
   /*   $('#payment')[0].scrollIntoView(true); */
 
-  console.log('upload data --> ', upload_data);
-  let stageTwoData = {
-    stageTwo: true,
-    referenceNumber: referenceNumber
-  }
-  window.parent.postMessage(JSON.stringify({
-    event_code: 'ym-client-event', data: JSON.stringify({
-      event: {
-        code: "fileuploads",
-        data: JSON.stringify(stageTwoData)
-      }
-    })
-  }), '*');
+  // console.log('upload data --> ', upload_data);
+  // let stageTwoData = {
+  //   stageTwo: true,
+  //   referenceNumber: referenceNumber
+  // }
+  // window.parent.postMessage(JSON.stringify({
+  //   event_code: 'ym-client-event', data: JSON.stringify({
+  //     event: {
+  //       code: "fileuploads",
+  //       data: JSON.stringify(stageTwoData)
+  //     }
+  //   })
+  // }), '*');
 }
 
 
@@ -2344,6 +2344,8 @@ debugger
 // otp timer function
 function otpTimer() {
   document.getElementById('otp-btn').style.display = 'block'
+  document.getElementById('otp-invalid-btn').style.display = 'block'
+  document.getElementById('otp-expiry-btn').style.display = 'block'
   document.getElementById('loader-btn').style.display = 'none'
   if (resendCount <= 5) {
     $('#otpPopUp').modal('show');
@@ -2396,6 +2398,15 @@ function resendOtp(type) {
 
   }
   else {
+    if (type == 'otpExpire') {
+      document.getElementById('otp-expiry-btn').style.display = 'none'
+      document.getElementById('loader-btn-expiry').style.display = 'block'
+    }
+    else if (type == 'invalidInput') {
+      document.getElementById('otp-invalid-btn').style.display = 'none'
+      document.getElementById('loader-btn-invalid').style.display = 'block'
+
+    }
     document.getElementById('otp-btn').style.display = 'none'
     document.getElementById('loader-btn').style.display = 'block'
     var source = 'Accident'
