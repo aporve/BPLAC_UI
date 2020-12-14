@@ -187,7 +187,7 @@ function trackProgress() {
                         surveyTag = event.data.surveyTag;
 
                         //for customer survey
-                        if (claimStatus.toLowerCase() == 'denied' || claimStatus.toLowerCase() == 'approved' && surveyTag == 'N') {
+                        if ((claimStatus.toLowerCase() == 'denied' || claimStatus.toLowerCase() == 'denied2' || claimStatus.toLowerCase() == 'denied3' || claimStatus.toLowerCase() == 'denied4' || claimStatus.toLowerCase() == 'approved') && surveyTag == 'N') {
                             $('#customer_survey').show()
                         }
                         else {
@@ -487,7 +487,7 @@ function setAccidentClaimStatusMsg() {
                 allStepperActive()
             }
             else if (claimStatus.toLowerCase().trim() == 'denied4') {
-                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p>An update on your claim request</p><br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. Your policy&#39;s coverage and all its benefits have ended last ' + lapsationDate +' due to non-payment of premium dues. </p> <br /> <p class="font-weight-normal request-font"> We understand that you&#39;re going through a tough time, ' + claimantFirstName + '. If you wish reinstate your policy, your Bancassurance Sales Executive will be ready to assist you. </p> <br /> <p class="font-weight-normal request-font"> You may also chat with Bessie at m.me/BessieofBPIPhilam, email us at at BPI-Philam_CustomerService@aia.com, or call us at (02) 8528-5501. </p> <br /> </div> '
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p>An update on your claim request</p><br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. Your policy&#39;s coverage and all its benefits have ended last ' + lapsationDate + ' due to non-payment of premium dues. </p> <br /> <p class="font-weight-normal request-font"> We understand that you&#39;re going through a tough time, ' + claimantFirstName + '. If you wish reinstate your policy, your Bancassurance Sales Executive will be ready to assist you. </p> <br /> <p class="font-weight-normal request-font"> You may also chat with Bessie at m.me/BessieofBPIPhilam, email us at at BPI-Philam_CustomerService@aia.com, or call us at (02) 8528-5501. </p> <br /> </div> '
                 document.getElementById("turnaround-time-ref").style.display = "none";
                 document.getElementById("payment-ref").style.display = "none";
                 allStepperActive()
@@ -695,7 +695,7 @@ function setIllnessClaimStatusMsg() {
                 allStepperActive()
             }
             else if (claimStatus.toLowerCase().trim() == 'denied4') {
-                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p>An update on your claim request</p><br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. Your policy&#39;s coverage and all its benefits have ended last ' + lapsationDate +' due to non-payment of premium dues. </p> <br /> <p class="font-weight-normal request-font"> We understand that you&#39;re going through a tough time, ' + claimantFirstName + '. If you wish reinstate your policy, your Bancassurance Sales Executive will be ready to assist you. </p> <br /> <p class="font-weight-normal request-font"> You may also chat with Bessie at m.me/BessieofBPIPhilam, email us at at BPI-Philam_CustomerService@aia.com, or call us at (02) 8528-5501. </p> <br /> </div> '
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p>An update on your claim request</p><br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. Your policy&#39;s coverage and all its benefits have ended last ' + lapsationDate + ' due to non-payment of premium dues. </p> <br /> <p class="font-weight-normal request-font"> We understand that you&#39;re going through a tough time, ' + claimantFirstName + '. If you wish reinstate your policy, your Bancassurance Sales Executive will be ready to assist you. </p> <br /> <p class="font-weight-normal request-font"> You may also chat with Bessie at m.me/BessieofBPIPhilam, email us at at BPI-Philam_CustomerService@aia.com, or call us at (02) 8528-5501. </p> <br /> </div> '
                 document.getElementById("turnaround-time-ref").style.display = "none";
                 document.getElementById("payment-ref").style.display = "none";
                 allStepperActive()
@@ -866,7 +866,7 @@ function setDeathClaimStatusMsg() {
                 allStepperActive()
             }
             else if (claimStatus.toLowerCase().trim() == 'denied4') {
-                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p>An update on your claim request</p><br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. Your poliyc&#39;s coverage and all its benefits have ended last ' + lapsationDate +' due to non-payment of premium. </p> <br /> <p class="font-weight-normal request-font"> We are sorry that this news is coming to you at a tough time, ' + claimantFirstName + '. If you wish to discuss the details of your claim, you may reach out to your Bancassurance Sales Executive or chat with Bessie at m.me/BessieofBPIPhilam. You may also email us at BPI-Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div> '
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p>An update on your claim request</p><br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. Your poliyc&#39;s coverage and all its benefits have ended last ' + lapsationDate + ' due to non-payment of premium. </p> <br /> <p class="font-weight-normal request-font"> We are sorry that this news is coming to you at a tough time, ' + claimantFirstName + '. If you wish to discuss the details of your claim, you may reach out to your Bancassurance Sales Executive or chat with Bessie at m.me/BessieofBPIPhilam. You may also email us at BPI-Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div> '
                 document.getElementById("turnaround-time-ref").style.display = "none";
                 document.getElementById("payment-ref").style.display = "none";
                 allStepperActive()
@@ -962,7 +962,7 @@ function trackProgressDropDown(trackMessagesArr) {
         '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + progress_msges[1]['msg'] + '</div></div></div>' +
         (claim_type == 'Accident' || claim_type == 'Illness' ?
             '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + 'You have chosen ' + disbursementType + ' as a preferred payout method' + '</div></div></div>' :
-        beneficiaryCount < 1 ?
+            beneficiaryCount < 1 ?
                 '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + 'You have chosen ' + disbursementType + ' as a preferred payout method' + '</div></div></div>' :
                 '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + 'You have chosen your preferred payout methods.' + '</div></div></div>')
         + (claimStatus.toLowerCase() == 'received' ?
@@ -980,7 +980,7 @@ function trackProgressDropDown(trackMessagesArr) {
             '')
         + (claimStatus == 'approved' && disbursementType == 'CTA' && beneficiaryCount < 1 ?
             '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + progress_msges[12]['msg'] + '</div></div></div>'
-        : claimStatus == 'approved' && disbursementType == 'PUA' && beneficiaryCount < 1 ? '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + progress_msges[9]['msg'] + '</div></div></div>' : '')
+            : claimStatus == 'approved' && disbursementType == 'PUA' && beneficiaryCount < 1 ? '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + progress_msges[9]['msg'] + '</div></div></div>' : '')
     document.getElementById('progs-status').innerHTML = final_progress_result
 
     //--before integration--//
