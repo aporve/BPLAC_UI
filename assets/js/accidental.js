@@ -23,6 +23,9 @@ var user_mobile;
 var currSeconds = 0;
 var otpSubmitted = false;
 var scanDoc = false;
+var payoutOption;
+var isChangeInBankDetails='N';
+var isChangeInPayoutOption='N';
 $('#privacy_consent_1').prop('checked', true);
 $('#privacy_consent_2').prop('checked', true);
 $('#privacy_consent_3').prop('checked', true);
@@ -1823,7 +1826,7 @@ function handleAccountInfo(event) {
     BankDetailsList.push(BankDetails);
 
     let filesObject = {};
-    filesObject["FolderName"] = `/CLAIMS/${referenceNumber}`
+    filesObject["FolderName"] = `/CLAIMS/BPLAC/${referenceNumber}`
     filesObject["FileList"] = filesList;
 
     InsuredInformation["PayoutOption"] = "CTA";
@@ -1892,6 +1895,8 @@ function getBankDetails() {
             if (event.data?.accountName != null) {
               $('#proof_BAO_display').hide();
               haveBankDetails = true;
+              isChangeInPayoutOption='Y';
+              field_Branch="";
               document.getElementById('have_bank_details').innerHTML = 'Here are your bank details that we have on file. If you wish to update your bank details, click CHANGE BANK ACCOUNT.'
               field_AccountName = event.data?.accountName;
               document.getElementById('field_AccountName').value = field_AccountName;
@@ -2082,14 +2087,16 @@ function disableBankDetailsOnHavingData() {
 
 function bankTranfer() {
   document.getElementById('ref_number').innerHTML = referenceNumber
+  payoutOption='CTA';
   getBankDetails();
  
 }
 
 function pickUp() {
-  document.getElementById('ref_number').innerHTML = referenceNumber
+  document.getElementById('ref_number').innerHTML = referenceNumber;
+  payoutOption='PUA';
   let filesObject = {};
-  filesObject["FolderName"] = `/CLAIMS/${referenceNumber}`
+  filesObject["FolderName"] = `/CLAIMS/BPLAC/${referenceNumber}`
   filesObject["FileList"] = filesList;
   let BankDetailsList = [];
   BankDetailsList.push(BankDetails);
@@ -2140,6 +2147,7 @@ function addBank(event) {
 
 function handleAddBankInfo(event) {
   event.preventDefault();
+  isChangeInBankDetails='Y';
   var field_AccountName1 = $("#field_AccountName1").val();
   var field_AccountNumber1 = $("#field_AccountNumber1").val();
   var field_currency1 = $("#from_currency1").val();
@@ -2676,6 +2684,143 @@ function submitOtp() {
   // document.getElementById('otp').value = '';
 }
 
+//to call preSubmit api
+function preSubmitCall() {
+  //Basic Information
+  //Insured information
+  //Beneficiary list
+  var source = 'Accident'
+  var raw = JSON.stringify({
+    "basicInformation": basicInformation,
+    "insuredInformation": InsuredInformation,
+    "beneficiaryList": [],
+  });
+
+  var preSubmitPayload = {}
+  preSubmitPayload['source'] = source;
+  preSubmitPayload['data'] = raw;
+
+  window.parent.postMessage(JSON.stringify({
+    event_code: 'ym-client-event', data: JSON.stringify({
+      event: {
+        code: "preSubmit",
+        data: preSubmitPayload
+      }
+    })
+  }), '*');
+
+  window.addEventListener('message', function (eventData) {
+
+    console.log("receiving presubmit event in acc")
+    // console.log(event.data.event_code)
+    try {
+
+      if (eventData.data) {
+        let event = JSON.parse(eventData.data);
+        console.log(event)
+        if (event.event_code == 'preSubmitResponse') { //sucess
+          if (event.data.returnCode == '0') {
+            // $("#step2").addClass("active");
+            // $("#step2>div").addClass("active");
+            // if (otpSubmitted == false) { otpTimer(); } else {
+
+            //   $('#requirements').hide();
+            //   $('#payment').show();
+            // }
+          }
+          else {
+
+          }
+        }
+        else {
+
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+
+  })
+}
+
+function finalSubmitCall() {
+  let filesObject = {};
+  filesObject["folderName"] = `CLAIMS/BPLAC/${referenceNumber}`
+  filesObject["fileList"] = filesList;
+
+  // var field_AccountName = $("#field_AccountName").val();
+  // var field_AccountNumber = $("#field_AccountNumber").val();
+  // var field_Bank = $("#field_Bank").val();
+  // var field_currency = $("from_currency").val();
+  // var field_Branch = $("#field_Branch").val();
+  let BankDetailsList = [];
+  BankDetailsList.push(BankDetails);
+
+  var finalData = {}
+  var source = 'Accident';
+  var raw = JSON.stringify({
+    "companyName": "BPLAC",
+    "webReferenceNumber": referenceNumber,
+    "payoutOption": payoutOption,
+    "bankDetails": BankDetailsList,
+    "isChangeInPayoutOption": isChangeInPayoutOption,
+    "isChangeInBankDetails": isChangeInBankDetails,
+    "filesInformation":filesObject,  
+  });
+  finalData['source'] = source;
+  finalData['data'] = JSON.stringify(raw);
+
+  window.parent.postMessage(JSON.stringify({
+    event_code: 'ym-client-event', data: JSON.stringify({
+      event: {
+        code: "finalSubmit",
+        data: finalData
+      }
+    })
+  }), '*');
+
+  window.addEventListener('message', function (eventData) {
+
+    console.log("receiving final event in acc")
+    // console.log(event.data.event_code)
+    try {
+
+      if (eventData.data) {
+        let event = JSON.parse(eventData.data);
+        console.log(event)
+        if (event.event_code == 'finalSubmitResponse') { //sucess
+          if (event.data.returnCode == '0') {
+            // myDisable()
+            // timer().then(async () => {
+            //   $("#step2").addClass("done");
+            //   /*  $("#step3").addClass("active");
+            //    $("#step3>div").addClass("active"); */
+            //   /* $("#step3").addClass("done"); */
+            //   $("#step3_circle").addClass("md-step-step3-circle ");
+            //   $("#step3_span").addClass("md-step3-span");
+            //   $("#step3_reference").addClass("md-step3-span")
+            //   $("#account_details").hide();
+            //   $("#process_confirmation").show();
+            //   console.log("Data -> ", data);
+            // });
+          }
+          else {
+            $("#popUp").modal("show");
+          }
+        }
+        else {
+          $("#popUp").modal("show");
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+
+  })
+
+
+
+}
 
 
 // When the user clicks anywhere outside of the modal, close it and remove timer 

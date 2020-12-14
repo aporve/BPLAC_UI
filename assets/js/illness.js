@@ -41,6 +41,9 @@ let BankDetails = {};
 let FilesInformation = {};
 let filesList = [];
 let filesMap = {};
+var payoutOption;
+var isChangeInBankDetails = 'N';
+var isChangeInPayoutOption = 'N';
 let claimType, causeOfLoss, govIdFront, govIdBack, apsFile, narrationReport, officialReceipts;
 let file1Buffer, file2Buffer, file3Buffer, file4Buffer, file5Buffer, file6Buffer, file7Buffer, file8Buffer;
 basicInformation["CompanyCode"] = "BPLAC";
@@ -1075,6 +1078,144 @@ const fileCheck = (file, button, pageid, formData, fileName) => {
 
 };
 
+//to call preSubmit api
+function preSubmitCall() {
+    //Basic Information
+    //Insured information
+    //Beneficiary list
+    var source = 'Illness'
+    var raw = JSON.stringify({
+        "basicInformation": basicInformation,
+        "insuredInformation": InsuredInformation,
+        "beneficiaryList": [],
+    });
+
+    var preSubmitPayload = {}
+    preSubmitPayload['source'] = source;
+    preSubmitPayload['data'] = raw;
+
+    window.parent.postMessage(JSON.stringify({
+        event_code: 'ym-client-event', data: JSON.stringify({
+            event: {
+                code: "preSubmit",
+                data: preSubmitPayload
+            }
+        })
+    }), '*');
+
+    window.addEventListener('message', function (eventData) {
+
+        console.log("receiving presubmit event in acc")
+        // console.log(event.data.event_code)
+        try {
+
+            if (eventData.data) {
+                let event = JSON.parse(eventData.data);
+                console.log(event)
+                if (event.event_code == 'preSubmitResponse') { //sucess
+                    if (event.data.returnCode == '0') {
+                        // $("#step2").addClass("active");
+                        // $("#step2>div").addClass("active");
+                        // if (otpSubmitted == false) { otpTimer(); } else {
+
+                        //   $('#requirements').hide();
+                        //   $('#payment').show();
+                        // }
+                    }
+                    else {
+
+                    }
+                }
+                else {
+
+                }
+            }
+        } catch (error) {
+            console.log(error)
+        }
+
+    })
+}
+
+function finalSubmitCall() {
+    let filesObject = {};
+    filesObject["folderName"] = `CLAIMS/BPLAC/${referenceNumber}`
+    filesObject["fileList"] = filesList;
+
+    // var field_AccountName = $("#field_AccountName").val();
+    // var field_AccountNumber = $("#field_AccountNumber").val();
+    // var field_Bank = $("#field_Bank").val();
+    // var field_currency = $("from_currency").val();
+    // var field_Branch = $("#field_Branch").val();
+    let BankDetailsList = [];
+    BankDetailsList.push(BankDetails);
+
+    var finalData = {}
+    var source = 'Illness';
+    var raw = JSON.stringify({
+        "companyName": "BPLAC",
+        "webReferenceNumber": referenceNumber,
+        "payoutOption": payoutOption,
+        "bankDetails": BankDetailsList,
+        "isChangeInPayoutOption": isChangeInPayoutOption,
+        "isChangeInBankDetails": isChangeInBankDetails,
+        "filesInformation": filesObject,
+    });
+    finalData['source'] = source;
+    finalData['data'] = JSON.stringify(raw);
+
+    window.parent.postMessage(JSON.stringify({
+        event_code: 'ym-client-event', data: JSON.stringify({
+            event: {
+                code: "finalSubmit",
+                data: finalData
+            }
+        })
+    }), '*');
+
+    window.addEventListener('message', function (eventData) {
+
+        console.log("receiving final event in acc")
+        // console.log(event.data.event_code)
+        try {
+
+            if (eventData.data) {
+                let event = JSON.parse(eventData.data);
+                console.log(event)
+                if (event.event_code == 'finalSubmitResponse') { //sucess
+                    if (event.data.returnCode == '0') {
+                        // myDisable()
+                        // timer().then(async () => {
+                        //   $("#step2").addClass("done");
+                        //   /*  $("#step3").addClass("active");
+                        //    $("#step3>div").addClass("active"); */
+                        //   /* $("#step3").addClass("done"); */
+                        //   $("#step3_circle").addClass("md-step-step3-circle ");
+                        //   $("#step3_span").addClass("md-step3-span");
+                        //   $("#step3_reference").addClass("md-step3-span")
+                        //   $("#account_details").hide();
+                        //   $("#process_confirmation").show();
+                        //   console.log("Data -> ", data);
+                        // });
+                    }
+                    else {
+                        $("#popUp").modal("show");
+                    }
+                }
+                else {
+                    $("#popUp").modal("show");
+                }
+            }
+        } catch (error) {
+            console.log(error)
+        }
+
+    })
+
+
+
+}
+
 
 const isFileSizeValid = (file) => {
     if (file.size < 2097152) {
@@ -1651,7 +1792,7 @@ function handleAccountInfo(event) {
             BankDetailsList.push(BankDetails);
 
             let filesObject = {};
-            filesObject["FolderName"] = `/CLAIMS/${referenceNumber}`
+            filesObject["FolderName"] = `/CLAIMS/BPLAC/${referenceNumber}`
             filesObject["FileList"] = filesList;
 
             InsuredInformation["PayoutOption"] = "CTA";
@@ -1679,6 +1820,7 @@ function handleAccountInfo(event) {
 
 function handleAddBankInfo(event) {
     event.preventDefault();
+    isChangeInBankDetails = 'Y';
     var field_AccountName1 = $("#field_AccountName1").val();
     var field_AccountNumber1 = $("#field_AccountNumber1").val();
     var field_currency1 = $("#from_currency1").val();
@@ -1800,71 +1942,86 @@ function getBankDetails() {
                         $('#proof_BAO_display').hide();
                         haveBankDetails = true;
                         $('#cover-spin').hide(0)
-                        document.getElementById('have_bank_details').innerHTML = ' We have your bank details on file.'
-                        field_AccountName = event.data.accountName;
-                        document.getElementById('field_AccountName').value = field_AccountName;
+                        if (event.data.accountName != null) {
+                            isChangeInPayoutOption = 'Y';
+                            document.getElementById('have_bank_details').innerHTML = ' We have your bank details on file.'
+                            field_AccountName = event.data?.accountName;
+                            document.getElementById('field_AccountName').value = field_AccountName;
+                            document.getElementById('field_AccountName1').value = field_AccountName;
 
-                        field_AccountNumber = event.data.maskedAccountNumber.replace(/.(?=.{4})/g, '*');
-                        document.getElementById('field_AccountNumber').value = field_AccountNumber;
+                            field_AccountNumber = event.data?.maskedAccountNumber?.replace(/.(?=.{4})/g, '*');
 
-                        field_Bank = event.data.bankName;
-                        field_Branch = '';
-                        field_Currency = event.data.accountCurrency;
-                        $("#from_currency option").each(function () {
-                            if ($(this).text() == field_Currency) {
-                                $(this).attr('selected', 'selected');
+                            document.getElementById('field_AccountNumber').value = field_AccountNumber;
+                            document.getElementById('field_AccountNumber1').value = field_AccountNumber;
+                            field_Branch = ''
+                            document.getElementById('field_Branch').value = field_Branch;
+                            document.getElementById('field_Branch1').value = field_Branch;
+                            field_Bank = event.data.bankName;
+                            document.getElementById('field_Bank').value = field_Bank;
+                            document.getElementById('field_Bank1').value = field_Bank;
+                            // field_Branch = '';
+                            field_Currency = event.data.accountCurrency;
+                            $("#from_currency option").each(function () {
+                                if ($(this).text() == field_Currency) {
+                                    $(this).attr('selected', 'selected');
+                                }
+                            });
+                            $("#from_currency1 option").each(function () {
+                                if ($(this).text() == field_Currency) {
+                                    $(this).attr('selected', 'selected');
+                                }
+                            });
+
+
+                            if (field_Currency.toLowerCase() == "peso") {
+
+                                $("#field_Bank").html(
+                                    "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option><option value='BPI Family Savings Bank - BFB'>BPI Family Savings Bank - BFB</option>"
+                                );
+                                $("#field_Bank option").each(function () {
+
+                                    if ($(this).text().split('-')[1].toLowerCase().trim() == field_Bank.toLowerCase().trim()) {
+
+                                        $(this).attr('selected', 'selected');
+                                    }
+                                });
+
+                                $("#field_Bank1").html(
+                                    "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option><option value='BPI Family Savings Bank - BFB'>BPI Family Savings Bank - BFB</option>"
+                                );
+                                $("#field_Bank1 option").each(function () {
+
+                                    if ($(this).text().split('-')[1].toLowerCase().trim() == field_Bank.toLowerCase().trim()) {
+
+                                        $(this).attr('selected', 'selected');
+                                    }
+                                });
                             }
-                        });
+                            else if (field_Currency.toLowerCase() == "usd") {
+                                $("#field_Bank1").html(
+                                    "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option>"
+                                );
+                                $("#field_Bank1 option").each(function () {
 
+                                    if ($(this).text().split('-')[1].toLowerCase().trim() == field_Bank.toLowerCase().trim()) {
 
-                        if (field_Currency.toLowerCase() == "peso") {
+                                        $(this).attr('selected', 'selected');
+                                    }
+                                });
 
-                            $("#field_Bank").html(
-                                "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option><option value='BPI Family Savings Bank - BFB'>BPI Family Savings Bank - BFB</option>"
-                            );
-                            $("#field_Bank option").each(function () {
+                                $("#field_Bank").html(
+                                    "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option>"
+                                );
+                                $("#field_Bank option").each(function () {
 
-                                if ($(this).text().split('-')[1].toLowerCase().trim() == field_Bank.toLowerCase().trim()) {
+                                    if ($(this).text().split('-')[1].toLowerCase().trim() == field_Bank.toLowerCase().trim()) {
 
-                                    $(this).attr('selected', 'selected');
-                                }
-                            });
-
-                            $("#field_Bank1").html(
-                                "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option><option value='BPI Family Savings Bank - BFB'>BPI Family Savings Bank - BFB</option>"
-                            );
-                            $("#field_Bank1 option").each(function () {
-
-                                if ($(this).text().split('-')[1].toLowerCase().trim() == field_Bank.toLowerCase().trim()) {
-
-                                    $(this).attr('selected', 'selected');
-                                }
-                            });
+                                        $(this).attr('selected', 'selected');
+                                    }
+                                });
+                            }
+                            disableBankDetailsOnHavingData()
                         }
-                        else if (field_Currency.toLowerCase() == "usd") {
-                            $("#field_Bank1").html(
-                                "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option>"
-                            );
-                            $("#field_Bank1 option").each(function () {
-
-                                if ($(this).text().split('-')[1].toLowerCase().trim() == field_Bank.toLowerCase().trim()) {
-
-                                    $(this).attr('selected', 'selected');
-                                }
-                            });
-
-                            $("#field_Bank").html(
-                                "<option value='Bank of the Philippine Islands - BPI'>Bank of the Philippine Islands - BPI</option>"
-                            );
-                            $("#field_Bank option").each(function () {
-
-                                if ($(this).text().split('-')[1].toLowerCase().trim() == field_Bank.toLowerCase().trim()) {
-
-                                    $(this).attr('selected', 'selected');
-                                }
-                            });
-                        }
-                        disableBankDetailsOnHavingData()
                         $('#payment').hide();
                         $('#account_details').show();
                         $("#step2").addClass("active");
@@ -1961,22 +2118,24 @@ function getBankDetails() {
     //     }).catch(error => {
     //         console.log(error)
     //     });
-    
-    
-    
+
+
+
 }
 
 function bankTranfer() {
 
     document.getElementById('ref_number').innerHTML = referenceNumber
+    payoutOption = 'CTA';
     getBankDetails();
-  
+
 }
 
 function pickUp() {
     document.getElementById('ref_number').innerHTML = referenceNumber
+    payoutOption = 'PUA';
     let filesObject = {};
-    filesObject["FolderName"] = `/CLAIMS/${referenceNumber}`
+    filesObject["FolderName"] = `/CLAIMS/BPLAC/${referenceNumber}`
     filesObject["FileList"] = filesList;
     let BankDetailsList = [];
     BankDetailsList.push(BankDetails);

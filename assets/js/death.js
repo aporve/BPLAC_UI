@@ -25,6 +25,9 @@ var currSeconds = 0;
 let filesMap = {};
 var otpSubmitted = false;
 var scanDoc = false;
+var payoutOption;
+var isChangeInBankDetails='N';
+var isChangeInPayoutOption='N';
 var file1 = document.getElementById('file_Upload_1');
 var file2 = document.getElementById('file_Upload_2');
 var file3 = document.getElementById('file_Upload_3');
@@ -416,6 +419,143 @@ function disableFutureDatesDOB() {
     $('#field_DOB').attr('max', maxDate);
 }
 
+//to call preSubmit api
+function preSubmitCall() {
+    //Basic Information
+    //Insured information
+    //Beneficiary list
+    var source = 'Death'
+    var raw = JSON.stringify({
+        "basicInformation": basicInformation,
+        "insuredInformation": InsuredInformation,
+        "beneficiaryList": BeneficiaryList,
+    });
+
+    var preSubmitPayload = {}
+    preSubmitPayload['source'] = source;
+    preSubmitPayload['data'] = raw;
+
+    window.parent.postMessage(JSON.stringify({
+        event_code: 'ym-client-event', data: JSON.stringify({
+            event: {
+                code: "preSubmit",
+                data: preSubmitPayload
+            }
+        })
+    }), '*');
+
+    window.addEventListener('message', function (eventData) {
+
+        console.log("receiving presubmit event in acc")
+        // console.log(event.data.event_code)
+        try {
+
+            if (eventData.data) {
+                let event = JSON.parse(eventData.data);
+                console.log(event)
+                if (event.event_code == 'preSubmitResponse') { //sucess
+                    if (event.data.returnCode == '0') {
+                        // $("#step2").addClass("active");
+                        // $("#step2>div").addClass("active");
+                        // if (otpSubmitted == false) { otpTimer(); } else {
+
+                        //   $('#requirements').hide();
+                        //   $('#payment').show();
+                        // }
+                    }
+                    else {
+
+                    }
+                }
+                else {
+
+                }
+            }
+        } catch (error) {
+            console.log(error)
+        }
+
+    })
+}
+
+function finalSubmitCall() {
+    let filesObject = {};
+    filesObject["folderName"] = `CLAIMS/BPLAC/${referenceNumber}`
+    filesObject["fileList"] = filesList;
+
+    // var field_AccountName = $("#field_AccountName").val();
+    // var field_AccountNumber = $("#field_AccountNumber").val();
+    // var field_Bank = $("#field_Bank").val();
+    // var field_currency = $("from_currency").val();
+    // var field_Branch = $("#field_Branch").val();
+    // let BankDetailsList = [];
+    // BankDetailsList.push(BankDetails);
+
+    var finalData = {}
+    var source = 'Death';
+    var raw = JSON.stringify({
+        "companyName": "BPLAC",
+        "webReferenceNumber": referenceNumber,
+        "payoutOption": payoutOption,
+        "bankDetails": BankDetailsList,
+        "isChangeInPayoutOption": isChangeInPayoutOption,
+        "isChangeInBankDetails": isChangeInBankDetails,
+        "filesInformation": filesObject,
+    });
+    finalData['source'] = source;
+    finalData['data'] = JSON.stringify(raw);
+
+    window.parent.postMessage(JSON.stringify({
+        event_code: 'ym-client-event', data: JSON.stringify({
+            event: {
+                code: "finalSubmit",
+                data: finalData
+            }
+        })
+    }), '*');
+
+    window.addEventListener('message', function (eventData) {
+
+        console.log("receiving final event in acc")
+        // console.log(event.data.event_code)
+        try {
+
+            if (eventData.data) {
+                let event = JSON.parse(eventData.data);
+                console.log(event)
+                if (event.event_code == 'finalSubmitResponse') { //sucess
+                    if (event.data.returnCode == '0') {
+                        // myDisable()
+                        // timer().then(async () => {
+                        //   $("#step2").addClass("done");
+                        //   /*  $("#step3").addClass("active");
+                        //    $("#step3>div").addClass("active"); */
+                        //   /* $("#step3").addClass("done"); */
+                        //   $("#step3_circle").addClass("md-step-step3-circle ");
+                        //   $("#step3_span").addClass("md-step3-span");
+                        //   $("#step3_reference").addClass("md-step3-span")
+                        //   $("#account_details").hide();
+                        //   $("#process_confirmation").show();
+                        //   console.log("Data -> ", data);
+                        // });
+                    }
+                    else {
+                        $("#popUp").modal("show");
+                    }
+                }
+                else {
+                    $("#popUp").modal("show");
+                }
+            }
+        } catch (error) {
+            console.log(error)
+        }
+
+    })
+
+
+
+}
 
 
 function checkKeyword(keyword, type) {
@@ -951,7 +1091,7 @@ function handleFormAddBeneficiary(event) {
             beneficiary["Nationality"] = field_addBeneficiaryNationality,
             beneficiary["Sex"] = field_addBeneficiarySex,
             beneficiary["Relationship"] = field_addBeneficiaryRelationToDeceased,
-            beneficiary["DocumentFolder"] = `/CLAIMS/${referenceNumber}`,
+            beneficiary["DocumentFolder"] = `/CLAIMS/BPLAC/${referenceNumber}`,
             beneficiary["PayoutOption"] = "CTA",
             beneficiary["Employer"] = field_addBeneficiaryEmployerName,
             beneficiary["GovernmentOfficial"] = field_addBeneficiary_relatives1,
@@ -1539,7 +1679,7 @@ function handleForm(event) {
             beneficiary["Nationality"] = field_BeneficiaryNationality,
             beneficiary["Sex"] = $("select#field_BeneficiarySex option").filter(":selected").val(),
             beneficiary["Relationship"] = field_BeneficiaryRelationToDeceased,
-            beneficiary["DocumentFolder"] = `/CLAIMS/${referenceNumber}`,
+            beneficiary["DocumentFolder"] = `/CLAIMS/BPLAC/${referenceNumber}`,
             beneficiary["PayoutOption"] = "CTA",
             beneficiary["Employer"] = field_BeneficiaryEmployerName,
             beneficiary["GovernmentOfficial"] = $("select#field_Beneficiary_relatives1 option").filter(":selected").val(),
@@ -3410,7 +3550,7 @@ function buttonSubmitClicked(event) {
         });
 
         let FilesInformation = {};
-        FilesInformation["FolderName"] = `/CLAIMS/${referenceNumber}`
+        FilesInformation["FolderName"] = `/CLAIMS/BPLAC/${referenceNumber}`
         FilesInformation["FileList"] = filesList;
 
         finalPayload["BasicInformation"] = basicInformation;
@@ -3503,7 +3643,7 @@ function addBeneficiaryButtonClicked(event) {
             console.log('upload data --> ', upload_data);
         });
         let FilesInformation = {};
-        FilesInformation["FolderName"] = `/CLAIMS/${referenceNumber}`
+        FilesInformation["FolderName"] = `/CLAIMS/BPLAC/${referenceNumber}`
         FilesInformation["FileList"] = filesList;
 
         finalPayload["BasicInformation"] = basicInformation;
@@ -3641,6 +3781,7 @@ function handleAccountInfo(event) {
 }
 function handleAddBankInfo(event) {
     event.preventDefault();
+    isChangeInBankDetails = 'Y';
     var field_AccountName1 = $("#field_AccountName1").val();
     var field_AccountNumber1 = $("#field_AccountNumber1").val();
     var field_currency1 = $("#from_currency1").val();
@@ -4002,6 +4143,7 @@ function getBankDetails() {
 function bankTranfer() {
 
     document.getElementById('ref_number').innerHTML = referenceNumber
+    payoutOption='CTA';
     getBankDetails();
     trackBenificiary = 0;
     $('#payment').hide();
@@ -4039,6 +4181,7 @@ function addBeneficiarybankTranfer() {
 
 function pickUp() {
     document.getElementById('ref_number').innerHTML = referenceNumber
+    payoutOption='PUA';
     trackBenificiary = 1;
     let index = BeneficiaryList.findIndex(ele => ele["BeneficiaryNo"] == "1")
     let benObject = BeneficiaryList[index]
