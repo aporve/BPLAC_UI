@@ -88,7 +88,7 @@ function timer(lowerVal, UpperVal) {
       if (i == 100 && UpperVal == 100) {
 
         console.log("cleartime");
-        clearTimeout(cleartime);
+        clearInterval(cleartime);
         renderProgress(0);
 
         resolve("cleartime")
