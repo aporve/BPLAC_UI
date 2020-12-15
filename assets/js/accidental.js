@@ -26,6 +26,7 @@ var scanDoc = false;
 var payoutOption;
 var isChangeInBankDetails = 'N';
 var isChangeInPayoutOption = 'N';
+let cleartime = null;
 $('#privacy_consent_1').prop('checked', true);
 $('#privacy_consent_2').prop('checked', true);
 $('#privacy_consent_3').prop('checked', true);
@@ -77,7 +78,7 @@ function timer(lowerVal, UpperVal) {
   var random = Math.floor(Math.random() * 5) + 1
   return new Promise((resolve, reject) => {
     var i = lowerVal
-    let cleartime = setInterval(() => {
+    cleartime = setInterval(() => {
       i = random + i;
       renderProgress(i)
       if (i == (UpperVal - 1)) {
@@ -118,7 +119,10 @@ function renderProgress(progress) {
       .css("transform", "rotate(0deg)");
     $(".animate-75-100-b").css("transform", "rotate(" + angle + "deg)");
   }
-  $(".text").html(progress + "%");
+  if (progress != 0) {
+    $(".text").html(progress + "%");
+  }
+
 }
 
 
@@ -2764,7 +2768,8 @@ function preSubmitCall() {
         if (event.event_code == 'preSubmitResponse') { //sucess
           if (event.data.returnCode == '0') {
             timer(50, 100).then(async () => {
-            
+              clearTimeout(cleartime);
+              renderProgress(0);
               $("#step2").addClass("active");
               $("#step2>div").addClass("active");
               if (otpSubmitted == false) { otpTimer(); } else {
@@ -2772,7 +2777,7 @@ function preSubmitCall() {
                 $('#requirements').hide();
                 $('#payment').show();
               }
-             
+
             })
 
 
