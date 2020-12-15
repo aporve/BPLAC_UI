@@ -85,15 +85,12 @@ function timer(lowerVal, UpperVal) {
         i = UpperVal;
         renderProgress(i)
       }
-      if (i > UpperVal) {
+      if (i == UpperVal) {
 
         console.log("cleartime");
-        clearInterval(cleartime);
-
+        clearTimeout(cleartime);
+        // document.getElementsByClassName('loader1').style.display='none'
         resolve("cleartime")
-        if (i > 100) {
-          renderProgress(0);
-        }
       }
       //  i++;
     }, 500);
