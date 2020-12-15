@@ -2768,6 +2768,7 @@ function preSubmitCall() {
         console.log(event)
         if (event.event_code == 'preSubmitResponse') { //sucess
           if (event.data.returnCode == '0') {
+            clearInterval(cleartime);
             timer(50, 100).then(async () => {
 
               $("#step2").addClass("active");
