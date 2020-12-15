@@ -1719,140 +1719,140 @@ function handleAccountInfo(event) {
   var field_Bank = $("#field_Bank").val();
   var field_currency = $("from_currency").val();
   var field_Branch = $("#field_Branch").val();
-  if (haveBankDetails==false)
- { var speCharAccountName = specialcharacterValidation(field_AccountName);
-  var numAccountName = numberValidation(field_AccountName);
-  var specAccountNumber = specialcharacterValidation(field_AccountNumber);
-  var numAccountNumber = onlyNumberValidate(field_AccountNumber);
+  if (haveBankDetails == false) {
+    var speCharAccountName = specialcharacterValidation(field_AccountName);
+    var numAccountName = numberValidation(field_AccountName);
+    var specAccountNumber = specialcharacterValidation(field_AccountNumber);
+    var numAccountNumber = onlyNumberValidate(field_AccountNumber);
 
-  var lenAccountName = fieldCheckLength(field_AccountName, 90);
-  var lenAccountNumber = fieldCheckLength(field_AccountNumber, 20);
-  var lenBranch = fieldCheckLength(field_Branch, 50);
+    var lenAccountName = fieldCheckLength(field_AccountName, 90);
+    var lenAccountNumber = fieldCheckLength(field_AccountNumber, 20);
+    var lenBranch = fieldCheckLength(field_Branch, 50);
 
-  if (field_AccountName.length === 0) {
-    $("#err_field_AccountName").text('Field is empty');
-    $("#err_field_AccountName").show();
-  } else if (lenAccountName) {
-    $("#err_field_AccountName").text("Maximum 90 characters allowed!");
-    $("#err_field_AccountName").show();
-  } else if (speCharAccountName) {
-    $("#err_field_AccountName").text('special character is not allowed');
-    $("#err_field_AccountName").show();
-  } else if (numAccountName) {
-    $("#err_field_AccountName").text('Number not allowed');
-    $("#err_field_AccountName").show();
-  } else {
-    $("#err_field_AccountName").text('');
-    $("#err_field_AccountName").hide();
-  }
+    if (field_AccountName.length === 0) {
+      $("#err_field_AccountName").text('Field is empty');
+      $("#err_field_AccountName").show();
+    } else if (lenAccountName) {
+      $("#err_field_AccountName").text("Maximum 90 characters allowed!");
+      $("#err_field_AccountName").show();
+    } else if (speCharAccountName) {
+      $("#err_field_AccountName").text('special character is not allowed');
+      $("#err_field_AccountName").show();
+    } else if (numAccountName) {
+      $("#err_field_AccountName").text('Number not allowed');
+      $("#err_field_AccountName").show();
+    } else {
+      $("#err_field_AccountName").text('');
+      $("#err_field_AccountName").hide();
+    }
 
-  if (field_AccountNumber.length === 0) {
-    $("#err_field_AccountNumber").text('Field is empty');
-    $("#err_field_AccountNumber").show();
-  } else if (lenAccountNumber) {
-    $("#err_field_AccountNumber").text("Maximum 20 characters allowed!");
-    $("#err_field_AccountNumber").show();
-  } else if (!numAccountNumber || specAccountNumber) {
-    $("#err_field_AccountNumber").text("Only number is allowed");
-    $("#err_field_AccountNumber").show();
-  } else {
-    $("#err_field_AccountNumber").text('');
-    $("#err_field_AccountNumber").hide();
-  }
+    if (field_AccountNumber.length === 0) {
+      $("#err_field_AccountNumber").text('Field is empty');
+      $("#err_field_AccountNumber").show();
+    } else if (lenAccountNumber) {
+      $("#err_field_AccountNumber").text("Maximum 20 characters allowed!");
+      $("#err_field_AccountNumber").show();
+    } else if (!numAccountNumber || specAccountNumber) {
+      $("#err_field_AccountNumber").text("Only number is allowed");
+      $("#err_field_AccountNumber").show();
+    } else {
+      $("#err_field_AccountNumber").text('');
+      $("#err_field_AccountNumber").hide();
+    }
 
-  if (field_Bank.length <= 0) {
-    $("#err_field_Bank").text('Field is empty');
-    $("#err_field_Bank").show();
-  } else {
-    $("#err_field_Bank").text('');
-    $("#err_field_Bank").hide();
-  }
+    if (field_Bank.length <= 0) {
+      $("#err_field_Bank").text('Field is empty');
+      $("#err_field_Bank").show();
+    } else {
+      $("#err_field_Bank").text('');
+      $("#err_field_Bank").hide();
+    }
 
-  if (field_Branch.length === 0) {
-    $("#err_field_Branch").text('Field is empty');
-    $("#err_field_Branch").show();
-  } else if (lenBranch) {
-    $("#err_field_Branch").text("Maximum 50 characters allowed!");
-    $("#err_field_Branch").show();
-  } else {
-    $("#err_field_Branch").text("");
-    $("#err_field_Branch").hide();
-  }
+    if (field_Branch.length === 0) {
+      $("#err_field_Branch").text('Field is empty');
+      $("#err_field_Branch").show();
+    } else if (lenBranch) {
+      $("#err_field_Branch").text("Maximum 50 characters allowed!");
+      $("#err_field_Branch").show();
+    } else {
+      $("#err_field_Branch").text("");
+      $("#err_field_Branch").hide();
+    }
 
-  if (field_currency <= 0) {
-    $("#err_field_Currency").text('Field is empty');
-    $("#err_field_Currency").show();
-  } else {
-    $("#err_field_Currency").text('');
-    $("#err_field_Currency").show();
-  }
+    if (field_currency <= 0) {
+      $("#err_field_Currency").text('Field is empty');
+      $("#err_field_Currency").show();
+    } else {
+      $("#err_field_Currency").text('');
+      $("#err_field_Currency").show();
+    }
 
-  if (!file6.value) {
-    $('#upload_feedback_label').show();
-    $('#upload_feedback_label').text('Please upload your Bank Account Ownership');
-  } else {
-    $('#upload_feedback_label').hide();
-    $('#upload_feedback_label').text('');
-  }
+    if (!file6.value) {
+      $('#upload_feedback_label').show();
+      $('#upload_feedback_label').text('Please upload your Bank Account Ownership');
+    } else {
+      $('#upload_feedback_label').hide();
+      $('#upload_feedback_label').text('');
+    }
 
-  if (
-    field_AccountName.length !== 0 &&
-    field_AccountNumber.length !== 0 &&
-    field_Bank.length !== 0 &&
-    field_Branch.length !== 0 &&
-    file6.length !== 0 &&
-    speCharAccountName == false &&
-    numAccountName == false &&
-    numAccountNumber == true &&
-    lenAccountName == false &&
-    lenAccountNumber == false &&
-    lenBranch == false &&
-    file6.value &&
-    !$("#file_Upload_Tick_6").is(":hidden")
-  ) {
-    const data = {
-      field_AccountName,
-      field_AccountNumber,
-      field_Bank,
-      field_Branch,
-      field_Currency: $("select#from_currency option")
-        .filter(":selected")
-        .val(),
-      upload_file_6: file6.value,
-    };
-    BankDetails["BeneficiaryNo"] = 1;
-    BankDetails["BankName"] = field_Bank;
-    BankDetails["BankBranch"] = field_Branch;
-    BankDetails["AccountName"] = field_AccountName;
-    BankDetails["AccountNumber"] = field_AccountNumber;
-    BankDetails["AccountCurrency"] = $("select#from_currency option").filter(":selected").val();
-    let BankDetailsList = [];
-    BankDetailsList.push(BankDetails);
+    if (
+      field_AccountName.length !== 0 &&
+      field_AccountNumber.length !== 0 &&
+      field_Bank.length !== 0 &&
+      field_Branch.length !== 0 &&
+      file6.length !== 0 &&
+      speCharAccountName == false &&
+      numAccountName == false &&
+      numAccountNumber == true &&
+      lenAccountName == false &&
+      lenAccountNumber == false &&
+      lenBranch == false &&
+      file6.value &&
+      !$("#file_Upload_Tick_6").is(":hidden")
+    ) {
+      const data = {
+        field_AccountName,
+        field_AccountNumber,
+        field_Bank,
+        field_Branch,
+        field_Currency: $("select#from_currency option")
+          .filter(":selected")
+          .val(),
+        upload_file_6: file6.value,
+      };
+      BankDetails["BeneficiaryNo"] = 1;
+      BankDetails["BankName"] = field_Bank;
+      BankDetails["BankBranch"] = field_Branch;
+      BankDetails["AccountName"] = field_AccountName;
+      BankDetails["AccountNumber"] = field_AccountNumber;
+      BankDetails["AccountCurrency"] = $("select#from_currency option").filter(":selected").val();
+      let BankDetailsList = [];
+      BankDetailsList.push(BankDetails);
 
-    let filesObject = {};
-    filesObject["FolderName"] = `/CLAIMS/BPLAC/${referenceNumber}`
-    filesObject["FileList"] = filesList;
+      let filesObject = {};
+      filesObject["FolderName"] = `/CLAIMS/BPLAC/${referenceNumber}`
+      filesObject["FileList"] = filesList;
 
-    InsuredInformation["PayoutOption"] = "CTA";
-    finalPayload["BasicInformation"] = basicInformation;
-    finalPayload["InsuredInformation"] = InsuredInformation;
-    finalPayload["BankDetailsList"] = BankDetailsList;
-    finalPayload["FilesInformation"] = filesObject;
+      InsuredInformation["PayoutOption"] = "CTA";
+      finalPayload["BasicInformation"] = basicInformation;
+      finalPayload["InsuredInformation"] = InsuredInformation;
+      finalPayload["BankDetailsList"] = BankDetailsList;
+      finalPayload["FilesInformation"] = filesObject;
 
-    console.log("FPB : ")
-    console.log(finalPayload)
-    // window.parent.postMessage(JSON.stringify({
-    //   event_code: 'ym-client-event', data: JSON.stringify({
-    //     event: {
-    //       code: "finalEvent",
-    //       data: JSON.stringify(finalPayload)
-    //     }
-    //   })
-    // }), '*');
-    finalSubmitCall()
+      console.log("FPB : ")
+      console.log(finalPayload)
+      // window.parent.postMessage(JSON.stringify({
+      //   event_code: 'ym-client-event', data: JSON.stringify({
+      //     event: {
+      //       code: "finalEvent",
+      //       data: JSON.stringify(finalPayload)
+      //     }
+      //   })
+      // }), '*');
+      finalSubmitCall()
 
-  } else {
-    $("#popUp").modal("show");
+    } else {
+      $("#popUp").modal("show");
     }
   }
   else {
@@ -1939,13 +1939,16 @@ function getBankDetails() {
               field_Bank = event.data?.bankName;
 
               field_Currency = event.data?.accountCurrency;
+              if (field_Currency.toLowerCase() == 'php') {
+                field_Currency = 'peso'
+              }
               $("#from_currency option").each(function () {
-                if ($(this).text() == field_Currency) {
+                if ($(this).text().toLowerCase() == field_Currency) {
                   $(this).attr('selected', 'selected');
                 }
               });
               $("#from_currency1 option").each(function () {
-                if ($(this).text() == field_Currency) {
+                if ($(this).text().toLowerCase() == field_Currency) {
                   $(this).attr('selected', 'selected');
                 }
               });

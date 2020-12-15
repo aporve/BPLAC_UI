@@ -1989,13 +1989,16 @@ function getBankDetails() {
                             document.getElementById('field_Bank1').value = field_Bank;
                             // field_Branch = '';
                             field_Currency = event.data.accountCurrency;
+                            if (field_Currency.toLowerCase() == 'php') {
+                                field_Currency = 'peso'
+                            }
                             $("#from_currency option").each(function () {
-                                if ($(this).text() == field_Currency) {
+                                if ($(this).text().toLowerCase() == field_Currency) {
                                     $(this).attr('selected', 'selected');
                                 }
                             });
                             $("#from_currency1 option").each(function () {
-                                if ($(this).text() == field_Currency) {
+                                if ($(this).text().toLowerCase() == field_Currency) {
                                     $(this).attr('selected', 'selected');
                                 }
                             });
