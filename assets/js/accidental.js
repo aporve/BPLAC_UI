@@ -91,14 +91,9 @@ function timer(lowerVal, UpperVal) {
         clearInterval(cleartime);
 
         resolve("cleartime")
-      }
-      if (i == 100 && UpperVal == 100) {
-
-        console.log("cleartime");
-        clearInterval(cleartime);
-        renderProgress(0);
-
-        resolve("cleartime")
+        if (i > 100) {
+          renderProgress(0);
+        }
       }
       //  i++;
     }, 500);
