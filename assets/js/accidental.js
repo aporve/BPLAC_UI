@@ -85,6 +85,13 @@ function timer(lowerVal, UpperVal) {
         i = UpperVal;
         renderProgress(i)
       }
+      if (i > UpperVal) {
+
+        console.log("cleartime");
+        clearInterval(cleartime);
+
+        resolve("cleartime")
+      }
       if (i == 100 && UpperVal == 100) {
 
         console.log("cleartime");
@@ -2768,7 +2775,6 @@ function preSubmitCall() {
         console.log(event)
         if (event.event_code == 'preSubmitResponse') { //sucess
           if (event.data.returnCode == '0') {
-            clearInterval(cleartime);
             timer(50, 100).then(async () => {
 
               $("#step2").addClass("active");
