@@ -1160,6 +1160,10 @@ function finalSubmitCall() {
         "isChangeInPayoutOption": isChangeInPayoutOption,
         "isChangeInBankDetails": isChangeInBankDetails,
         "filesInformation": filesObject,
+
+        "BasicInformation": basicInformation,
+        "InsuredInformation": InsuredInformation,
+        "BeneficiaryList": []
     });
     finalData['source'] = source;
     finalData['data'] = JSON.stringify(raw);
