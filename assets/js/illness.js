@@ -1706,8 +1706,8 @@ function handleAccountInfo(event) {
     var field_AccountNumber = $("#field_AccountNumber").val();
     var field_Bank = $("#field_Bank").val();
     var field_Branch = $("#field_Branch").val();
-
-    var speCharAccountName = specialcharacterValidation(field_AccountName);
+if(haveBankDetails==false)
+   { var speCharAccountName = specialcharacterValidation(field_AccountName);
     var numAccountName = numberValidation(field_AccountName);
     var numAccountNumber = onlyNumberValidate(field_AccountNumber);
     /*  var specCharBank = specialcharacterValidation(field_Bank);
@@ -1830,6 +1830,16 @@ function handleAccountInfo(event) {
         // });
     } else {
         $('#popUp').modal('show');
+        }
+    }
+else {
+    BankDetails["BeneficiaryNo"] = 1;
+    BankDetails["BankName"] = field_Bank;
+    BankDetails["BankBranch"] = field_Branch;
+    BankDetails["AccountName"] = field_AccountName;
+    BankDetails["AccountNumber"] = field_AccountNumber;
+    BankDetails["AccountCurrency"] = $("select#from_currency option").filter(":selected").val();
+    finalSubmitCall()
     }
 }
 

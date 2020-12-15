@@ -1719,7 +1719,8 @@ function handleAccountInfo(event) {
   var field_Bank = $("#field_Bank").val();
   var field_currency = $("from_currency").val();
   var field_Branch = $("#field_Branch").val();
-  var speCharAccountName = specialcharacterValidation(field_AccountName);
+  if (haveBankDetails==false)
+ { var speCharAccountName = specialcharacterValidation(field_AccountName);
   var numAccountName = numberValidation(field_AccountName);
   var specAccountNumber = specialcharacterValidation(field_AccountNumber);
   var numAccountNumber = onlyNumberValidate(field_AccountNumber);
@@ -1852,6 +1853,39 @@ function handleAccountInfo(event) {
 
   } else {
     $("#popUp").modal("show");
+    }
+  }
+  else {
+    BankDetails["BeneficiaryNo"] = 1;
+    BankDetails["BankName"] = field_Bank;
+    BankDetails["BankBranch"] = field_Branch;
+    BankDetails["AccountName"] = field_AccountName;
+    BankDetails["AccountNumber"] = field_AccountNumber;
+    BankDetails["AccountCurrency"] = $("select#from_currency option").filter(":selected").val();
+    let BankDetailsList = [];
+    BankDetailsList.push(BankDetails);
+
+    let filesObject = {};
+    filesObject["FolderName"] = `/CLAIMS/BPLAC/${referenceNumber}`
+    filesObject["FileList"] = filesList;
+
+    InsuredInformation["PayoutOption"] = "CTA";
+    finalPayload["BasicInformation"] = basicInformation;
+    finalPayload["InsuredInformation"] = InsuredInformation;
+    finalPayload["BankDetailsList"] = BankDetailsList;
+    finalPayload["FilesInformation"] = filesObject;
+
+    console.log("FPB : ")
+    console.log(finalPayload)
+    // window.parent.postMessage(JSON.stringify({
+    //   event_code: 'ym-client-event', data: JSON.stringify({
+    //     event: {
+    //       code: "finalEvent",
+    //       data: JSON.stringify(finalPayload)
+    //     }
+    //   })
+    // }), '*');
+    finalSubmitCall()
   }
 }
 
