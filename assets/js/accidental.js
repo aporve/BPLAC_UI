@@ -85,10 +85,11 @@ function timer(lowerVal, UpperVal) {
         i = UpperVal;
         renderProgress(i)
       }
-      if (i == UpperVal) {
+      if (i == 100 && UpperVal == 100) {
 
         console.log("cleartime");
         clearTimeout(cleartime);
+        renderProgress(0);
 
         resolve("cleartime")
       }
@@ -2768,8 +2769,7 @@ function preSubmitCall() {
         if (event.event_code == 'preSubmitResponse') { //sucess
           if (event.data.returnCode == '0') {
             timer(50, 100).then(async () => {
-              clearTimeout(cleartime);
-              renderProgress(0);
+
               $("#step2").addClass("active");
               $("#step2>div").addClass("active");
               if (otpSubmitted == false) { otpTimer(); } else {
