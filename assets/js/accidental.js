@@ -119,9 +119,9 @@ function renderProgress(progress) {
       .css("transform", "rotate(0deg)");
     $(".animate-75-100-b").css("transform", "rotate(" + angle + "deg)");
   }
-  if (progress != 0) {
+  // if (progress != 0) {
     $(".text").html(progress + "%");
-  }
+  // }
 
 }
 
