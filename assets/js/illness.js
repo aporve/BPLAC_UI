@@ -1094,7 +1094,7 @@ function preSubmitCall() {
     var preSubmitPayload = {}
     preSubmitPayload['source'] = source;
     preSubmitPayload['data'] = raw;
-
+    timer(0,50)
     window.parent.postMessage(JSON.stringify({
         event_code: 'ym-client-event', data: JSON.stringify({
             event: {
@@ -1115,12 +1115,14 @@ function preSubmitCall() {
                 console.log(event)
                 if (event.event_code == 'preSubmitResponse') { //sucess
                     if (event.data.returnCode == '0') {
-                        $("#step2").addClass("active");
-                        $("#step2>div").addClass("active");
-                        if (otpSubmitted == false) { otpTimer(); } else {
-                            $('#requirements').hide();
-                            $('#payment').show();
-                        }
+                        timer(50, 100).then(async () => {
+                            $("#step2").addClass("active");
+                            $("#step2>div").addClass("active");
+                            if (otpSubmitted == false) { otpTimer(); } else {
+                                $('#requirements').hide();
+                                $('#payment').show();
+                            }
+                        })
                     }
                     else {
 
@@ -1167,7 +1169,7 @@ function finalSubmitCall() {
     });
     finalData['source'] = source;
     finalData['data'] = JSON.stringify(raw);
-
+    timer(0, 50)
     window.parent.postMessage(JSON.stringify({
         event_code: 'ym-client-event', data: JSON.stringify({
             event: {
