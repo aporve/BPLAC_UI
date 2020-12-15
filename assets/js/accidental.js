@@ -1626,6 +1626,7 @@ file7.onchange = async function (e) {
 
 
 function buttonSubmitClicked(event) {
+  //test comment//
   event.preventDefault();
   // console.log(!$('#file_Upload_Tick_1').is(":hidden"));
   // console.log(!$('#file_Upload_Tick_2').is(":hidden"));
