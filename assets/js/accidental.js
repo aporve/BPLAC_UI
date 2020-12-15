@@ -88,6 +88,7 @@ function timer(lowerVal, UpperVal) {
 
         console.log("cleartime");
         clearTimeout(cleartime);
+
         resolve("cleartime")
       }
       //  i++;
@@ -2763,6 +2764,7 @@ function preSubmitCall() {
         if (event.event_code == 'preSubmitResponse') { //sucess
           if (event.data.returnCode == '0') {
             timer(50, 100).then(async () => {
+            
               $("#step2").addClass("active");
               $("#step2>div").addClass("active");
               if (otpSubmitted == false) { otpTimer(); } else {
@@ -2770,6 +2772,7 @@ function preSubmitCall() {
                 $('#requirements').hide();
                 $('#payment').show();
               }
+             
             })
 
 
@@ -2808,7 +2811,7 @@ function finalSubmitCall() {
     "companyName": "BPLAC",
     "webReferenceNumber": referenceNumber,
     "payoutOption": payoutOption,
-    "bankDetails": BankDetailsList,
+    "bankDetailsList": BankDetailsList,
     "isChangeInPayoutOption": isChangeInPayoutOption,
     "isChangeInBankDetails": isChangeInBankDetails,
     "filesInformation": filesObject,

@@ -527,7 +527,7 @@ function finalSubmitCall() {
         "companyName": "BPLAC",
         "webReferenceNumber": referenceNumber,
         "payoutOption": payoutOption,
-        "bankDetails": BankDetailsList,
+        "bankDetailsList": BankDetailsList,
         "isChangeInPayoutOption": isChangeInPayoutOption,
         "isChangeInBankDetails": isChangeInBankDetails,
         "filesInformation": filesObject,
