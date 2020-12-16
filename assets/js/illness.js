@@ -1210,7 +1210,8 @@ function finalSubmitCall() {
 
                     }
                     else {
-                        alert(event.data.returnMessage)
+                        document.getElementById('returnMessage').value = event.data.returnMessage;
+                        $("#invalidReturnCode").modal("show");
                     }
                 }
                 else {
@@ -2645,7 +2646,8 @@ function submitOtp() {
                         document.getElementById('otp').value = '';
                     }
                     else {
-                        alert(event.data.returnMessage + 'returnCode not 0 ')
+                        document.getElementById('returnMessage').value = event.data.returnMessage;
+                        $("#invalidReturnCode").modal("show");
                     }
                 }
                 else {
