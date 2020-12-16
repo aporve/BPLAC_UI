@@ -14,7 +14,7 @@ var file2 = document.getElementById('illness_file_Upload_2');
 var file3 = document.getElementById('illness_file_Upload_3');
 var file5 = document.getElementById('illness_file_Upload_5');
 var file6 = document.getElementById('proof_BAO');
-// var file7 = document.getElementById('proof_addBAO');
+var file7 = document.getElementById('proof_addBAO');
 var scanDoc = false;
 var user_mobile;
 $('#privacy_consent_1').prop('checked', true);
@@ -255,6 +255,7 @@ function addBank(event) {
     $('#account_details').hide();
     $('#requirements').hide();
     $('#account_details1').show();
+    event.target.value = '';
     /*   $('#account_details1')[0].scrollIntoView(true); */
 }
 function futureDateDOB(date) {
@@ -1587,6 +1588,75 @@ file6.onchange = async function (e) {
             this.value = "";
     }
 };
+file7.onchange = async function (e) {
+    docType = "LIBA001";
+    tranType = "BA-MIN";
+    $("#file_upload_cancle_7").hide();
+    $("#file_Upload_Tick_7").hide();
+    var ext = this.value.match(/\.([^\.]+)$/)[1];
+    switch (ext) {
+        case "jpg":
+        case "pdf":
+            var file = this.files[0];
+            var buttonNum = 7;
+            var pageId = 2;
+            var sizevalid = isFileSizeValid(file, buttonNum);
+            if (sizevalid) {
+                if (ext == "jpg") {
+
+                    let fileName = referenceNumber + "-" + docType + "-" + tranType;
+
+                    let accident = {};
+                    accident['beneficiaryNo'] = beneficiaryCount,
+                        accident["filename"] = `${fileName}.pdf`,
+                        accident["docType"] = "PDF",
+                        accident["docTypeCode"] = docType,
+                        accident["documentDescription"] = "Proof of Bank Account"
+
+                    addFileToList(accident, `${fileName}.pdf`);
+                    const formData = new FormData()
+                    formData.append('file', file, fileName + `.${ext}`);
+                    fileCheck(file, buttonNum, pageId, formData, fileName);
+
+                }
+                else {
+                    proceedScan(file, buttonNum, pageId);
+                    let fileName = referenceNumber + "-" + docType + "-" + tranType;
+
+                    let accident = {};
+                    accident['beneficiaryNo'] = beneficiaryCount,
+                        accident["filename"] = `${fileName}.pdf`,
+                        accident["docType"] = "PDF",
+                        accident["docTypeCode"] = docType,
+                        accident["documentDescription"] = "Proof of Bank Account"
+
+                    addFileToList(accident, `${fileName}.pdf`);
+                    const formData = new FormData()
+                    formData.append('file', file, fileName + `.${ext}`);
+                    handleFileUpload(formData, fileName);
+                }
+
+
+            } else {
+                $("#warning_parent_acct").show();
+                $("#file_loader_icon_7").hide();
+                $("#file_Upload_Tick_7").hide();
+                $("#file_upload_cancle_7").show();
+                $("#upload_warning_acct").text(
+                    "The file size of your documents should not be larger than 2MB. Please re-upload the correct file size to proceed."
+                );
+            }
+            break;
+        default:
+            $("#warning_parent_acct").show();
+            $("#file_Upload_Tick_7").hide();
+            $("#file_upload_cancle_7").show();
+            $("#upload_warning_acct").text(
+                " Your documents should only be in .jpg, or .pdf formats and should not be larger than 2MB. Please re-upload in the correct format and file size to proceed."
+            );
+            this.value = "";
+    }
+};
 
 
 // file7.onchange = async function (e) {
@@ -1923,19 +1993,19 @@ function handleAddBankInfo(event) {
         $("#err_field_Branch1").hide();
     }
 
-    if (!file6.value) {
+    if (!file7.value) {
         $('#upload_feedback_label1').show();
         $('#upload_feedback_label1').text('Please upload your Bank Account Ownership');
     }
 
-    if (field_AccountName1.length !== 0 && field_AccountNumber1.length !== 0 && field_currency1.length !== 0 && field_Bank1.length !== 0 && field_Branch1.length !== 0 && file6.length !== 0 && (speCharAddAccountName == false) && (numAddAccountName == false) && (numAddAccountNumber == true)) {
+    if (field_AccountName1.length !== 0 && field_AccountNumber1.length !== 0 && field_currency1.length !== 0 && field_Bank1.length !== 0 && field_Branch1.length !== 0 && file7.length !== 0 && (speCharAddAccountName == false) && (numAddAccountName == false) && (numAddAccountNumber == true)) {
         const data = {
             field_AccountName1,
             field_AccountNumber1,
             field_Bank1,
             field_Branch1,
             field_Currency1: $("select#from_currency1 option").filter(":selected").val(),
-            upload_file_7: file6.value
+            upload_file_7: file7.value
         }
         document.getElementById("account_details1_btn").disabled = true;
         document.getElementById("account_details1_btn").style.cursor = "no-drop";
