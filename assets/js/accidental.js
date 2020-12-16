@@ -30,6 +30,11 @@ let cleartime = null;
 $('#privacy_consent_1').prop('checked', true);
 $('#privacy_consent_2').prop('checked', true);
 $('#privacy_consent_3').prop('checked', true);
+
+document.getElementById('upload_waiting_btn').style.display = 'none'
+document.getElementById('account_details1_btn_waiting').style.display = 'none'
+document.getElementById('pick_up_btn_waiting').style.display = 'none'
+
 var form_addBank = document.getElementById("addbank_form");
 form_addBank.addEventListener('submit', handleAddBankInfo);
 
@@ -96,7 +101,27 @@ function timer(lowerVal, UpperVal) {
     }, 500);
   })
 }
+function enableDottedLoader() {
+  document.getElementById('files_upload_btn').style.display = 'none'
+  document.getElementById('upload_waiting_btn').style.display = 'block'
 
+  document.getElementById('account_details1_btn').style.display = 'none'
+  document.getElementById('account_details1_btn_waiting').style.display = 'block'
+
+
+  document.getElementById('pick_up_btn').style.display = 'none'
+  document.getElementById('pick_up_btn_waiting').style.display = 'block'
+}
+function disableDottedLoader() {
+  document.getElementById('files_upload_btn').style.display = 'block'
+  document.getElementById('upload_waiting_btn').style.display = 'none'
+
+  document.getElementById('account_details1_btn').style.display = 'block'
+  document.getElementById('account_details1_btn_waiting').style.display = 'none'
+
+  document.getElementById('pick_up_btn').style.display = 'block'
+  document.getElementById('pick_up_btn_waiting').style.display = 'none'
+}
 function renderProgress(progress) {
   progress = Math.floor(progress);
   if (progress < 25) {
@@ -120,7 +145,7 @@ function renderProgress(progress) {
     $(".animate-75-100-b").css("transform", "rotate(" + angle + "deg)");
   }
   // if (progress != 0) {
-    $(".text").html(progress + "%");
+  $(".text").html(progress + "%");
   // }
 
 }
@@ -1972,7 +1997,7 @@ function handleAccountInfo(event) {
     document.getElementById("account_details_btn").style.cursor = "no-drop";
     document.getElementById("submit9").disabled = true;
     document.getElementById("submit9").style.cursor = "no-drop";
-    
+
     finalSubmitCall()
   }
 }
@@ -2828,6 +2853,7 @@ function submitOtp() {
 
 //to call preSubmit api
 function preSubmitCall() {
+  enableDottedLoader();
   //Basic Information
   //Insured information
   //Beneficiary list
@@ -2862,15 +2888,16 @@ function preSubmitCall() {
         console.log(event)
         if (event.event_code == 'preSubmitResponse') { //sucess
           if (event.data.returnCode == '0') {
+            disableDottedLoader();
             // timer(50, 100).then(async () => {
 
-              $("#step2").addClass("active");
-              $("#step2>div").addClass("active");
-              if (otpSubmitted == false) { otpTimer(); } else {
+            $("#step2").addClass("active");
+            $("#step2>div").addClass("active");
+            if (otpSubmitted == false) { otpTimer(); } else {
 
-                $('#requirements').hide();
-                $('#payment').show();
-              }
+              $('#requirements').hide();
+              $('#payment').show();
+            }
 
             // })
 
@@ -2892,6 +2919,7 @@ function preSubmitCall() {
 }
 
 function finalSubmitCall() {
+  enableDottedLoader();
   let filesObject = {};
   filesObject["folderName"] = `CLAIMS/BPLAC/${referenceNumber}`
   filesObject["fileList"] = filesList;
@@ -2942,20 +2970,21 @@ function finalSubmitCall() {
         console.log(event)
         if (event.event_code == 'finalSubmitResponse') { //sucess
           if (event.data.returnCode == '0') {
+            disableDottedLoader();
             myDisable()
             // timer(50, 100).then(async () => {
-              $("#step2").addClass("done");
-              /*  $("#step3").addClass("active"); */
-              /*   $("#step3>div").addClass("active"); */
-              /* $("#step3").addClass("done"); */
-              $("#step3_circle").addClass("md-step-step3-circle ");
-              $("#step3_span").addClass("md-step3-span");
-              $("#step3_reference").addClass("md-step3-span")
-              $("#account_details").hide();
-              $("#account_details1").hide();
-              $("#pickUp").hide();
-              $("#process_confirmation").show();
-              console.log("Data -> ", data);
+            $("#step2").addClass("done");
+            /*  $("#step3").addClass("active"); */
+            /*   $("#step3>div").addClass("active"); */
+            /* $("#step3").addClass("done"); */
+            $("#step3_circle").addClass("md-step-step3-circle ");
+            $("#step3_span").addClass("md-step3-span");
+            $("#step3_reference").addClass("md-step3-span")
+            $("#account_details").hide();
+            $("#account_details1").hide();
+            $("#pickUp").hide();
+            $("#process_confirmation").show();
+            console.log("Data -> ", data);
             // });
           }
           else {
