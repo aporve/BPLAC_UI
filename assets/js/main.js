@@ -222,9 +222,12 @@ function trackProgress() {
                             $('#noDataModal').modal('show'); //
                         }
                         }
-                    else {
+                    else if (event.data.returnCode == '1'){
                         $('#refNoWarning').modal('show');
 
+                    }
+                    else {
+                        $('#noDataModal').modal('show'); //
                     }
                 }
                 else {
