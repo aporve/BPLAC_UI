@@ -2645,7 +2645,7 @@ function submitOtp() {
                         document.getElementById('otp').value = '';
                     }
                     else {
-                        alert(event.data.returnMessage);
+                        alert(event.data.returnMessage + 'returnCode not 0 ')
                     }
                 }
                 else {
