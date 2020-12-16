@@ -4216,7 +4216,7 @@ function addBeneficiarybankTranfer() {
     $("#step2").addClass("active");
     $("#step2>div").addClass("active");
 }
-
+debugger
 function pickUp() {
     document.getElementById('ref_number').innerHTML = referenceNumber
     payoutOption = 'PUA';
