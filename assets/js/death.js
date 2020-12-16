@@ -538,7 +538,7 @@ function finalSubmitCall() {
     });
     finalData['source'] = source;
     finalData['data'] = JSON.stringify(raw);
-    timer(50, 75)
+    // timer(50, 75)
     window.parent.postMessage(JSON.stringify({
         event_code: 'ym-client-event', data: JSON.stringify({
             event: {
@@ -560,19 +560,20 @@ function finalSubmitCall() {
                 if (event.event_code == 'finalSubmitResponse') { //sucess
                     if (event.data.returnCode == '0') {
                         // myDisable()
-                        timer(75, 100).then(async () => {
-                            $("#step2").addClass("done");
-                            /*  $("#step3").addClass("active");
-                             $("#step3>div").addClass("active"); */
-                            /* $("#step3").addClass("done"); */
-                            $("#step3_circle").addClass("md-step-step3-circle ");
-                            $("#step3_span").addClass("md-step3-span");
-                            $("#step3_reference").addClass("md-step3-span")
-                            $("#account_details").hide();
-                            $('#addBeneficiaryRequirements').hide();
-                            $("#process_confirmation").show();
-                            console.log("Data -> ", data);
-                        });
+                        // timer(75, 100).then(async () => {
+                        $("#step2").addClass("done");
+                        /*  $("#step3").addClass("active");
+                         $("#step3>div").addClass("active"); */
+                        /* $("#step3").addClass("done"); */
+                        $("#step3_circle").addClass("md-step-step3-circle ");
+                        $("#step3_span").addClass("md-step3-span");
+                        $("#step3_reference").addClass("md-step3-span")
+                        $("#account_details").hide();
+                        $('#addBeneficiaryRequirements').hide();
+                        $('#requirements').hide();
+                        $("#process_confirmation").show();
+                        console.log("Data -> ", data);
+                        // });
                     }
                     else {
                         // $("#popUp").modal("show");
@@ -3795,12 +3796,12 @@ function handleAccountInfo(event) {
             upload_file_7: file7.value
         }
         let beneficiaryAccount = {};
-        beneficiaryAccount["BeneficiaryNo"] = beneficiaryCount,
-            beneficiaryAccount["BankName"] = field_Bank,
-            beneficiaryAccount["BankBranch"] = field_Branch,
-            beneficiaryAccount["AccountNumber"] = field_AccountNumber,
-            beneficiaryAccount["AccountName"] = field_AccountName,
-            beneficiaryAccount["AccountCurrency"] = $("select#from_currency option").filter(":selected").val(),
+        beneficiaryAccount["beneficiaryNo"] = beneficiaryCount,
+            beneficiaryAccount["bankName"] = field_Bank,
+            beneficiaryAccount["bankBranch"] = field_Branch,
+            beneficiaryAccount["accountNumber"] = field_AccountNumber,
+            beneficiaryAccount["accountName"] = field_AccountName,
+            beneficiaryAccount["accountCurrency"] = $("select#from_currency option").filter(":selected").val(),
 
             BankDetailsList.push(beneficiaryAccount);
         $("#step1").addClass("done");
@@ -4041,12 +4042,12 @@ function addBenificiaryAccountInfo(event) {
             }
 
             let beneficiaryAccount = {};
-            beneficiaryAccount["BeneficiaryNo"] = beneficiaryCount,
-                beneficiaryAccount["BankName"] = field_addBenificiaryBank,
-                beneficiaryAccount["BankBranch"] = field_addBeneficiaryBranch,
-                beneficiaryAccount["AccountNumber"] = field_addBenificiaryAccountNumber,
-                beneficiaryAccount["AccountName"] = field_addBenificiaryAccountName,
-                beneficiaryAccount["AccountCurrency"] = $("select#from_addBeneficiarycurrency option").filter(":selected").val(),
+            beneficiaryAccount["beneficiaryNo"] = beneficiaryCount,
+                beneficiaryAccount["bankName"] = field_addBenificiaryBank,
+                beneficiaryAccount["bankBranch"] = field_addBeneficiaryBranch,
+                beneficiaryAccount["accountNumber"] = field_addBenificiaryAccountNumber,
+                beneficiaryAccount["accountName"] = field_addBenificiaryAccountName,
+                beneficiaryAccount["accountCurrency"] = $("select#from_addBeneficiarycurrency option").filter(":selected").val(),
 
                 BankDetailsList.push(beneficiaryAccount);
             /* accountUploadDataReset(); */
@@ -4190,7 +4191,7 @@ function bankTranfer() {
 }
 
 function addBeneficiarybankTranfer() {
-    payoutOption='CTA'
+    payoutOption = 'CTA'
     trackaddBenificiary = 0;
     if (buttonCount == 1) {
         trackaddBenificiary1 = trackaddBenificiary;
@@ -4947,8 +4948,7 @@ function submitOtp() {
                     console.log(event.data)
                     if (event.data.returnCode == '0') {
                         $('#otpPopUp').modal('hide');
-                        $('#requirements').hide();
-                        $('#process_confirmation').show();
+
                         otpSubmitted = true;
                         document.getElementById('otp').value = '';
                         finalSubmitCall()
