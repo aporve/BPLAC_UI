@@ -1852,12 +1852,12 @@ if(haveBankDetails==false)
             field_Currency: $("select#from_currency option").filter(":selected").val(),
             upload_file_6: file6.value
         }
-        BankDetails["BeneficiaryNo"] = 1;
-        BankDetails["BankName"] = field_Bank;
-        BankDetails["BankBranch"] = field_Branch;
-        BankDetails["AccountName"] = field_AccountName;
-        BankDetails["AccountNumber"] = field_AccountNumber;
-        BankDetails["AccountCurrency"] = $("select#from_currency option").filter(":selected").val();
+        BankDetails["beneficiaryNo"] = 1;
+        BankDetails["bankName"] = field_Bank;
+        BankDetails["bankBranch"] = field_Branch;
+        BankDetails["accountName"] = field_AccountName;
+        BankDetails["accountNumber"] = field_AccountNumber;
+        BankDetails["accountCurrency"] = $("select#from_currency option").filter(":selected").val();
         document.getElementById("account_details_btn").disabled = true;
         document.getElementById("account_details_btn").style.cursor = "no-drop";
         document.getElementById("submit9").disabled = true;
