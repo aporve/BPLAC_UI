@@ -1127,7 +1127,7 @@ function handleFormAddBeneficiary(event) {
             beneficiary["sex"] = field_addBeneficiarySex,
             beneficiary["relationship"] = field_addBeneficiaryRelationToDeceased,
             beneficiary["documentFolder"] = `/CLAIMS/BPLAC/${referenceNumber}`,
-            beneficiary["payoutOption"] = "CTA",
+            beneficiary["payoutOption"] = payoutOption,
             beneficiary["employer"] = field_addBeneficiaryEmployerName,
             beneficiary["governmentOfficial"] = field_addBeneficiary_relatives1,
             beneficiary["governmentOfficialRelative"] = field_add_Beneficiary_add_relatives2,
@@ -1715,7 +1715,7 @@ function handleForm(event) {
             beneficiary["sex"] = $("select#field_BeneficiarySex option").filter(":selected").val(),
             beneficiary["relationship"] = field_BeneficiaryRelationToDeceased,
             beneficiary["documentFolder"] = `/CLAIMS/BPLAC/${referenceNumber}`,
-            beneficiary["payoutOption"] = "CTA",
+            beneficiary["payoutOption"] = payoutOption,
             beneficiary["employer"] = field_BeneficiaryEmployerName,
             beneficiary["governmentOfficial"] = $("select#field_Beneficiary_relatives1 option").filter(":selected").val(),
             beneficiary["governmentOfficialRelative"] = $("select#field_Beneficiary_relatives2 option").filter(":selected").val(),
@@ -4190,6 +4190,7 @@ function bankTranfer() {
 }
 
 function addBeneficiarybankTranfer() {
+    payoutOption='CTA'
     trackaddBenificiary = 0;
     if (buttonCount == 1) {
         trackaddBenificiary1 = trackaddBenificiary;
@@ -4221,7 +4222,7 @@ function pickUp() {
     trackBenificiary = 1;
     let index = BeneficiaryList.findIndex(ele => ele["BeneficiaryNo"] == "1")
     let benObject = BeneficiaryList[index]
-    benObject["payoutOption"] = "PUA";
+    // benObject["payoutOption"] = "PUA";
     BeneficiaryList[index] = benObject;
 
 
@@ -4233,10 +4234,10 @@ function pickUp() {
 }
 
 function addBeneficiaryPickup() {
-
+    payoutOption = 'PUA';
     let index = BeneficiaryList.findIndex(ele => ele["BeneficiaryNo"] == (beneficiaryCount.toString()))
     let benObject = BeneficiaryList[index]
-    benObject["payoutOption"] = "PUA";
+    // benObject["payoutOption"] = "PUA";
     BeneficiaryList[index] = benObject;
 
     trackaddBenificiary = 1;
