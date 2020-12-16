@@ -1856,6 +1856,8 @@ function handleAccountInfo(event) {
       // }), '*');
       document.getElementById("account_details_btn").disabled = true;
       document.getElementById("account_details_btn").style.cursor = "no-drop";
+      document.getElementById("submit9").disabled = true;
+      document.getElementById("submit9").style.cursor = "no-drop";
       finalSubmitCall()
 
     } else {
@@ -1894,6 +1896,9 @@ function handleAccountInfo(event) {
     // }), '*');
     document.getElementById("account_details_btn").disabled = true;
     document.getElementById("account_details_btn").style.cursor = "no-drop";
+    document.getElementById("submit9").disabled = true;
+    document.getElementById("submit9").style.cursor = "no-drop";
+    
     finalSubmitCall()
   }
 }

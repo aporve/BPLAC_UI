@@ -1787,6 +1787,8 @@ if(haveBankDetails==false)
         BankDetails["AccountCurrency"] = $("select#from_currency option").filter(":selected").val();
         document.getElementById("account_details_btn").disabled = true;
         document.getElementById("account_details_btn").style.cursor = "no-drop";
+        document.getElementById("submit9").disabled = true;
+        document.getElementById("submit9").style.cursor = "no-drop";
         finalSubmitCall()
         // myDisable()
         // timer().then(async () => {
@@ -1845,6 +1847,8 @@ else {
     BankDetails["AccountCurrency"] = $("select#from_currency option").filter(":selected").val();
     document.getElementById("account_details_btn").disabled = true;
     document.getElementById("account_details_btn").style.cursor = "no-drop";
+    document.getElementById("submit9").disabled = true;
+    document.getElementById("submit9").style.cursor = "no-drop";
     finalSubmitCall()
     }
 }
