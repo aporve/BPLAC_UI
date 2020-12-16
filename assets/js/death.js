@@ -457,7 +457,7 @@ function preSubmitCall() {
     var preSubmitPayload = {}
     preSubmitPayload['source'] = source;
     preSubmitPayload['data'] = raw;
-    timer(0, 25)
+    // timer(0, 25)
     window.parent.postMessage(JSON.stringify({
         event_code: 'ym-client-event', data: JSON.stringify({
             event: {
@@ -485,12 +485,12 @@ function preSubmitCall() {
                         //   $('#requirements').hide();
                         //   $('#payment').show();
                         // }
-                        timer(25, 50).then(async () => {
+                        // timer(25, 50).then(async () => {
                             if (otpSubmitted == false) { otpTimer(); } else {
                                 $('#requirements').hide();
                                 $('#process_confirmation').show();
                             }
-                        })
+                        // })
 
                     }
                     else {
