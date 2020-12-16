@@ -14,7 +14,7 @@ var file2 = document.getElementById('illness_file_Upload_2');
 var file3 = document.getElementById('illness_file_Upload_3');
 var file5 = document.getElementById('illness_file_Upload_5');
 var file6 = document.getElementById('proof_BAO');
-var file7 = document.getElementById('proof_addBAO');
+// var file7 = document.getElementById('proof_addBAO');
 var scanDoc = false;
 var user_mobile;
 $('#privacy_consent_1').prop('checked', true);
@@ -1589,55 +1589,55 @@ file6.onchange = async function (e) {
 };
 
 
-file7.onchange = async function (e) {
-    $("#file_upload_cancle_7").hide();
-    $("#file_Upload_Tick_7").hide();
-    var ext = this.value.match(/\.([^\.]+)$/)[1];
-    switch (ext) {
-        case "jpg":
-        case "pdf":
-            var file = this.files[0];
-            var buttonNum = 7;
-            var sizevalid = isFileSizeValid(file, buttonNum);
-            if (sizevalid) {
-                if (ext == "jpg") {
-                    // var isFileBlur = fileCheck(file, buttonNum);
-                    // if (isFileBlur == false) {
-                    fileCheck(file, buttonNum);
-                    file1Buffer = await getBuffer(file);
-                    console.log("file buffer : ")
-                    console.log(file1Buffer);
-                    filesMap["file7"] = file1Buffer;
-                    // }
-                }
-                else {
-                    proceedScan(file, buttonNum);
-                    file1Buffer = await getBuffer(file);
-                    console.log("file buffer : ")
-                    console.log(file1Buffer);
-                    filesMap["file7"] = file1Buffer;
-                }
+// file7.onchange = async function (e) {
+//     $("#file_upload_cancle_7").hide();
+//     $("#file_Upload_Tick_7").hide();
+//     var ext = this.value.match(/\.([^\.]+)$/)[1];
+//     switch (ext) {
+//         case "jpg":
+//         case "pdf":
+//             var file = this.files[0];
+//             var buttonNum = 7;
+//             var sizevalid = isFileSizeValid(file, buttonNum);
+//             if (sizevalid) {
+//                 if (ext == "jpg") {
+//                     // var isFileBlur = fileCheck(file, buttonNum);
+//                     // if (isFileBlur == false) {
+//                     fileCheck(file, buttonNum);
+//                     file1Buffer = await getBuffer(file);
+//                     console.log("file buffer : ")
+//                     console.log(file1Buffer);
+//                     filesMap["file7"] = file1Buffer;
+//                     // }
+//                 }
+//                 else {
+//                     proceedScan(file, buttonNum);
+//                     file1Buffer = await getBuffer(file);
+//                     console.log("file buffer : ")
+//                     console.log(file1Buffer);
+//                     filesMap["file7"] = file1Buffer;
+//                 }
 
-            } else {
-                $("#warning_parent").show();
-                $("#file_loader_icon_7").hide();
-                $("#file_Upload_Tick_7").hide();
-                $("#file_upload_cancle_7").show();
-                $("#upload_warning").text(
-                    "You may only upload documents not exceeding 2MB in file size. Please re-upload in the correct format and file size proceed."
-                );
-            }
-            break;
-        default:
-            $("#warning_parent").show();
-            $("#file_Upload_Tick_7").hide();
-            $("#file_upload_cancle_7").show();
-            $("#upload_warning").text(
-                "You may only upload documents that are in .jpg, .pdf formats and must not exceed 2MB in file size. Please re-upload in the correct format and file size to proceed."
-            );
-            this.value = "";
-    }
-};
+//             } else {
+//                 $("#warning_parent").show();
+//                 $("#file_loader_icon_7").hide();
+//                 $("#file_Upload_Tick_7").hide();
+//                 $("#file_upload_cancle_7").show();
+//                 $("#upload_warning").text(
+//                     "You may only upload documents not exceeding 2MB in file size. Please re-upload in the correct format and file size proceed."
+//                 );
+//             }
+//             break;
+//         default:
+//             $("#warning_parent").show();
+//             $("#file_Upload_Tick_7").hide();
+//             $("#file_upload_cancle_7").show();
+//             $("#upload_warning").text(
+//                 "You may only upload documents that are in .jpg, .pdf formats and must not exceed 2MB in file size. Please re-upload in the correct format and file size to proceed."
+//             );
+//             this.value = "";
+//     }
+// };
 
 
 function buttonSubmitClicked(event) {
@@ -1913,19 +1913,19 @@ function handleAddBankInfo(event) {
         $("#err_field_Branch1").hide();
     }
 
-    if (!file7.value) {
+    if (!file6.value) {
         $('#upload_feedback_label1').show();
         $('#upload_feedback_label1').text('Please upload your Bank Account Ownership');
     }
 
-    if (field_AccountName1.length !== 0 && field_AccountNumber1.length !== 0 && field_currency1.length !== 0 && field_Bank1.length !== 0 && field_Branch1.length !== 0 && file7.length !== 0 && (speCharAddAccountName == false) && (numAddAccountName == false) && (numAddAccountNumber == true)) {
+    if (field_AccountName1.length !== 0 && field_AccountNumber1.length !== 0 && field_currency1.length !== 0 && field_Bank1.length !== 0 && field_Branch1.length !== 0 && file6.length !== 0 && (speCharAddAccountName == false) && (numAddAccountName == false) && (numAddAccountNumber == true)) {
         const data = {
             field_AccountName1,
             field_AccountNumber1,
             field_Bank1,
             field_Branch1,
             field_Currency1: $("select#from_currency1 option").filter(":selected").val(),
-            upload_file_7: file7.value
+            upload_file_7: file6.value
         }
         finalSubmitCall();
         // $("#step3_circle").addClass("md-step-step3-circle ");
