@@ -54,6 +54,9 @@ $('#privacy_consent_beneficiary_1').prop('checked', true);
 $('#privacy_consent_beneficiary_2').prop('checked', true);
 $('#privacy_consent_beneficiary_3').prop('checked', true);
 
+document.getElementById('submit9_waiting').style.display = 'none'
+document.getElementById('submit10_waiting').style.display = 'none'
+
 let basicInformation = {};
 let InsuredInformation = {};
 let finalPayload = {};
@@ -169,6 +172,28 @@ function addFileToList(fileObject, fileName) {
         console.log("adding bcoz unique");
         filesList.push(fileObject);
     }
+}
+
+function enableDottedLoader() {
+    document.getElementById('submit9').style.display = 'none'
+    document.getElementById('submit9_waiting').style.display = 'block'
+
+    document.getElementById('submit10').style.display = 'none'
+    document.getElementById('submit10_waiting').style.display = 'block'
+
+
+    // document.getElementById('pick_up_btn').style.display = 'none'
+    // document.getElementById('pick_up_btn_waiting').style.display = 'block'
+}
+function disableDottedLoader() {
+    document.getElementById('submit9').style.display = 'block'
+    document.getElementById('submit9_waiting').style.display = 'none'
+
+    document.getElementById('submit10').style.display = 'block'
+    document.getElementById('submit10_waiting').style.display = 'none'
+
+    // document.getElementById('pick_up_btn').style.display = 'block'
+    // document.getElementById('pick_up_btn_waiting').style.display = 'none'
 }
 
 // function timer() {
@@ -444,6 +469,7 @@ function disableFutureDatesDOB() {
 
 //to call preSubmit api
 function preSubmitCall() {
+    enableDottedLoader();
     //Basic Information
     //Insured information
     //Beneficiary list
@@ -482,6 +508,7 @@ function preSubmitCall() {
                 console.log(event)
                 if (event.event_code == 'preSubmitResponse') { //sucess
                     if (event.data.returnCode == '0') {
+                        disableDottedLoader();
                         // $("#step2").addClass("active");
                         // $("#step2>div").addClass("active");
                         // if (otpSubmitted == false) { otpTimer(); } else {
@@ -490,10 +517,10 @@ function preSubmitCall() {
                         //   $('#payment').show();
                         // }
                         // timer(25, 50).then(async () => {
-                            if (otpSubmitted == false) { otpTimer(); } else {
-                                $('#requirements').hide();
-                                $('#process_confirmation').show();
-                            }
+                        if (otpSubmitted == false) { otpTimer(); } else {
+                            $('#requirements').hide();
+                            $('#process_confirmation').show();
+                        }
                         // })
 
                     }
@@ -513,6 +540,7 @@ function preSubmitCall() {
 }
 
 function finalSubmitCall() {
+    enableDottedLoader();
     let filesObject = {};
     filesObject["folderName"] = `CLAIMS/BPLAC/${referenceNumber}`
     filesObject["fileList"] = filesList;
@@ -563,6 +591,7 @@ function finalSubmitCall() {
                 console.log(event)
                 if (event.event_code == 'finalSubmitResponse') { //sucess
                     if (event.data.returnCode == '0') {
+                        disableDottedLoader();
                         // myDisable()
                         // timer(75, 100).then(async () => {
                         $("#step2").addClass("done");
@@ -3578,15 +3607,15 @@ function buttonSubmitClicked(event) {
         }
         myDisable()
         // timer().then(async () => {
-            $("#step2").addClass("done");
-            $("#step3_circle").addClass("md-step-step3-circle ");
-            $("#step3_span").addClass("md-step3-span");
-            $("#step3_reference").addClass("md-step3-span")
-            /*  $("#step3").addClass("active");
-            $("#step3>div").addClass("active"); */
-            /*  $("#step3").addClass("done"); */
-            $('#requirements').hide();
-            $('#process_confirmation').show();
+        $("#step2").addClass("done");
+        $("#step3_circle").addClass("md-step-step3-circle ");
+        $("#step3_span").addClass("md-step3-span");
+        $("#step3_reference").addClass("md-step3-span")
+        /*  $("#step3").addClass("active");
+        $("#step3>div").addClass("active"); */
+        /*  $("#step3").addClass("done"); */
+        $('#requirements').hide();
+        $('#process_confirmation').show();
 
 
         // });
