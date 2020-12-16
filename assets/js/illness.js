@@ -1785,6 +1785,8 @@ if(haveBankDetails==false)
         BankDetails["AccountName"] = field_AccountName;
         BankDetails["AccountNumber"] = field_AccountNumber;
         BankDetails["AccountCurrency"] = $("select#from_currency option").filter(":selected").val();
+        document.getElementById("account_details_btn").disabled = true;
+        document.getElementById("account_details_btn").style.cursor = "no-drop";
         finalSubmitCall()
         // myDisable()
         // timer().then(async () => {
@@ -1841,6 +1843,8 @@ else {
     BankDetails["AccountName"] = field_AccountName;
     BankDetails["AccountNumber"] = field_AccountNumber;
     BankDetails["AccountCurrency"] = $("select#from_currency option").filter(":selected").val();
+    document.getElementById("account_details_btn").disabled = true;
+    document.getElementById("account_details_btn").style.cursor = "no-drop";
     finalSubmitCall()
     }
 }
@@ -1927,6 +1931,8 @@ function handleAddBankInfo(event) {
             field_Currency1: $("select#from_currency1 option").filter(":selected").val(),
             upload_file_7: file6.value
         }
+        document.getElementById("account_details1_btn").disabled = true;
+        document.getElementById("account_details1_btn").style.cursor = "no-drop";
         finalSubmitCall();
         // $("#step3_circle").addClass("md-step-step3-circle ");
         // $("#step3_span").addClass("md-step3-span");
@@ -2194,6 +2200,8 @@ function pickUp() {
 }
 
 function pickup_Bpi() {
+    document.getElementById("pick_up_btn").disabled = true;
+    document.getElementById("pick_up_btn").style.cursor = "no-drop";
     finalSubmitCall()
     // $("#pickUp").hide();
     // $('#process_confirmation').show();
