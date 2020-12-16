@@ -200,9 +200,9 @@ function trackProgress() {
                             }
                             //for customer survey
 
-
+                            document.getElementById('original_ref_no').innerHTML = document.getElementById('reference_number').value;
                             document.getElementById('payment_amount').innerHTML = currency + ' ' + claimAmount;
-
+                            
                             displayDateForClaimStatus() // date to be displayed on top
                             $("#img_claim").hide();
                             $("#claim").hide();
