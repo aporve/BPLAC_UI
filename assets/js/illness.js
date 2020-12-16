@@ -16,6 +16,7 @@ var file5 = document.getElementById('illness_file_Upload_5');
 var file6 = document.getElementById('proof_BAO');
 var file7 = document.getElementById('proof_addBAO');
 var scanDoc = false;
+haveBankDetails = false;
 var user_mobile;
 $('#privacy_consent_1').prop('checked', true);
 $('#privacy_consent_2').prop('checked', true);

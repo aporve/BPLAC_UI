@@ -14,7 +14,7 @@ var file4 = document.getElementById('file_Upload_4');
 var file5 = document.getElementById('file_Upload_5');
 var file6 = document.getElementById('proof_BAO');
 var file7 = document.getElementById('proof_addBAO');
-
+haveBankDetails = false;
 let url = new URL(window.location.href);
 let referenceNumber = url.searchParams.get('refNumber');
 let uid = url.searchParams.get('sender');
