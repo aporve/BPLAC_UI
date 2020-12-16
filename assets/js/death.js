@@ -609,7 +609,7 @@ function finalSubmitCall() {
                         // });
                     }
                     else {
-                        document.getElementById('returnMessage').value = event.data.returnMessage;
+                        document.getElementById('returnMessage').innerHTML = event.data.returnMessage;
                         $("#invalidReturnCode").modal("show");
                         // $("#popUp").modal("show");
                     }
@@ -5003,7 +5003,7 @@ function submitOtp() {
                         document.getElementById('otp').value = '';
                     }
                     else {
-                        document.getElementById('returnMessage').value = event.data.returnMessage;
+                        document.getElementById('returnMessage').innerHTML = event.data.returnMessage;
                         $("#invalidReturnCode").modal("show");
                     }
                 }

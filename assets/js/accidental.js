@@ -2766,7 +2766,7 @@ function submitOtp() {
             // $('#cover-spin').hide(0)
           }
           else {
-            document.getElementById('returnMessage').value = event.data.returnMessage;
+            document.getElementById('returnMessage').innerHTML = event.data.returnMessage;
             $("#invalidReturnCode").modal("show");
           }
 
@@ -2988,7 +2988,7 @@ function finalSubmitCall() {
             // });
           }
           else {
-            document.getElementById('returnMessage').value = event.data.returnMessage;
+            document.getElementById('returnMessage').innerHTML = event.data.returnMessage;
             $("#invalidReturnCode").modal("show");
           }
         }
