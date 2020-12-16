@@ -1113,25 +1113,25 @@ function handleFormAddBeneficiary(event) {
 
         let beneficiary = {};
 
-        beneficiary["BeneficiaryNo"] = beneficiaryCount.toString(),
-            beneficiary["FirstName"] = field_addBeneficiaryFirstName,
-            beneficiary["MiddleName"] = field_addBeneficiaryMiddleName,
-            beneficiary["LastName"] = field_addBeneficiaryLastName,
-            beneficiary["DateOfBirth"] = field_addBeneficiaryDOB.split('-')[1] + "/" + field_addBeneficiaryDOB.split('-')[2] + "/" + field_addBeneficiaryDOB.split('-')[0],
-            beneficiary["CountryCode"] = $("select#field_addBeneficiaryMobileNumberSelect option").filter(":selected").val(),
-            beneficiary["PhoneNumber"] = field_addBeneficiaryMobileNum,
-            beneficiary["EmailAddress"] = field_addBeneficiaryEmailAddress,
-            beneficiary["HomeAddress"] = field_addBeneficiaryHomeAddress,
-            beneficiary["PlaceOfBirth"] = field_addBeneficiaryPOB,
-            beneficiary["Nationality"] = field_addBeneficiaryNationality,
-            beneficiary["Sex"] = field_addBeneficiarySex,
-            beneficiary["Relationship"] = field_addBeneficiaryRelationToDeceased,
-            beneficiary["DocumentFolder"] = `/CLAIMS/BPLAC/${referenceNumber}`,
-            beneficiary["PayoutOption"] = "CTA",
-            beneficiary["Employer"] = field_addBeneficiaryEmployerName,
-            beneficiary["GovernmentOfficial"] = field_addBeneficiary_relatives1,
-            beneficiary["GovernmentOfficialRelative"] = field_add_Beneficiary_add_relatives2,
-            beneficiary["Occupation"] = field_addBeneficiaryOccupation,
+        beneficiary["beneficiaryNo"] = beneficiaryCount.toString(),
+            beneficiary["firstName"] = field_addBeneficiaryFirstName,
+            beneficiary["middleName"] = field_addBeneficiaryMiddleName,
+            beneficiary["lastName"] = field_addBeneficiaryLastName,
+            beneficiary["dateOfBirth"] = field_addBeneficiaryDOB.split('-')[1] + "/" + field_addBeneficiaryDOB.split('-')[2] + "/" + field_addBeneficiaryDOB.split('-')[0],
+            beneficiary["countryCode"] = $("select#field_addBeneficiaryMobileNumberSelect option").filter(":selected").val(),
+            beneficiary["phoneNumber"] = field_addBeneficiaryMobileNum,
+            beneficiary["emailAddress"] = field_addBeneficiaryEmailAddress,
+            beneficiary["homeAddress"] = field_addBeneficiaryHomeAddress,
+            beneficiary["placeOfBirth"] = field_addBeneficiaryPOB,
+            beneficiary["nationality"] = field_addBeneficiaryNationality,
+            beneficiary["sex"] = field_addBeneficiarySex,
+            beneficiary["relationship"] = field_addBeneficiaryRelationToDeceased,
+            beneficiary["documentFolder"] = `/CLAIMS/BPLAC/${referenceNumber}`,
+            beneficiary["payoutOption"] = "CTA",
+            beneficiary["employer"] = field_addBeneficiaryEmployerName,
+            beneficiary["governmentOfficial"] = field_addBeneficiary_relatives1,
+            beneficiary["governmentOfficialRelative"] = field_add_Beneficiary_add_relatives2,
+            beneficiary["occupation"] = field_addBeneficiaryOccupation,
             beneficiary["check1"] = dataBen.privacy_consent_beneficiary_1,
             beneficiary["check2"] = dataBen.privacy_consent_beneficiary_2
         BeneficiaryList.push(beneficiary);
@@ -4221,7 +4221,7 @@ function pickUp() {
     trackBenificiary = 1;
     let index = BeneficiaryList.findIndex(ele => ele["BeneficiaryNo"] == "1")
     let benObject = BeneficiaryList[index]
-    benObject["PayoutOption"] = "PUA";
+    benObject["payoutOption"] = "PUA";
     BeneficiaryList[index] = benObject;
 
 
@@ -4236,7 +4236,7 @@ function addBeneficiaryPickup() {
 
     let index = BeneficiaryList.findIndex(ele => ele["BeneficiaryNo"] == (beneficiaryCount.toString()))
     let benObject = BeneficiaryList[index]
-    benObject["PayoutOption"] = "PUA";
+    benObject["payoutOption"] = "PUA";
     BeneficiaryList[index] = benObject;
 
     trackaddBenificiary = 1;

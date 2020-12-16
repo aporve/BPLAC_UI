@@ -1838,7 +1838,7 @@ function handleAccountInfo(event) {
       filesObject["FolderName"] = `/CLAIMS/BPLAC/${referenceNumber}`
       filesObject["FileList"] = filesList;
 
-      InsuredInformation["PayoutOption"] = "CTA";
+      // InsuredInformation["PayoutOption"] = "CTA";
       finalPayload["BasicInformation"] = basicInformation;
       finalPayload["InsuredInformation"] = InsuredInformation;
       finalPayload["BankDetailsList"] = BankDetailsList;
@@ -1874,7 +1874,7 @@ function handleAccountInfo(event) {
     filesObject["FolderName"] = `/CLAIMS/BPLAC/${referenceNumber}`
     filesObject["FileList"] = filesList;
 
-    InsuredInformation["PayoutOption"] = "CTA";
+    // InsuredInformation["PayoutOption"] = "CTA";
     finalPayload["BasicInformation"] = basicInformation;
     finalPayload["InsuredInformation"] = InsuredInformation;
     finalPayload["BankDetailsList"] = BankDetailsList;
@@ -2136,7 +2136,7 @@ function pickUp() {
   BankDetailsList.push(BankDetails);
 
   // filesMap["Accident"] = accident
-  InsuredInformation["PayoutOption"] = "PUA";
+  // InsuredInformation["PayoutOption"] = "PUA";
   finalPayload["BasicInformation"] = basicInformation;
   finalPayload["InsuredInformation"] = InsuredInformation;
   finalPayload["BankDetailsList"] = BankDetailsList;
@@ -2808,7 +2808,7 @@ function finalSubmitCall() {
   // var field_Branch = $("#field_Branch").val();
   let BankDetailsList = [];
   BankDetailsList.push(BankDetails);
-
+  InsuredInformation["payoutOption"] = payoutOption;
   var finalData = {}
   var source = 'Accident';
   var raw = JSON.stringify({
