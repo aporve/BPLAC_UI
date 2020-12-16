@@ -576,6 +576,7 @@ function finalSubmitCall() {
                         // });
                     }
                     else {
+                        alert(event.data.returnMessage)
                         // $("#popUp").modal("show");
                     }
                 }

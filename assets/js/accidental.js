@@ -2952,11 +2952,11 @@ function finalSubmitCall() {
             // });
           }
           else {
-            $("#popUp").modal("show");
+            alert(event.data.returnMessage)
           }
         }
         else {
-          $("#popUp").modal("show");
+          // $("#popUp").modal("show");
         }
       }
     } catch (error) {
