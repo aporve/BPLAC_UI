@@ -400,7 +400,7 @@ function setAccidentClaimStatusMsg() {
         if (docsPending == 'Y') {
             var finalDocsList = '';
             requirementsList.forEach(function (item) {
-                finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p>' +' ' + item.name + '</p> </div>'
+                finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p style="padding-left:7px">' +' ' + item.name + '</p> </div>'
 
             });
 
@@ -455,7 +455,7 @@ function setAccidentClaimStatusMsg() {
         if (docsPending == 'Y') {
             var finalDocsList = '';
             requirementsList.forEach(function (item) {
-                finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p>' + ' ' + item.name + '</p> </div>'
+                finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p style="padding-left:7px">' + ' ' + item.name + '</p> </div>'
 
             });
 
@@ -611,7 +611,7 @@ function setIllnessClaimStatusMsg() {
             twoStepperActive();
             var finalDocsList = '';
             requirementsList.forEach(function (item) {
-                finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p>' +' ' + item.name + '</p> </div>'
+                finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p style="padding-left:7px">' +' ' + item.name + '</p> </div>'
 
             });
             document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR OTHER CLAIMS DOCUMENTS</h3> <br /><p>Additional Claims Documents</p><br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We have reviewed your initial claim request submission and identified that we may also need the following documents for us to proceed: </p> <br /> <p class="font-weight-normal request-font"> <div style="padding-left: 10px;"> ' + finalDocsList + ' </div> </p> <br /> <p class="font-weight-normal request-font"> Don’t worry, you can easily submit these documents to our BSE at any BPI or BPI Family Savings Bank branch so we can proceed with your claim request. You may also visit Vibe Customer Service Center at GF BPI-Philam Makati, 6811 Ayala Ave., 1226 Makati. </p> </div>';
@@ -663,7 +663,7 @@ function setIllnessClaimStatusMsg() {
         if (docsPending == 'Y') {
             var finalDocsList = '';
             requirementsList.forEach(function (item) {
-                finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p>' + ' ' + item.name + '</p> </div>'
+                finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p style="padding-left:7px">' + ' ' + item.name + '</p> </div>'
 
             });
 
@@ -749,7 +749,7 @@ function setDeathClaimStatusMsg() {
         if (docsPending == 'Y') {
             var finalDocsList = '';
             requirementsList.forEach(function (item) {
-                finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p>' + ' ' + item.name + '</p> </div>'
+                finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p style="padding-left:7px">' + ' ' + item.name + '</p> </div>'
 
             });
             document.getElementById('claim-msg-text').innerHTML = '<div> <h3>YOUR OTHER CLAIMS DOCUMENTS</h3>  <br /><p>Our sincerest condolences for your loss. </p><br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '.We have reviewed your initial claim request submission and identified that we may need the following documents for us to proceed: </p > <br /> <p class="font-weight-normal request-font"> <div style="padding-left: 10px;"> ' + finalDocsList + '</div> </p> <br /> <p class="font-weight-normal request-font"> You can easily submit these documents to our BSE at any BPI or BPI Family Savings Bank branch so we can proceed with your claim request. You may also visit Vibe Customer Service Center at GF BPI-Philam Makati, 6811 Ayala Ave., 1226 Makati. </p> </div>';
@@ -819,7 +819,7 @@ function setDeathClaimStatusMsg() {
         if (docsPending == 'Y') {
             var finalDocsList = '';
             requirementsList.forEach(function (item) {
-                finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p>' + ' ' + item.name + '</p> </div>'
+                finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p style="padding-left:7px">' + ' ' + item.name + '</p> </div>'
 
             });
 
