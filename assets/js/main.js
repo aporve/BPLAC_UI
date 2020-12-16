@@ -215,6 +215,9 @@ function trackProgress() {
                             setClaimProgressScreen(); // to set header title and image for claim status screen
                             trackProgressDropDown() // for tracking progress dropdown
                         }
+                        else {
+                            $('#     $('#noDataModal').modal('show');').modal('show');
+                        }
                         }
                     else {
                         $('#refNoWarning').modal('show');
