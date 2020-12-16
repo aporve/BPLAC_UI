@@ -2759,7 +2759,7 @@ function preSubmitCall() {
   var preSubmitPayload = {}
   preSubmitPayload['source'] = source;
   preSubmitPayload['data'] = raw;
-  timer(0, 50)
+  // timer(0, 50)
   window.parent.postMessage(JSON.stringify({
     event_code: 'ym-client-event', data: JSON.stringify({
       event: {
@@ -2780,7 +2780,7 @@ function preSubmitCall() {
         console.log(event)
         if (event.event_code == 'preSubmitResponse') { //sucess
           if (event.data.returnCode == '0') {
-            timer(50, 100).then(async () => {
+            // timer(50, 100).then(async () => {
 
               $("#step2").addClass("active");
               $("#step2>div").addClass("active");
@@ -2790,7 +2790,7 @@ function preSubmitCall() {
                 $('#payment').show();
               }
 
-            })
+            // })
 
 
           }
@@ -2839,7 +2839,7 @@ function finalSubmitCall() {
   });
   finalData['source'] = source;
   finalData['data'] = JSON.stringify(raw);
-  timer(0, 50)
+  // timer(0, 50)
   window.parent.postMessage(JSON.stringify({
     event_code: 'ym-client-event', data: JSON.stringify({
       event: {
@@ -2861,7 +2861,7 @@ function finalSubmitCall() {
         if (event.event_code == 'finalSubmitResponse') { //sucess
           if (event.data.returnCode == '0') {
             myDisable()
-            timer(50, 100).then(async () => {
+            // timer(50, 100).then(async () => {
               $("#step2").addClass("done");
               /*  $("#step3").addClass("active"); */
               /*   $("#step3>div").addClass("active"); */
@@ -2874,7 +2874,7 @@ function finalSubmitCall() {
               $("#pickUp").hide();
               $("#process_confirmation").show();
               console.log("Data -> ", data);
-            });
+            // });
           }
           else {
             $("#popUp").modal("show");
