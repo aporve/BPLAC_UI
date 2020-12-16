@@ -3577,7 +3577,7 @@ function buttonSubmitClicked(event) {
             insurance_Checkbox: $('#upload_invalidCheck_2').is(':checked')
         }
         myDisable()
-        timer().then(async () => {
+        // timer().then(async () => {
             $("#step2").addClass("done");
             $("#step3_circle").addClass("md-step-step3-circle ");
             $("#step3_span").addClass("md-step3-span");
@@ -3589,7 +3589,7 @@ function buttonSubmitClicked(event) {
             $('#process_confirmation').show();
 
 
-        });
+        // });
 
         let FilesInformation = {};
         FilesInformation["FolderName"] = `/CLAIMS/BPLAC/${referenceNumber}`
