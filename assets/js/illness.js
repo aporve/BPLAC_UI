@@ -1699,6 +1699,8 @@ function buttonSubmitClicked(event) {
     /* $('#payment')[0].scrollIntoView(true); */
 
     // console.log('upload data --> ', upload_data);
+    document.getElementById('files_upload_btn').disabled = "true";
+    document.getElementById("files_upload_btn").style.cursor = "no-drop";
     preSubmitCall()
 }
 

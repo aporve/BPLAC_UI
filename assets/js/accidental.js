@@ -1711,6 +1711,8 @@ function buttonSubmitClicked(event) {
   //     }
   //   })
   // }), '*');
+  document.getElementById('files_upload_btn').disabled = "true";
+  document.getElementById("files_upload_btn").style.cursor = "no-drop";
   preSubmitCall()
 
 }
