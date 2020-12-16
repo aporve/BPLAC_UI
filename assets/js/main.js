@@ -181,7 +181,7 @@ function trackProgress() {
                             claimantFirstName = event.data.claimantFirstName;
                             // denialTag = response.denialTag;
                             sourceSystem = event.data.sourceSystem;
-                            if (sourceSystem.toLowerCase() == 'iserve') {
+                            if (sourceSystem.trim().toLowerCase() == 'iserve') {
                                 sourceSystem='tips'
                             }
                             isFallout = event.data.isFallout;
