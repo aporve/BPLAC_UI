@@ -1227,3 +1227,9 @@ function submit_survey(event) {
 function closeModal() {
     location.reload();
 }
+function backToFileClaim() {
+
+    window.location.href = "main.html";
+
+
+}
