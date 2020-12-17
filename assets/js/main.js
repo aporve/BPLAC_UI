@@ -30,6 +30,8 @@ var surveyAns2 = 0;
 var surveyQues3;
 var surveyAns3 = 0;
 var surveyObj = {};
+var org_claimSubType;
+var org_sourceSystem;
 var survey_form = document.getElementById('customer_survey');
 survey_form.addEventListener('submit', submit_survey);
 function getAccidentPage() {
@@ -170,6 +172,7 @@ function trackProgress() {
                             else {
 
                                 claim_type = event.data.subType
+                                org_claimSubType = event.data.subType;
                                 if (event.data.subType.toLowerCase() == 'il') {
                                     claim_type = 'illness'
                                 }
@@ -188,6 +191,7 @@ function trackProgress() {
                             claimantFirstName = event.data.claimantFirstName;
                             // denialTag = response.denialTag;
                             sourceSystem = event.data.sourceSystem;
+                            org_sourceSystem = event.data.sourceSystem;
                             if (sourceSystem.trim().toLowerCase() != 'tips' && sourceSystem.trim().toLowerCase() != 'cms') {
                                 sourceSystem = 'cms'
                             }
@@ -1129,7 +1133,10 @@ function submit_survey(event) {
     {
         'companyName': 'BPLAC',
         'TIPSReferenceNumber': referenceNumber,
-        'sourceSystem': sourceSystem,
+        'claimType': claim_type,
+        'subType': org_claimSubType,
+        'policyNumber': policyNumber,
+        'sourceSystem': org_sourceSystem,
         'surveyQuestion1': surveyAns1,
         'surveyQuestion2': surveyAns2,
         'surveyQuestion3': surveyAns3
