@@ -3636,6 +3636,13 @@ function buttonSubmitClicked(event) {
         //     $('#requirements').hide();
         //     $('#process_confirmation').show();
         // }
+        var nodes = document.getElementById("requirements").getElementsByTagName('*');
+        for (var i = 0; i < nodes.length; i++) {
+            nodes[i].disabled = true;
+            nodes[i].style.cursor = 'no-drop'
+
+        }
+        document.getElementById("requirements").style.opacity = '0.65'
         preSubmitCall()
         // window.parent.postMessage(JSON.stringify({
         //     event_code: 'ym-client-event', data: JSON.stringify({
@@ -3723,6 +3730,13 @@ function addBeneficiaryButtonClicked(event) {
         finalPayload["BeneficiaryList"] = BeneficiaryList;
         finalPayload["BankDetailsList"] = BankDetailsList;
         finalPayload["FilesInformation"] = FilesInformation;
+        var nodes = document.getElementById("addBeneficiaryRequirements").getElementsByTagName('*');
+        for (var i = 0; i < nodes.length; i++) {
+            nodes[i].disabled = true;
+            nodes[i].style.cursor = 'no-drop'
+
+        }
+        document.getElementById("addBeneficiaryRequirements").style.opacity = '0.65'
         preSubmitCall()
         // console.log("final payload : ")
         // console.log(finalPayload)
