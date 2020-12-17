@@ -30,6 +30,8 @@ var surveyAns2 = 0;
 var surveyQues3;
 var surveyAns3 = 0;
 var surveyObj = {};
+var org_claimSubType;
+var org_sourceSystem='';
 var survey_form = document.getElementById('customer_survey');
 survey_form.addEventListener('submit', submit_survey);
 function getAccidentPage() {
@@ -131,79 +133,204 @@ function dummyRefNumberTest() {
 }
 
 function trackProgress() {
-    // api call on clicking GO button from claim status screen
-    var res;
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
+
+    document.getElementById('go-btn').style.display = 'none'
+    document.getElementById('loader-btn').style.display = 'block'
+    var finalPayload = {}
+    var source = 'main';
     var raw = JSON.stringify({ "companyName": "BPLAC", "TIPSReferenceNumber": referenceNumber });
-    var requestOptions = {
-        method: 'POST',
-        headers: myHeaders,
-        body: raw
-    };
-    fetch("http://localhost:3000/claim_status", requestOptions).then((response) => response.json())
-        .then(response => {
-            if (response.returnCode != '0') {
+    finalPayload['source'] = source;
+    finalPayload['data'] = raw;
+    window.parent.postMessage(JSON.stringify({
+        event_code: 'ym-client-event', data: JSON.stringify({
+            event: {
+                code: "getClaimStatus",
+                data: finalPayload
+            }
+        })
+    }), '*');
+
+
+    window.addEventListener('message', function (eventData) {
+
+        console.log("receiving claim status event ")
+        // console.log(event.data.event_code)
+        try {
+
+            if (eventData.data) {
+                let event = JSON.parse(eventData.data);
+                console.log(event);
+                if (event.event_code == 'claimStatusResponse') { //sucess
+                    console.log(event.data)
+                    if (event.data.returnCode == '0' || event.data.retCode == '0') {
+                        if (event.data.type != null) {
+                            document.getElementById('go-btn').style.display = 'block'
+                            document.getElementById('loader-btn').style.display = 'none'
+                            if (event.data.type.toLowerCase() == 'death') {
+                                claim_type = event.data.type
+                            }
+                            else {
+
+                                claim_type = event.data.subType
+                                org_claimSubType = event.data.subType;
+                                if (event.data.subType.toLowerCase() == 'il') {
+                                    claim_type = 'illness'
+                                }
+                                else if (event.data.subType.toLowerCase() == 'ac') {
+                                    claim_type = 'accident'
+                                }
+                            }
+                            transactionNumber = event.data.transactionNumber;
+                            disbursementType = event.data.disbursementType;
+                            beneficiaryCount = event.data.beneficiaryCount;
+                            lapsationDate = event.data.lapsationDate;
+                            claimStatus = event.data.claimStatus;
+                            docsPending = event.data.docsPending;
+                            docsReceived = event.data.docsReceived;
+                            policyNumber = event.data.policyNumber;
+                            claimantFirstName = event.data.claimantFirstName;
+                            // denialTag = response.denialTag;
+                            sourceSystem = event.data.sourceSystem;
+                            org_sourceSystem = event.data.sourceSystem;
+                            if (sourceSystem.trim().toLowerCase() != 'tips' && sourceSystem.trim().toLowerCase() != 'cms') {
+                                sourceSystem = 'cms'
+                            }
+                            isFallout = event.data.isFallout;
+                            claimAmount = event.data.claimAmount;
+                            currency = event.data.currency;
+                            requirementsList = event.data.requirementsList;
+                            surveyTag = event.data.surveyTag;
+
+                            //for customer survey
+                            if ((claimStatus.toLowerCase() == 'denied' || claimStatus.toLowerCase() == 'denied2' || claimStatus.toLowerCase() == 'denied3' || claimStatus.toLowerCase() == 'denied4' || claimStatus.toLowerCase() == 'approved') && (surveyTag == 'N' || surveyTag == null)) {
+                                $('#customer_survey').show()
+                            }
+                            else {
+
+                                $('#customer_survey').hide()
+                            }
+                            //for customer survey
+
+                            document.getElementById('original_ref_no').innerHTML = document.getElementById('reference_number').value;
+                            document.getElementById('payment_amount').innerHTML = currency + ' ' + claimAmount;
+
+                            displayDateForClaimStatus() // date to be displayed on top
+                            $("#img_claim").hide();
+                            $("#claim").hide();
+                            $("#reference_No").hide();
+
+                            // document.getElementById('text').innerHTML = document.getElementById('payout-pickup-ill').innerHTML;
+                            // activeProcess()
+                            // activeProcessCircle()
+                            $("#err_recaptcha").text('');
+                            $("#err_recaptcha").hide();
+                            $("#reference-divider").show();
+                            $("#process_confirmation1").show();
+                            setClaimProgressScreen(); // to set header title and image for claim status screen
+                            trackProgressDropDown() // for tracking progress dropdown
+                        }
+                        else {
+                            $('#noDataModal').modal('show'); //
+                        }
+                    }
+                    else if (event.data.returnCode == '1') {
+                        $('#refNoWarning').modal('show');
+
+                    }
+                    else {
+                        $('#noDataModal').modal('show'); //
+                    }
+                }
+                else {
+                    // $('#refNoWarning').modal('show');
+
+                }
+            } else {
                 $('#refNoWarning').modal('show');
+
             }
-            else {
-                if (response.type.toLowerCase().trim() == 'death') {
-                    claim_type = response.type
-                }
-                else {
-                    claim_type = response.subType
-                }
-                transactionNumber = response.transactionNumber;
-                disbursementType = response.disbursementType;
-                beneficiaryCount = response.beneficiaryCount;
-                lapsationDate = response.lapsationDate;
-                claimStatus = response.claimStatus;
-                docsPending = response.docsPending;
-                docsReceived = response.docsReceived;
-                policyNumber = response.policyNumber;
-                claimantFirstName = response.claimantFirstName;
-                // denialTag = response.denialTag;
-                sourceSystem = response.sourceSystem;
-                isFallout = response.isFallout;
-                claimAmount = response.claimAmount;
-                currency = response.currency;
-                requirementsList = response.requirementsList;
-                surveyTag = response.surveyTag;
-                if (claimStatus.toLowerCase().trim() == 'denied' || claimStatus.toLowerCase().trim() == 'approved' && surveyTag == 'N') {
-                    $('#customer_survey').show()
-                }
-                else {
+        } catch (error) {
+            // alert(error)
 
-                    $('#customer_survey').hide()
-                }
-                // document.getElementById('name').innerHTML = claimantFirstName;
+        }
 
-                document.getElementById('payment_amount').innerHTML = currency + ' ' + claimAmount;
-                // document.getElementById('currency').innerHTML = currency;
-                // document.getElementById('net_amount').innerHTML = claimAmount;
-                displayDateForClaimStatus()
-                $("#img_claim").hide();
-                $("#claim").hide();
-                $("#reference_No").hide();
+    })
 
-                // document.getElementById('text').innerHTML = document.getElementById('payout-pickup-ill').innerHTML;
-                // activeProcess()
-                // activeProcessCircle()
-                $("#err_recaptcha").text('');
-                $("#err_recaptcha").hide();
-                $("#reference-divider").show();
-                $("#process_confirmation1").show();
-                setClaimProgressScreen(); // to set header title and image for claim status screen
-                trackProgressDropDown(trackMessagesArr) // for tracking progress dropdown
-            }
-        }).catch(error => {
-            console.log(error)
-        });
 
-    var response = {};
-    // to show header and description based on claim type
-    claim_msg_type = response['claim-msg-type'] // to set the message shown based on status
-    trackMessagesArr = response['trackMessages']  // to populate dropdown
+
+    // api call on clicking GO button from claim status screen
+    // var res;
+    // var myHeaders = new Headers();
+    // myHeaders.append("Content-Type", "application/json");
+    // var raw = JSON.stringify({ "companyName": "BPLAC", "TIPSReferenceNumber": referenceNumber });
+    // var requestOptions = {
+    //     method: 'POST',
+    //     headers: myHeaders,
+    //     body: raw
+    // };
+    // fetch("http://localhost:3000/claim_status", requestOptions).then((response) => response.json())
+    //     .then(response => {
+    //         if (response.returnCode != '0') {
+    //             $('#refNoWarning').modal('show');
+    //         }
+    //         else {
+    //             if (response.type.toLowerCase().trim() == 'death') {
+    //                 claim_type = response.type
+    //             }
+    //             else {
+    //                 claim_type = response.subType
+    //             }
+    //             transactionNumber = response.transactionNumber;
+    //             disbursementType = response.disbursementType;
+    //             beneficiaryCount = response.beneficiaryCount;
+    //             lapsationDate = response.lapsationDate;
+    //             claimStatus = response.claimStatus;
+    //             docsPending = response.docsPending;
+    //             docsReceived = response.docsReceived;
+    //             policyNumber = response.policyNumber;
+    //             claimantFirstName = response.claimantFirstName;
+    //             // denialTag = response.denialTag;
+    //             sourceSystem = response.sourceSystem;
+    //             isFallout = response.isFallout;
+    //             claimAmount = response.claimAmount;
+    //             currency = response.currency;
+    //             requirementsList = response.requirementsList;
+    //             surveyTag = response.surveyTag;
+    //             if (claimStatus.toLowerCase().trim() == 'denied' || claimStatus.toLowerCase().trim() == 'approved' && surveyTag == 'N') {
+    //                 $('#customer_survey').show()
+    //             }
+    //             else {
+
+    //                 $('#customer_survey').hide()
+    //             }
+    //             // document.getElementById('name').innerHTML = claimantFirstName;
+
+    //             document.getElementById('payment_amount').innerHTML = currency + ' ' + claimAmount;
+    //             // document.getElementById('currency').innerHTML = currency;
+    //             // document.getElementById('net_amount').innerHTML = claimAmount;
+    //             displayDateForClaimStatus()
+    //             $("#img_claim").hide();
+    //             $("#claim").hide();
+    //             $("#reference_No").hide();
+
+    //             // document.getElementById('text').innerHTML = document.getElementById('payout-pickup-ill').innerHTML;
+    //             // activeProcess()
+    //             // activeProcessCircle()
+    //             $("#err_recaptcha").text('');
+    //             $("#err_recaptcha").hide();
+    //             $("#reference-divider").show();
+    //             $("#process_confirmation1").show();
+    //             setClaimProgressScreen(); // to set header title and image for claim status screen
+    //             trackProgressDropDown(trackMessagesArr) // for tracking progress dropdown
+    //         }
+    //     }).catch(error => {
+    //         console.log(error)
+    //     });
+
+    // var response = {};
+    // // to show header and description based on claim type
+    // claim_msg_type = response['claim-msg-type'] // to set the message shown based on status
+    // trackMessagesArr = response['trackMessages']  // to populate dropdown
 
     // var x = dummyRefNumberTest() // for testing
 
@@ -284,7 +411,7 @@ function setAccidentClaimStatusMsg() {
         if (docsPending == 'Y') {
             var finalDocsList = '';
             requirementsList.forEach(function (item) {
-                finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p>' + item.name + '</p> </div>'
+                finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p style="padding-left:7px">' + ' ' + item.name + '</p> </div>'
 
             });
 
@@ -327,7 +454,7 @@ function setAccidentClaimStatusMsg() {
                 allStepperActive()
             }
             else if (claimStatus.toLowerCase().trim() == 'denied4') {
-                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p class="font-weight-justy request-font"> An update on your claim request </p> <br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We have reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. Your coverage and all its benefits have ended last ' + lapsationDate +' due to non-payment of premium dues. </p> <br /> <p> We wish you a speedy recovery. </p> <br /> <p> If you have any questions, or would like to reinstate your policy, you may reach out to us by chatting with Bessie the chatbot at m.me/BessieofBPIPhilam. You may also email us at BPI Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div> '
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p class="font-weight-justy request-font"> An update on your claim request </p> <br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We have reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. Your coverage and all its benefits have ended  due to non-payment of premium dues. </p> <br /> <p> We wish you a speedy recovery. </p> <br /> <p> If you have any questions, or would like to reinstate your policy, you may reach out to us by chatting with Bessie the chatbot at m.me/BessieofBPIPhilam. You may also email us at BPI Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div> '
                 document.getElementById("turnaround-time-ref").style.display = "none";
                 document.getElementById("payment-ref").style.display = "none";
                 allStepperActive()
@@ -339,7 +466,7 @@ function setAccidentClaimStatusMsg() {
         if (docsPending == 'Y') {
             var finalDocsList = '';
             requirementsList.forEach(function (item) {
-                finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p>' + item.name + '</p> </div>'
+                finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p style="padding-left:7px">' + ' ' + item.name + '</p> </div>'
 
             });
 
@@ -382,7 +509,7 @@ function setAccidentClaimStatusMsg() {
                 allStepperActive()
             }
             else if (claimStatus.toLowerCase().trim() == 'denied4') {
-                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p>An update on your claim request</p><br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. Your policy&#39;s coverage and all its benefits have ended last ' + lapsationDate +' due to non-payment of premium dues. </p> <br /> <p class="font-weight-normal request-font"> We understand that you&#39;re going through a tough time, ' + claimantFirstName + '. If you wish reinstate your policy, your Bancassurance Sales Executive will be ready to assist you. </p> <br /> <p class="font-weight-normal request-font"> You may also chat with Bessie at m.me/BessieofBPIPhilam, email us at at BPI-Philam_CustomerService@aia.com, or call us at (02) 8528-5501. </p> <br /> </div> '
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p>An update on your claim request</p><br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. Your policy&#39;s coverage and all its benefits have ended last ' + lapsationDate + ' due to non-payment of premium dues. </p> <br /> <p class="font-weight-normal request-font"> We understand that you&#39;re going through a tough time, ' + claimantFirstName + '. If you wish reinstate your policy, your Bancassurance Sales Executive will be ready to assist you. </p> <br /> <p class="font-weight-normal request-font"> You may also chat with Bessie at m.me/BessieofBPIPhilam, email us at at BPI-Philam_CustomerService@aia.com, or call us at (02) 8528-5501. </p> <br /> </div> '
                 document.getElementById("turnaround-time-ref").style.display = "none";
                 document.getElementById("payment-ref").style.display = "none";
                 allStepperActive()
@@ -495,7 +622,7 @@ function setIllnessClaimStatusMsg() {
             twoStepperActive();
             var finalDocsList = '';
             requirementsList.forEach(function (item) {
-                finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p>' + item.name + '</p> </div>'
+                finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p style="padding-left:7px">' + ' ' + item.name + '</p> </div>'
 
             });
             document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR OTHER CLAIMS DOCUMENTS</h3> <br /><p>Additional Claims Documents</p><br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We have reviewed your initial claim request submission and identified that we may also need the following documents for us to proceed: </p> <br /> <p class="font-weight-normal request-font"> <div style="padding-left: 10px;"> ' + finalDocsList + ' </div> </p> <br /> <p class="font-weight-normal request-font"> Don’t worry, you can easily submit these documents to our BSE at any BPI or BPI Family Savings Bank branch so we can proceed with your claim request. You may also visit Vibe Customer Service Center at GF BPI-Philam Makati, 6811 Ayala Ave., 1226 Makati. </p> </div>';
@@ -536,7 +663,7 @@ function setIllnessClaimStatusMsg() {
                 allStepperActive()
             }
             else if (claimStatus.toLowerCase().trim() == 'denied4') {
-                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p class="font-weight-justy request-font"> An update on your claim request </p> <br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We have reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. Your coverage and all its benefits have ended last ' + lapsationDate +' due to non-payment of premium dues. </p> <br /> <p> We wish you a speedy recovery. </p> <br /> <p> If you have any questions, or would like to reinstate your policy, you may reach out to us by chatting with Bessie the chatbot at m.me/BessieofBPIPhilam. You may also email us at BPI Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div> '
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p class="font-weight-justy request-font"> An update on your claim request </p> <br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We have reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. Your coverage and all its benefits have ended  due to non-payment of premium dues. </p> <br /> <p> We wish you a speedy recovery. </p> <br /> <p> If you have any questions, or would like to reinstate your policy, you may reach out to us by chatting with Bessie the chatbot at m.me/BessieofBPIPhilam. You may also email us at BPI Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div> '
                 document.getElementById("turnaround-time-ref").style.display = "none";
                 document.getElementById("payment-ref").style.display = "none";
                 allStepperActive()
@@ -547,7 +674,7 @@ function setIllnessClaimStatusMsg() {
         if (docsPending == 'Y') {
             var finalDocsList = '';
             requirementsList.forEach(function (item) {
-                finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p>' + item.name + '</p> </div>'
+                finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p style="padding-left:7px">' + ' ' + item.name + '</p> </div>'
 
             });
 
@@ -590,7 +717,7 @@ function setIllnessClaimStatusMsg() {
                 allStepperActive()
             }
             else if (claimStatus.toLowerCase().trim() == 'denied4') {
-                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p>An update on your claim request</p><br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. Your policy&#39;s coverage and all its benefits have ended last ' + lapsationDate +' due to non-payment of premium dues. </p> <br /> <p class="font-weight-normal request-font"> We understand that you&#39;re going through a tough time, ' + claimantFirstName + '. If you wish reinstate your policy, your Bancassurance Sales Executive will be ready to assist you. </p> <br /> <p class="font-weight-normal request-font"> You may also chat with Bessie at m.me/BessieofBPIPhilam, email us at at BPI-Philam_CustomerService@aia.com, or call us at (02) 8528-5501. </p> <br /> </div> '
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p>An update on your claim request</p><br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. Your policy&#39;s coverage and all its benefits have ended last ' + lapsationDate + ' due to non-payment of premium dues. </p> <br /> <p class="font-weight-normal request-font"> We understand that you&#39;re going through a tough time, ' + claimantFirstName + '. If you wish reinstate your policy, your Bancassurance Sales Executive will be ready to assist you. </p> <br /> <p class="font-weight-normal request-font"> You may also chat with Bessie at m.me/BessieofBPIPhilam, email us at at BPI-Philam_CustomerService@aia.com, or call us at (02) 8528-5501. </p> <br /> </div> '
                 document.getElementById("turnaround-time-ref").style.display = "none";
                 document.getElementById("payment-ref").style.display = "none";
                 allStepperActive()
@@ -625,7 +752,7 @@ function setIllnessClaimStatusMsg() {
     // }
 
 }
-
+debugger
 
 function setDeathClaimStatusMsg() {
     if (sourceSystem.toLowerCase().trim() == 'tips') {
@@ -633,7 +760,7 @@ function setDeathClaimStatusMsg() {
         if (docsPending == 'Y') {
             var finalDocsList = '';
             requirementsList.forEach(function (item) {
-                finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p>' + item.name + '</p> </div>'
+                finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p style="padding-left:7px">' + ' ' + item.name + '</p> </div>'
 
             });
             document.getElementById('claim-msg-text').innerHTML = '<div> <h3>YOUR OTHER CLAIMS DOCUMENTS</h3>  <br /><p>Our sincerest condolences for your loss. </p><br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '.We have reviewed your initial claim request submission and identified that we may need the following documents for us to proceed: </p > <br /> <p class="font-weight-normal request-font"> <div style="padding-left: 10px;"> ' + finalDocsList + '</div> </p> <br /> <p class="font-weight-normal request-font"> You can easily submit these documents to our BSE at any BPI or BPI Family Savings Bank branch so we can proceed with your claim request. You may also visit Vibe Customer Service Center at GF BPI-Philam Makati, 6811 Ayala Ave., 1226 Makati. </p> </div>';
@@ -692,7 +819,7 @@ function setDeathClaimStatusMsg() {
                 allStepperActive()
             }
             else if (claimStatus.toLowerCase().trim() == 'denied4') {
-                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p class="font-weight-justy request-font"> Our sincerest condolences for your loss. </p> <br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We have reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. The BPI-Philam policy you provided and its benefits have ended last ' + lapsationDate +' due to non-payment of premium dues. </p> <br /> <p> We understand that you’re going through a tough time. For assistance, please feel free to reach out to us at BPI Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div> '
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p class="font-weight-justy request-font"> Our sincerest condolences for your loss. </p> <br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We have reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. The BPI-Philam policy you provided and its benefits have ended due to non-payment of premium dues. </p> <br /> <p> We understand that you’re going through a tough time. For assistance, please feel free to reach out to us at BPI Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div> '
                 document.getElementById("turnaround-time-ref").style.display = "none";
                 document.getElementById("payment-ref").style.display = "none";
                 allStepperActive()
@@ -703,7 +830,7 @@ function setDeathClaimStatusMsg() {
         if (docsPending == 'Y') {
             var finalDocsList = '';
             requirementsList.forEach(function (item) {
-                finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p>' + item.name + '</p> </div>'
+                finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p style="padding-left:7px">' + ' ' + item.name + '</p> </div>'
 
             });
 
@@ -761,7 +888,7 @@ function setDeathClaimStatusMsg() {
                 allStepperActive()
             }
             else if (claimStatus.toLowerCase().trim() == 'denied4') {
-                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p>An update on your claim request</p><br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. Your poliyc&#39;s coverage and all its benefits have ended last ' + lapsationDate +' due to non-payment of premium. </p> <br /> <p class="font-weight-normal request-font"> We are sorry that this news is coming to you at a tough time, ' + claimantFirstName + '. If you wish to discuss the details of your claim, you may reach out to your Bancassurance Sales Executive or chat with Bessie at m.me/BessieofBPIPhilam. You may also email us at BPI-Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div> '
+                document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN DENIED</h3> <br /> <p>An update on your claim request</p><br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We reviewed the documents you submitted and we regret to inform you that we are unable to grant your claim request. Your poliyc&#39;s coverage and all its benefits have ended last ' + lapsationDate + ' due to non-payment of premium. </p> <br /> <p class="font-weight-normal request-font"> We are sorry that this news is coming to you at a tough time, ' + claimantFirstName + '. If you wish to discuss the details of your claim, you may reach out to your Bancassurance Sales Executive or chat with Bessie at m.me/BessieofBPIPhilam. You may also email us at BPI-Philam_CustomerService@aia.com or call us at (02) 8528-5501. </p> <br /> </div> '
                 document.getElementById("turnaround-time-ref").style.display = "none";
                 document.getElementById("payment-ref").style.display = "none";
                 allStepperActive()
@@ -857,7 +984,7 @@ function trackProgressDropDown(trackMessagesArr) {
         '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + progress_msges[1]['msg'] + '</div></div></div>' +
         (claim_type == 'Accident' || claim_type == 'Illness' ?
             '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + 'You have chosen ' + disbursementType + ' as a preferred payout method' + '</div></div></div>' :
-        beneficiaryCount < 1 ?
+            beneficiaryCount < 1 ?
                 '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + 'You have chosen ' + disbursementType + ' as a preferred payout method' + '</div></div></div>' :
                 '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + 'You have chosen your preferred payout methods.' + '</div></div></div>')
         + (claimStatus.toLowerCase() == 'received' ?
@@ -875,7 +1002,7 @@ function trackProgressDropDown(trackMessagesArr) {
             '')
         + (claimStatus == 'approved' && disbursementType == 'CTA' && beneficiaryCount < 1 ?
             '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + progress_msges[12]['msg'] + '</div></div></div>'
-        : claimStatus == 'approved' && disbursementType == 'PUA' && beneficiaryCount < 1 ? '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + progress_msges[9]['msg'] + '</div></div></div>' : '')
+            : claimStatus == 'approved' && disbursementType == 'PUA' && beneficiaryCount < 1 ? '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + progress_msges[9]['msg'] + '</div></div></div>' : '')
     document.getElementById('progs-status').innerHTML = final_progress_result
 
     //--before integration--//
@@ -1002,13 +1129,27 @@ function selectAnswer(quesn_num, id, selectedOption) {
 function submit_survey(event) {
 
     event.preventDefault();
-    var survey_data = {};
-    survey_data['companyName'] = 'BPLAC';
-    survey_data['TIPSReferenceNumber'] = referenceNumber;
-    survey_data['sourceSystem'] = sourceSystem;
-    survey_data['surveyQuestion1'] = surveyAns1;
-    survey_data['surveyQuestion2'] = surveyAns2;
-    survey_data['surveyQuestion3'] = surveyAns3;
+    if (org_sourceSystem == '' || org_sourceSystem == null) {
+        org_sourceSystem='cms'
+    }
+    var survey_data =
+    {
+        'companyName': 'BPLAC',
+        'TIPSReferenceNumber': referenceNumber,
+        'claimType': claim_type,
+        'subType': org_claimSubType,
+        'policyNumber': policyNumber,
+        'sourceSystem': org_sourceSystem,
+        'surveyQuestion1': surveyAns1,
+        'surveyQuestion2': surveyAns2,
+        'surveyQuestion3': surveyAns3
+    };
+    // survey_data['companyName'] = 'BPLAC';
+    // survey_data['TIPSReferenceNumber'] = referenceNumber;
+    // survey_data['sourceSystem'] = sourceSystem;
+    // survey_data['surveyQuestion1'] = surveyAns1;
+    // survey_data['surveyQuestion2'] = surveyAns2;
+    // survey_data['surveyQuestion3'] = surveyAns3;
 
     // let surveyData = {
     //     stageOne: true,
@@ -1016,22 +1157,61 @@ function submit_survey(event) {
     //     referenceNumber: referenceNumber,
     //     data: survey_data
     // }
+    var finalPayload = {}
+    var raw = JSON.stringify(survey_data)
+
+    var source = 'main';
+    finalPayload['source'] = source;
+    finalPayload['data'] = raw;
     window.parent.postMessage(JSON.stringify({
         event_code: 'ym-client-event', data: JSON.stringify({
             event: {
-                code: "customer_survey",
-                data: JSON.stringify(survey_data)
+                code: "customerSurvey",
+                data: finalPayload
             }
         })
     }), '*');
+    window.addEventListener('message', function (eventData) {
 
-    var nodes = document.getElementById("customer_survey").getElementsByTagName('*');
-    for (var i = 0; i < nodes.length; i++) {
-        nodes[i].disabled = true;
-        nodes[i].style.cursor = 'no-drop'
+        console.log("receiving survey event in acc")
+        // console.log(event.data.event_code)
+        try {
 
-    }
-    document.getElementById("customer_survey").style.opacity = '0.65'
+            if (eventData.data) {
+                let event = JSON.parse(eventData.data);
+                console.log(event)
+                if (event.event_code == 'surveryResponse') { //sucess
+                    console.log(event.data)
+                    if (event.data.returnCode == '0' || event.data.retCode == '0') {
+                        var nodes = document.getElementById("customer_survey").getElementsByTagName('*');
+                        for (var i = 0; i < nodes.length; i++) {
+                            nodes[i].disabled = true;
+                            nodes[i].style.cursor = 'no-drop'
+
+                        }
+                        document.getElementById("customer_survey").style.opacity = '0.65'
+                    }
+                }
+                else {
+
+                }
+            }
+        } catch (error) {
+            console.log(error)
+        }
+
+    })
+
+
+
+
+    // var nodes = document.getElementById("customer_survey").getElementsByTagName('*');
+    // for (var i = 0; i < nodes.length; i++) {
+    //     nodes[i].disabled = true;
+    //     nodes[i].style.cursor = 'no-drop'
+
+    // }
+    // document.getElementById("customer_survey").style.opacity = '0.65'
 
 
 
@@ -1060,4 +1240,13 @@ function submit_survey(event) {
     //     }).catch(error => {
     //         console.log(error)
     //     });
+}
+function closeModal() {
+    location.reload();
+}
+function backToFileClaim() {
+
+    window.location.href = "main.html";
+
+
 }

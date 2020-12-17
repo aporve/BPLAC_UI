@@ -10,7 +10,8 @@
         integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     <link rel="stylesheet" href="./assets/css/styles.css">
     <title>Yellow Messenger</title>
-    <style>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <!-- <style>
         .btnn:hover {
             color: white;
             /* color: #b8123e !important; */
@@ -26,7 +27,7 @@
             text-decoration: unset !important;
             border: 1px solid white !important;
         }
-    </style>
+    </style> -->
 </head>
 
 <body class="d-flex flex-column min-vh-100">
@@ -177,23 +178,26 @@
                                     placeholder="Reference Number" aria-label="Recipient's username"
                                     aria-describedby="basic-addon2" style=" max-width: 602px; height: 62px;">
                                 <div class="input-group-append">
-                                    <button onclick="captcha()" class="input-group-text" id="basic-addon2"
+                                    <button onclick="captcha()" class="input-group-text" id="go-btn"
                                         style="width: 82px; background-color: #b8123e !important; cursor: pointer;justify-content: center;">
                                         <div>
                                             <p style=" color:#fff;font-size: 26px;">GO</p>
                                         </div>
                                     </button>
+                                    <button id='loader-btn' type="button" class="btn btn-danger"
+                                        style="display: none;width: 82px; background-color: #b8123e !important; cursor: pointer;justify-content: center;"><span
+                                            class="loading"></span></button>
                                 </div>
                             </div>
                         </div>
                         <div style="padding-bottom: 27px;">
-                            <a href="Where can I find my reference number" class="reference-track"
+                            <a href="https://wwwuat.bpi-philam.com/en/help-support/faq.html" class="reference-track"
                                 style="color: #b8123e; text-decoration: revert;">Where can I find my reference
                                 number?</a>
                         </div>
 
                         <div>
-                            <div class="g-recaptcha" data-sitekey="6LeyUtkZAAAAAFcgCZc3o3i7qi4DWYkHjhfukp4T"></div>
+                            <div class="g-recaptcha" data-sitekey="6LeFPOsZAAAAADGU9ehAxipxQBBlv1XvZRGd29gx"></div>
                             <span class="error reference-track" id="err_recaptcha"></span>
                         </div>
                     </div>
@@ -317,7 +321,7 @@
 
                                     <div class="time_duration1">
                                         <div class="" style="color: #fff;">Reference Number</div>
-                                        <div class="font-weight-bold" style="color: #fff;">8445730535</div>
+                                        <div class="font-weight-bold" style="color: #fff;" id='original_ref_no'></div>
                                     </div>
                                     </br>
                                     <div id="payment-ref" style="display: hidden;">
@@ -914,8 +918,7 @@
                                         <div class="row">
                                             <div class="col-12  footer " id="stepper_intro">
                                                 <button type="submit" class="btnn submit__btn1"
-                                                    style="color:#fff; background-color: #b8123e !important;"
-                                                   >Submit</button>
+                                                    style="color:#fff; background-color: #b8123e !important;">Submit</button>
                                             </div>
                                         </div>
                                     </div>
@@ -929,32 +932,47 @@
     </main>
     <!-- warning pop up for wrong reference number -->
     <section class="hide modal fade" id="refNoWarning" tabindex="-1" role="dialog"
-        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-dialog-centered" role="document">
 
             <div class="modal-content">
 
                 <div class="modal-body">
-                    <button type="button" class="close" data-dismiss="modal">
+                    <!-- <button type="button" class="close"  data-dismiss="modal">
                         ×
-                    </button>
+                    </button> -->
                     <p id="p1">We’re sorry, it seems like the reference number you placed does not match what we
                         have on record. You may try again, or
                         contact your financial advisor for assistance.
                     </p>
                 </div>
+                <button type="button" class="btn btn-danger" style="width: 50%; margin: 0 auto 3rem auto;"
+                    onclick="backToFileClaim()">Ok</button>
 
             </div>
     </section>
     <!-- warning pop up for wrong reference number -->
-
+<!-- no data found modal-->
+<section class="hide modal fade" id="noDataModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p id="p1">No Data found !!
+                </p>
+            </div>
+            <button type="button" class="btn btn-danger" style="width: 50%; margin: 0 auto 3rem auto;"
+                onclick="backToFileClaim()">Ok</button>
+        </div>
+</section>
+<!-- no data found modal-->
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
         crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  
     <script src="./assets/js/messages.js"></script>
     <script src="./assets/js/main.js"></script>
     <!-- <script>
@@ -1320,3 +1338,4 @@
 </body>
 
 </html>
+<!-- comments -->
