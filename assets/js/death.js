@@ -1150,9 +1150,9 @@ function handleFormAddBeneficiary(event) {
         let beneficiary = {};
 
         beneficiary["beneficiaryNo"] = beneficiaryCount.toString(),
-            beneficiary["firstName"] = field_addBeneficiaryFirstName,
-            beneficiary["middleName"] = field_addBeneficiaryMiddleName,
-            beneficiary["lastName"] = field_addBeneficiaryLastName,
+            beneficiary["firstName"] = field_addBeneficiaryFirstName.toUpperCase(),
+            beneficiary["middleName"] = field_addBeneficiaryMiddleName.toUpperCase(),
+            beneficiary["lastName"] = field_addBeneficiaryLastName.toUpperCase(),
             beneficiary["dateOfBirth"] = field_addBeneficiaryDOB.split('-')[1] + "/" + field_addBeneficiaryDOB.split('-')[2] + "/" + field_addBeneficiaryDOB.split('-')[0],
             beneficiary["countryCode"] = $("select#field_addBeneficiaryMobileNumberSelect option").filter(":selected").val(),
             beneficiary["phoneNumber"] = field_addBeneficiaryMobileNum,
@@ -1726,9 +1726,9 @@ function handleForm(event) {
             privacy_consent_3: $("#privacy_consent_3").is(":checked")
         }
 
-        InsuredInformation["firstName"] = field_firstName;
-        InsuredInformation["middleName"] = field_middleName;
-        InsuredInformation["lastName"] = field_lastName;
+        InsuredInformation["firstName"] = field_firstName.toUpperCase();
+        InsuredInformation["middleName"] = field_middleName.toUpperCase();
+        InsuredInformation["lastName"] = field_lastName.toUpperCase();
         InsuredInformation["suffix"] = field_lastName_Suffix;
         InsuredInformation["dateOfBirth"] = field_DOB.split('-')[1] + "/" + field_DOB.split('-')[2] + "/" + field_DOB.split('-')[0];
         InsuredInformation["insuredsDeath"] = field_DOID.split('-')[1] + "/" + field_DOID.split('-')[2] + "/" + field_DOID.split('-')[0];
@@ -1738,9 +1738,9 @@ function handleForm(event) {
         let beneficiary = {};
 
         beneficiary["beneficiaryNo"] = beneficiaryCount.toString(),
-            beneficiary["firstName"] = field_BeneficiaryFirstName,
-            beneficiary["middleName"] = field_BeneficiaryMiddleName,
-            beneficiary["lastName"] = field_BeneficiaryLastName,
+            beneficiary["firstName"] = field_BeneficiaryFirstName.toUpperCase(),
+            beneficiary["middleName"] = field_BeneficiaryMiddleName.toUpperCase(),
+            beneficiary["lastName"] = field_BeneficiaryLastName.toUpperCase(),
             beneficiary["dateOfBirth"] = field_BeneficiaryDOB.split('-')[1] + "/" + field_BeneficiaryDOB.split('-')[2] + "/" + field_BeneficiaryDOB.split('-')[0],
             beneficiary["countryCode"] = $("select#field_BeneficiaryMobileNumberSelect option").filter(":selected").val(),
             beneficiary["phoneNumber"] = field_BeneficiaryMobileNum,
