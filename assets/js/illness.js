@@ -1036,6 +1036,12 @@ const proceedScan = async (fileObj, button, pageid) => {
                         "Warning : We detected a virus/malware in your uploaded documents. Please re-upload a clean, virus-free document to proceed."
                     );
                 }
+                if (pageid == 3) {
+                    $("#warning_parent_acct1").show();
+                    $("#upload_warning_acct1").text(
+                        "Warning : We detected a virus/malware in your uploaded documents. Please re-upload a clean, virus-free document to proceed."
+                    );
+                }
 
                 $(`#file_loader_icon_${button}`).hide();
                 $(`#file_Upload_Tick_${button}`).hide();
@@ -1046,6 +1052,7 @@ const proceedScan = async (fileObj, button, pageid) => {
                 scanDoc = true
                 $("#warning_parent").hide();
                 $("#warning_parent_acct").hide();
+                $("#warning_parent_acct1").hide();
                 $(`#file_loader_icon_${button}`).hide();
                 $(`#file_Upload_Tick_${button}`).show();
                 $(`#file_upload_cancle_${button}`).hide();
@@ -1092,6 +1099,11 @@ const fileCheck = (file, button, pageid, formData, fileName) => {
             if (pageid == 2) {
                 $('#warning_parent_acct').show();
                 $("#upload_warning_acct").text("Sorry, we noticed that your uploaded documents are unreadable. Please reupload a clearer copy of your documents to proceed.");
+                console.log("Image is bad");
+            }
+            if (pageid == 3) {
+                $('#warning_parent_acct1').show();
+                $("#upload_warning_acct1").text("Sorry, we noticed that your uploaded documents are unreadable. Please reupload a clearer copy of your documents to proceed.");
                 console.log("Image is bad");
             }
 
@@ -1639,7 +1651,7 @@ file7.onchange = async function (e) {
         case "pdf":
             var file = this.files[0];
             var buttonNum = 7;
-            var pageId = 2;
+            var pageId = 3;
             var sizevalid = isFileSizeValid(file, buttonNum);
             if (sizevalid) {
                 if (ext == "jpg") {
@@ -1678,7 +1690,7 @@ file7.onchange = async function (e) {
 
 
             } else {
-                $("#warning_parent_acct").show();
+                $("#warning_parent_acct1").show();
                 $("#file_loader_icon_7").hide();
                 $("#file_Upload_Tick_7").hide();
                 $("#file_upload_cancle_7").show();
@@ -1688,7 +1700,7 @@ file7.onchange = async function (e) {
             }
             break;
         default:
-            $("#warning_parent_acct").show();
+            $("#warning_parent_acct1").show();
             $("#file_Upload_Tick_7").hide();
             $("#file_upload_cancle_7").show();
             $("#upload_warning_acct").text(
