@@ -1129,7 +1129,7 @@ function selectAnswer(quesn_num, id, selectedOption) {
 function submit_survey(event) {
 
     event.preventDefault();
-    if (org_sourceSystem == '') {
+    if (org_sourceSystem == '' || org_sourceSystem == null) {
         org_sourceSystem='cms'
     }
     var survey_data =
