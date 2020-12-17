@@ -507,7 +507,7 @@ function preSubmitCall() {
                 let event = JSON.parse(eventData.data);
                 console.log(event)
                 if (event.event_code == 'preSubmitResponse') { //sucess
-                    if (event.data.returnCode == '0') {
+                    if (event.data.returnCode == '0' || event.data.retCode == '0') {
                         disableDottedLoader();
                         // $("#step2").addClass("active");
                         // $("#step2>div").addClass("active");
@@ -590,8 +590,9 @@ function finalSubmitCall() {
                 let event = JSON.parse(eventData.data);
                 console.log(event)
                 if (event.event_code == 'finalSubmitResponse') { //sucess
-                    if (event.data.returnCode == '0') {
+                    if (event.data.returnCode == '0' || event.data.retCode == '0') {
                         disableDottedLoader();
+                        document.getElementById('ref_number').innerHTML = event.data?.transactionNumber
                         // myDisable()
                         // timer(75, 100).then(async () => {
                         $("#step2").addClass("done");
@@ -1164,9 +1165,9 @@ function handleFormAddBeneficiary(event) {
             beneficiary["relationship"] = field_addBeneficiaryRelationToDeceased,
             // beneficiary["documentFolder"] = `/CLAIMS/BPLAC/${referenceNumber}`,
             beneficiary["payoutOption"] = payoutOption,
-            beneficiary["employer"] = field_addBeneficiaryEmployerName,
-            beneficiary["governmentOfficial"] = field_addBeneficiary_relatives1,
-            beneficiary["governmentOfficialRelative"] = field_add_Beneficiary_add_relatives2,
+            // beneficiary["employer"] = field_addBeneficiaryEmployerName,
+            // beneficiary["governmentOfficial"] = field_addBeneficiary_relatives1,
+            // beneficiary["governmentOfficialRelative"] = field_add_Beneficiary_add_relatives2,
             // beneficiary["occupation"] = field_addBeneficiaryOccupation,
             beneficiary["check1"] = dataBen.privacy_consent_beneficiary_1,
             beneficiary["check2"] = dataBen.privacy_consent_beneficiary_2
@@ -1729,7 +1730,7 @@ function handleForm(event) {
         InsuredInformation["firstName"] = field_firstName.toUpperCase();
         InsuredInformation["middleName"] = field_middleName.toUpperCase();
         InsuredInformation["lastName"] = field_lastName.toUpperCase();
-        InsuredInformation["suffix"] = field_lastName_Suffix;
+        InsuredInformation["suffix"] = field_lastName_Suffix.toUpperCase();
         InsuredInformation["dateOfBirth"] = field_DOB.split('-')[1] + "/" + field_DOB.split('-')[2] + "/" + field_DOB.split('-')[0];
         InsuredInformation["insuredsDeath"] = field_DOID.split('-')[1] + "/" + field_DOID.split('-')[2] + "/" + field_DOID.split('-')[0];
         document.getElementById('user_mobile').innerHTML = field_BeneficiaryMobileNum.replace(/.(?=.{4})/g, '*')
@@ -1752,9 +1753,9 @@ function handleForm(event) {
             beneficiary["relationship"] = field_BeneficiaryRelationToDeceased,
             // beneficiary["documentFolder"] = `/CLAIMS/BPLAC/${referenceNumber}`,
             beneficiary["payoutOption"] = payoutOption,
-            beneficiary["employer"] = field_BeneficiaryEmployerName,
-            beneficiary["governmentOfficial"] = $("select#field_Beneficiary_relatives1 option").filter(":selected").val(),
-            beneficiary["governmentOfficialRelative"] = $("select#field_Beneficiary_relatives2 option").filter(":selected").val(),
+            // beneficiary["employer"] = field_BeneficiaryEmployerName,
+            // beneficiary["governmentOfficial"] = $("select#field_Beneficiary_relatives1 option").filter(":selected").val(),
+            // beneficiary["governmentOfficialRelative"] = $("select#field_Beneficiary_relatives2 option").filter(":selected").val(),
             // beneficiary["occupation"] = field_BenificiaryOccupation,
             beneficiary["check1"] = data.privacy_consent_1,
             beneficiary["check2"] = data.privacy_consent_2,
@@ -3605,17 +3606,17 @@ function buttonSubmitClicked(event) {
             upload_file_6: file6.value,
             insurance_Checkbox: $('#upload_invalidCheck_2').is(':checked')
         }
-        myDisable()
-        // timer().then(async () => {
-        $("#step2").addClass("done");
-        $("#step3_circle").addClass("md-step-step3-circle ");
-        $("#step3_span").addClass("md-step3-span");
-        $("#step3_reference").addClass("md-step3-span")
-        /*  $("#step3").addClass("active");
-        $("#step3>div").addClass("active"); */
-        /*  $("#step3").addClass("done"); */
-        $('#requirements').hide();
-        $('#process_confirmation').show();
+        // myDisable()
+        // // timer().then(async () => {
+        // $("#step2").addClass("done");
+        // $("#step3_circle").addClass("md-step-step3-circle ");
+        // $("#step3_span").addClass("md-step3-span");
+        // $("#step3_reference").addClass("md-step3-span")
+        // /*  $("#step3").addClass("active");
+        // $("#step3>div").addClass("active"); */
+        // /*  $("#step3").addClass("done"); */
+        // $('#requirements').hide();
+        // $('#process_confirmation').show();
 
 
         // });
@@ -3636,6 +3637,13 @@ function buttonSubmitClicked(event) {
         //     $('#requirements').hide();
         //     $('#process_confirmation').show();
         // }
+        var nodes = document.getElementById("requirements").getElementsByTagName('*');
+        for (var i = 0; i < nodes.length; i++) {
+            nodes[i].disabled = true;
+            nodes[i].style.cursor = 'no-drop'
+
+        }
+        document.getElementById("requirements").style.opacity = '0.65'
         preSubmitCall()
         // window.parent.postMessage(JSON.stringify({
         //     event_code: 'ym-client-event', data: JSON.stringify({
@@ -3723,6 +3731,13 @@ function addBeneficiaryButtonClicked(event) {
         finalPayload["BeneficiaryList"] = BeneficiaryList;
         finalPayload["BankDetailsList"] = BankDetailsList;
         finalPayload["FilesInformation"] = FilesInformation;
+        var nodes = document.getElementById("addBeneficiaryRequirements").getElementsByTagName('*');
+        for (var i = 0; i < nodes.length; i++) {
+            nodes[i].disabled = true;
+            nodes[i].style.cursor = 'no-drop'
+
+        }
+        document.getElementById("addBeneficiaryRequirements").style.opacity = '0.65'
         preSubmitCall()
         // console.log("final payload : ")
         // console.log(finalPayload)
@@ -4838,7 +4853,7 @@ function resendOtp(type) {
                     if (event.event_code == 'resetResponse') { //sucess
                         console.log(event.data)
 
-                        if (event.data.returnCode == '0') {
+                        if (event.data.returnCode == '0' || event.data.retCode == '0') {
 
 
                             $('#invalidOtp').modal('hide');
@@ -4981,7 +4996,7 @@ function submitOtp() {
                 let event = JSON.parse(eventData.data);
                 if (event.event_code == 'validationResponse') { //sucess
                     console.log(event.data)
-                    if (event.data.returnCode == '0') {
+                    if (event.data.returnCode == '0' || event.data.retCode == '0') {
                         $('#otpPopUp').modal('hide');
 
                         otpSubmitted = true;

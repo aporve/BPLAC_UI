@@ -1028,7 +1028,7 @@ function handleForm(event) {
     InsuredInformation["firstName"] = field_firstName.toUpperCase();
     InsuredInformation["middleName"] = field_middleName.toUpperCase();
     InsuredInformation["lastName"] = field_lastName.toUpperCase();
-    InsuredInformation["suffix"] = field_lastName_Suffix;
+    InsuredInformation["suffix"] = field_lastName_Suffix.toUpperCase();
     InsuredInformation["dateOfBirth"] = field_DOB.split('-')[1] + "/" + field_DOB.split('-')[2] + "/" + field_DOB.split('-')[0];
     InsuredInformation["countryCode"] = $("select#inlineFormCustomSelect option").filter(":selected").val();
     InsuredInformation["phoneNumber"] = field_mobileNum;
@@ -1103,7 +1103,7 @@ const proceedScan = async (fileObj, button, pageid) => {
             "We detected a virus/malware in your uploaded documents. Please re-upload clean, virus-free documents to proceed."
           );
         }
-
+      
         $(`#file_loader_icon_${button}`).hide();
         $(`#file_Upload_Tick_${button}`).hide();
         $(`#file_upload_cancle_${button}`).show();
@@ -1127,6 +1127,9 @@ const proceedScan = async (fileObj, button, pageid) => {
       }
       if (pageid == 2) {
         $("#warning_parent_acct").show();
+      }
+      if (pageid == 3) {
+        $("#warning_parent_acct_file").show();
       }
       $(`#file_loader_icon_${button}`).hide();
       $(`#file_Upload_Tick_${button}`).hide();
@@ -1161,6 +1164,8 @@ const fileCheck = (file, button, pageid, formData, fileName) => {
         $("#warning_parent_acct1").show();
         $("#upload_warning_acct1").text("Sorry, we noticed that your uploaded documents are unreadable. Please reupload a clearer copy of your documents to proceed.");
       }
+      
+
 
       $(`#file_loader_icon_${button}`).hide();
       $(`#file_Upload_Tick_${button}`).hide();
@@ -2629,7 +2634,7 @@ function resendOtp(type) {
           if (event.event_code == 'resetResponse') { //sucess
 
             console.log(event.data)
-            if (event.data.returnCode == '0') {
+            if (event.data.returnCode == '0' || event.data.retCode == '0') {
               $('#invalidOtp').modal('hide');
               if (type != 'resend') { $('#otpPopUp').modal('show'); }
               document.getElementById('otp').value = ''
@@ -2776,7 +2781,7 @@ function submitOtp() {
         let event = JSON.parse(eventData.data);
         if (event.event_code == 'validationResponse') { //sucess
           console.log(event.data)
-          if (event.data.returnCode == '0') {
+          if (event.data.returnCode == '0' || event.data.retCode == '0') {
             // $('#cover-spin').hide(0)
 
             $('#otpPopUp').modal('hide');
@@ -2921,7 +2926,7 @@ function preSubmitCall() {
         let event = JSON.parse(eventData.data);
         console.log(event)
         if (event.event_code == 'preSubmitResponse') { //sucess
-          if (event.data.returnCode == '0') {
+          if (event.data.returnCode == '0' || event.data.retCode == '0') {
             disableDottedLoader();
             // timer(50, 100).then(async () => {
 
@@ -3003,9 +3008,10 @@ function finalSubmitCall() {
         let event = JSON.parse(eventData.data);
         console.log(event)
         if (event.event_code == 'finalSubmitResponse') { //sucess
-          if (event.data.returnCode == '0') {
+          if (event.data.returnCode == '0' || event.data.retCode == '0') {
             disableDottedLoader();
             myDisable()
+            document.getElementById('ref_number').innerHTML = event.data?.transactionNumber
             // timer(50, 100).then(async () => {
             $("#step2").addClass("done");
             /*  $("#step3").addClass("active"); */

@@ -960,7 +960,7 @@ function handleForm(event) {
         InsuredInformation["firstName"] = field_firstName.toUpperCase();
         InsuredInformation["middleName"] = field_middleName.toUpperCase();
         InsuredInformation["lastName"] = field_lastName.toUpperCase();
-        InsuredInformation["suffix"] = field_lastName_Suffix;
+        InsuredInformation["suffix"] = field_lastName_Suffix.toUpperCase();
         InsuredInformation["dateOfBirth"] = field_DOB.split('-')[1] + "/" + field_DOB.split('-')[2] + "/" + field_DOB.split('-')[0];
         InsuredInformation["countryCode"] = $("select#inlineFormCustomSelect option").filter(":selected").val();
         InsuredInformation["phoneNumber"] = field_mobileNum;
@@ -1163,7 +1163,7 @@ function preSubmitCall() {
                 let event = JSON.parse(eventData.data);
                 console.log(event)
                 if (event.event_code == 'preSubmitResponse') { //sucess
-                    if (event.data.returnCode == '0') {
+                    if (event.data.returnCode == '0' || event.data.retCode == '0') {
                         disableDottedLoader();
                         // timer(50, 100).then(async () => {
                         $("#step2").addClass("active");
@@ -1240,9 +1240,10 @@ function finalSubmitCall() {
                 let event = JSON.parse(eventData.data);
                 console.log(event)
                 if (event.event_code == 'finalSubmitResponse') { //sucess
-                    if (event.data.returnCode == '0') {
+                    if (event.data.returnCode == '0' || event.data.retCode == '0') {
                         disableDottedLoader();
                         myDisable()
+                        document.getElementById('ref_number').innerHTML = event.data?.transactionNumber
                         // timer(50, 100).then(async () => {
                         $("#step2").addClass("done");
                         $("#step3_circle").addClass("md-step-step3-circle ");
@@ -2107,7 +2108,7 @@ function getBankDetails() {
                 let event = JSON.parse(eventData.data);
                 console.log(event)
                 if (event.event_code == 'payoutDetails') { //sucess
-                    if (event.data.returnCode == '0') {
+                    if (event.data.returnCode == '0' || event.data.retCode == '0') {
                         $('#proof_BAO_display').hide();
                         haveBankDetails = true;
                         $('#cover-spin').hide(0)
@@ -2552,7 +2553,7 @@ function resendOtp(type) {
                     if (event.event_code == 'resetResponse') { //sucess
 
                         console.log(event.data)
-                        if (event.data.returnCode == '0') {
+                        if (event.data.returnCode == '0' || event.data.retCode == '0') {
                             $('#invalidOtp').modal('hide');
                             if (type != 'resend') { $('#otpPopUp').modal('show'); }
                             document.getElementById('otp').value = ''
@@ -2680,7 +2681,7 @@ function submitOtp() {
                 let event = JSON.parse(eventData.data);
                 if (event.event_code == 'validationResponse') { //sucess
                     console.log(event.data)
-                    if (event.data.returnCode == '0') {
+                    if (event.data.returnCode == '0' || event.data.retCode == '0') {
                         $('#otpPopUp').modal('hide');
                         $('#requirements').hide();
                         $('#payment').show();

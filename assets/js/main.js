@@ -30,6 +30,8 @@ var surveyAns2 = 0;
 var surveyQues3;
 var surveyAns3 = 0;
 var surveyObj = {};
+var org_claimSubType;
+var org_sourceSystem='';
 var survey_form = document.getElementById('customer_survey');
 survey_form.addEventListener('submit', submit_survey);
 function getAccidentPage() {
@@ -160,7 +162,7 @@ function trackProgress() {
                 console.log(event);
                 if (event.event_code == 'claimStatusResponse') { //sucess
                     console.log(event.data)
-                    if (event.data.returnCode == '0') {
+                    if (event.data.returnCode == '0' || event.data.retCode == '0') {
                         if (event.data.type != null) {
                             document.getElementById('go-btn').style.display = 'block'
                             document.getElementById('loader-btn').style.display = 'none'
@@ -168,7 +170,15 @@ function trackProgress() {
                                 claim_type = event.data.type
                             }
                             else {
+
                                 claim_type = event.data.subType
+                                org_claimSubType = event.data.subType;
+                                if (event.data.subType.toLowerCase() == 'il') {
+                                    claim_type = 'illness'
+                                }
+                                else if (event.data.subType.toLowerCase() == 'ac') {
+                                    claim_type = 'accident'
+                                }
                             }
                             transactionNumber = event.data.transactionNumber;
                             disbursementType = event.data.disbursementType;
@@ -181,6 +191,7 @@ function trackProgress() {
                             claimantFirstName = event.data.claimantFirstName;
                             // denialTag = response.denialTag;
                             sourceSystem = event.data.sourceSystem;
+                            org_sourceSystem = event.data.sourceSystem;
                             if (sourceSystem.trim().toLowerCase() != 'tips' && sourceSystem.trim().toLowerCase() != 'cms') {
                                 sourceSystem = 'cms'
                             }
@@ -202,7 +213,7 @@ function trackProgress() {
 
                             document.getElementById('original_ref_no').innerHTML = document.getElementById('reference_number').value;
                             document.getElementById('payment_amount').innerHTML = currency + ' ' + claimAmount;
-                            
+
                             displayDateForClaimStatus() // date to be displayed on top
                             $("#img_claim").hide();
                             $("#claim").hide();
@@ -221,8 +232,8 @@ function trackProgress() {
                         else {
                             $('#noDataModal').modal('show'); //
                         }
-                        }
-                    else if (event.data.returnCode == '1'){
+                    }
+                    else if (event.data.returnCode == '1') {
                         $('#refNoWarning').modal('show');
 
                     }
@@ -400,7 +411,7 @@ function setAccidentClaimStatusMsg() {
         if (docsPending == 'Y') {
             var finalDocsList = '';
             requirementsList.forEach(function (item) {
-                finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p style="padding-left:7px">' +' ' + item.name + '</p> </div>'
+                finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p style="padding-left:7px">' + ' ' + item.name + '</p> </div>'
 
             });
 
@@ -611,7 +622,7 @@ function setIllnessClaimStatusMsg() {
             twoStepperActive();
             var finalDocsList = '';
             requirementsList.forEach(function (item) {
-                finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p style="padding-left:7px">' +' ' + item.name + '</p> </div>'
+                finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p style="padding-left:7px">' + ' ' + item.name + '</p> </div>'
 
             });
             document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR OTHER CLAIMS DOCUMENTS</h3> <br /><p>Additional Claims Documents</p><br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We have reviewed your initial claim request submission and identified that we may also need the following documents for us to proceed: </p> <br /> <p class="font-weight-normal request-font"> <div style="padding-left: 10px;"> ' + finalDocsList + ' </div> </p> <br /> <p class="font-weight-normal request-font"> Don’t worry, you can easily submit these documents to our BSE at any BPI or BPI Family Savings Bank branch so we can proceed with your claim request. You may also visit Vibe Customer Service Center at GF BPI-Philam Makati, 6811 Ayala Ave., 1226 Makati. </p> </div>';
@@ -1118,11 +1129,17 @@ function selectAnswer(quesn_num, id, selectedOption) {
 function submit_survey(event) {
 
     event.preventDefault();
+    if (org_sourceSystem == '' || org_sourceSystem == null) {
+        org_sourceSystem='cms'
+    }
     var survey_data =
     {
         'companyName': 'BPLAC',
         'TIPSReferenceNumber': referenceNumber,
-        'sourceSystem': sourceSystem,
+        'claimType': claim_type,
+        'subType': org_claimSubType,
+        'policyNumber': policyNumber,
+        'sourceSystem': org_sourceSystem,
         'surveyQuestion1': surveyAns1,
         'surveyQuestion2': surveyAns2,
         'surveyQuestion3': surveyAns3
@@ -1165,7 +1182,7 @@ function submit_survey(event) {
                 console.log(event)
                 if (event.event_code == 'surveryResponse') { //sucess
                     console.log(event.data)
-                    if (event.data.returnCode == '0') {
+                    if (event.data.returnCode == '0' || event.data.retCode == '0') {
                         var nodes = document.getElementById("customer_survey").getElementsByTagName('*');
                         for (var i = 0; i < nodes.length; i++) {
                             nodes[i].disabled = true;
