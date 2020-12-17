@@ -507,7 +507,7 @@ function preSubmitCall() {
                 let event = JSON.parse(eventData.data);
                 console.log(event)
                 if (event.event_code == 'preSubmitResponse') { //sucess
-                    if (event.data.returnCode == '0') {
+                    if (event.data.returnCode == '0' || event.data.retCode == '0') {
                         disableDottedLoader();
                         // $("#step2").addClass("active");
                         // $("#step2>div").addClass("active");
@@ -590,7 +590,7 @@ function finalSubmitCall() {
                 let event = JSON.parse(eventData.data);
                 console.log(event)
                 if (event.event_code == 'finalSubmitResponse') { //sucess
-                    if (event.data.returnCode == '0') {
+                    if (event.data.returnCode == '0' || event.data.retCode == '0') {
                         disableDottedLoader();
                         document.getElementById('ref_number').innerHTML = event.data?.transactionNumber
                         // myDisable()
@@ -4853,7 +4853,7 @@ function resendOtp(type) {
                     if (event.event_code == 'resetResponse') { //sucess
                         console.log(event.data)
 
-                        if (event.data.returnCode == '0') {
+                        if (event.data.returnCode == '0' || event.data.retCode == '0') {
 
 
                             $('#invalidOtp').modal('hide');
@@ -4996,7 +4996,7 @@ function submitOtp() {
                 let event = JSON.parse(eventData.data);
                 if (event.event_code == 'validationResponse') { //sucess
                     console.log(event.data)
-                    if (event.data.returnCode == '0') {
+                    if (event.data.returnCode == '0' || event.data.retCode == '0') {
                         $('#otpPopUp').modal('hide');
 
                         otpSubmitted = true;

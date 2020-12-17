@@ -162,7 +162,7 @@ function trackProgress() {
                 console.log(event);
                 if (event.event_code == 'claimStatusResponse') { //sucess
                     console.log(event.data)
-                    if (event.data.returnCode == '0') {
+                    if (event.data.returnCode == '0' || event.data.retCode == '0') {
                         if (event.data.type != null) {
                             document.getElementById('go-btn').style.display = 'block'
                             document.getElementById('loader-btn').style.display = 'none'
@@ -1182,7 +1182,7 @@ function submit_survey(event) {
                 console.log(event)
                 if (event.event_code == 'surveryResponse') { //sucess
                     console.log(event.data)
-                    if (event.data.returnCode == '0') {
+                    if (event.data.returnCode == '0' || event.data.retCode == '0') {
                         var nodes = document.getElementById("customer_survey").getElementsByTagName('*');
                         for (var i = 0; i < nodes.length; i++) {
                             nodes[i].disabled = true;

@@ -1151,7 +1151,7 @@ function preSubmitCall() {
                 let event = JSON.parse(eventData.data);
                 console.log(event)
                 if (event.event_code == 'preSubmitResponse') { //sucess
-                    if (event.data.returnCode == '0') {
+                    if (event.data.returnCode == '0' || event.data.retCode == '0') {
                         disableDottedLoader();
                         // timer(50, 100).then(async () => {
                         $("#step2").addClass("active");
@@ -1228,7 +1228,7 @@ function finalSubmitCall() {
                 let event = JSON.parse(eventData.data);
                 console.log(event)
                 if (event.event_code == 'finalSubmitResponse') { //sucess
-                    if (event.data.returnCode == '0') {
+                    if (event.data.returnCode == '0' || event.data.retCode == '0') {
                         disableDottedLoader();
                         myDisable()
                         document.getElementById('ref_number').innerHTML = event.data?.transactionNumber
@@ -2096,7 +2096,7 @@ function getBankDetails() {
                 let event = JSON.parse(eventData.data);
                 console.log(event)
                 if (event.event_code == 'payoutDetails') { //sucess
-                    if (event.data.returnCode == '0') {
+                    if (event.data.returnCode == '0' || event.data.retCode == '0') {
                         $('#proof_BAO_display').hide();
                         haveBankDetails = true;
                         $('#cover-spin').hide(0)
@@ -2541,7 +2541,7 @@ function resendOtp(type) {
                     if (event.event_code == 'resetResponse') { //sucess
 
                         console.log(event.data)
-                        if (event.data.returnCode == '0') {
+                        if (event.data.returnCode == '0' || event.data.retCode == '0') {
                             $('#invalidOtp').modal('hide');
                             if (type != 'resend') { $('#otpPopUp').modal('show'); }
                             document.getElementById('otp').value = ''
@@ -2669,7 +2669,7 @@ function submitOtp() {
                 let event = JSON.parse(eventData.data);
                 if (event.event_code == 'validationResponse') { //sucess
                     console.log(event.data)
-                    if (event.data.returnCode == '0') {
+                    if (event.data.returnCode == '0' || event.data.retCode == '0') {
                         $('#otpPopUp').modal('hide');
                         $('#requirements').hide();
                         $('#payment').show();
