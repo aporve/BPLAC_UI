@@ -1231,6 +1231,7 @@ function finalSubmitCall() {
                     if (event.data.returnCode == '0') {
                         disableDottedLoader();
                         myDisable()
+                        document.getElementById('ref_number').innerHTML = event.data?.transactionNumber
                         // timer(50, 100).then(async () => {
                         $("#step2").addClass("done");
                         $("#step3_circle").addClass("md-step-step3-circle ");

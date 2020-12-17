@@ -592,6 +592,7 @@ function finalSubmitCall() {
                 if (event.event_code == 'finalSubmitResponse') { //sucess
                     if (event.data.returnCode == '0') {
                         disableDottedLoader();
+                        document.getElementById('ref_number').innerHTML = event.data?.transactionNumber
                         // myDisable()
                         // timer(75, 100).then(async () => {
                         $("#step2").addClass("done");
