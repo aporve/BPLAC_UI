@@ -1097,12 +1097,7 @@ const proceedScan = async (fileObj, button, pageid) => {
             "We detected a virus/malware in your uploaded documents. Please re-upload clean, virus-free documents to proceed."
           );
         }
-        if (pageid == 3) {
-          $("#warning_parent_file").show();
-          $("#upload_warning_acct_file").text(
-            "We detected a virus/malware in your uploaded documents. Please re-upload clean, virus-free documents to proceed."
-          );
-        }
+      
         $(`#file_loader_icon_${button}`).hide();
         $(`#file_Upload_Tick_${button}`).hide();
         $(`#file_upload_cancle_${button}`).show();
@@ -1158,10 +1153,7 @@ const fileCheck = (file, button, pageid, formData, fileName) => {
         $("#warning_parent_acct").show();
         $("#upload_warning_acct").text("Sorry, we noticed that your uploaded documents are unreadable. Please reupload a clearer copy of your documents to proceed.");
       }
-      if (pageid == 3) {
-        $("#warning_parent_acct_file").show();
-        $("#upload_warning_acct_file").text("Sorry, we noticed that your uploaded documents are unreadable. Please reupload a clearer copy of your documents to proceed.");
-      }
+      
 
 
       $(`#file_loader_icon_${button}`).hide();
@@ -1634,7 +1626,7 @@ file7.onchange = async function (e) {
     case "pdf":
       var file = this.files[0];
       var buttonNum = 7;
-      var pageId = 3
+      var pageId = 2
       var sizevalid = isFileSizeValid(file, buttonNum);
       if (sizevalid) {
         if (ext == "jpg") {
@@ -3008,7 +3000,7 @@ function finalSubmitCall() {
           if (event.data.returnCode == '0') {
             disableDottedLoader();
             myDisable()
-            
+            document.getElementById('ref_number').innerHTML = event.data?.transactionNumber
             // timer(50, 100).then(async () => {
             $("#step2").addClass("done");
             /*  $("#step3").addClass("active"); */
