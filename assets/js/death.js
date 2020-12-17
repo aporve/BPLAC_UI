@@ -3605,17 +3605,17 @@ function buttonSubmitClicked(event) {
             upload_file_6: file6.value,
             insurance_Checkbox: $('#upload_invalidCheck_2').is(':checked')
         }
-        myDisable()
-        // timer().then(async () => {
-        $("#step2").addClass("done");
-        $("#step3_circle").addClass("md-step-step3-circle ");
-        $("#step3_span").addClass("md-step3-span");
-        $("#step3_reference").addClass("md-step3-span")
-        /*  $("#step3").addClass("active");
-        $("#step3>div").addClass("active"); */
-        /*  $("#step3").addClass("done"); */
-        $('#requirements').hide();
-        $('#process_confirmation').show();
+        // myDisable()
+        // // timer().then(async () => {
+        // $("#step2").addClass("done");
+        // $("#step3_circle").addClass("md-step-step3-circle ");
+        // $("#step3_span").addClass("md-step3-span");
+        // $("#step3_reference").addClass("md-step3-span")
+        // /*  $("#step3").addClass("active");
+        // $("#step3>div").addClass("active"); */
+        // /*  $("#step3").addClass("done"); */
+        // $('#requirements').hide();
+        // $('#process_confirmation').show();
 
 
         // });
