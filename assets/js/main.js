@@ -97,7 +97,7 @@ function captcha() {
     }
 
     // $('#refNoWarning').modal('hide');
-    if (ref_num.length != 0 && lenRefNo == false && specRefNo == false && numRefNo == true) {
+    if (ref_num.length != 0 && ref_num.length == 10 && lenRefNo == false && specRefNo == false && numRefNo == true) {
         if (grecaptcha && grecaptcha.getResponse().length > 0) {
 
             referenceNumber = document.getElementById('reference_number').value
