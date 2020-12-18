@@ -31,7 +31,7 @@ var surveyQues3;
 var surveyAns3 = 0;
 var surveyObj = {};
 var org_claimSubType;
-var org_sourceSystem='';
+var org_sourceSystem = '';
 var survey_form = document.getElementById('customer_survey');
 survey_form.addEventListener('submit', submit_survey);
 function getAccidentPage() {
@@ -554,7 +554,7 @@ function setAccidentClaimStatusMsg() {
     //     default: document.getElementById('claim-msg-text').innerHTML = 'No message found'
     //         break;
     // }
-    // debugger
+    //  
     // if (docsPending == 'Y') {
     //     var finalDocsList = '';
     //     requirementsList.forEach(function (item) {
@@ -752,7 +752,7 @@ function setIllnessClaimStatusMsg() {
     // }
 
 }
-debugger
+
 
 function setDeathClaimStatusMsg() {
     if (sourceSystem.toLowerCase().trim() == 'tips') {
@@ -1130,7 +1130,7 @@ function submit_survey(event) {
 
     event.preventDefault();
     if (org_sourceSystem == '' || org_sourceSystem == null) {
-        org_sourceSystem='cms'
+        org_sourceSystem = 'cms'
     }
     var survey_data =
     {
