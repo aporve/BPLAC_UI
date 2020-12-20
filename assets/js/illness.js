@@ -113,6 +113,8 @@ function enableDottedLoader() {
 }
 function disableDottedLoader() {
     document.getElementById('files_upload_btn').style.display = 'block'
+    document.getElementById('files_upload_btn').disabled = "false";
+    document.getElementById("files_upload_btn").style.cursor = "pointer";
     document.getElementById('upload_waiting_btn').style.display = 'none'
 
     document.getElementById('account_details1_btn').style.display = 'block'
