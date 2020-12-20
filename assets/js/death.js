@@ -4765,6 +4765,8 @@ function otpTimer() {
     document.getElementById('otp-invalid-btn').style.display = 'block'
     document.getElementById('otp-expiry-btn').style.display = 'block'
     document.getElementById('loader-btn').style.display = 'none'
+    document.getElementById('loader-btn-expiry').style.display = 'none'
+    document.getElementById('loader-btn-invalid').style.display = 'none'
     if (resendCount <= 5) {
         $('#otpPopUp').modal('show');
         if (remaining == 120) {
@@ -4807,7 +4809,7 @@ function resendOtp(type) {
         $('#otpPopUp').modal('hide');
         $('#invalidOtp').modal('hide');
         $('#maxResendOtp').modal('show');
-
+        $('#otpExpiry').modal('hide');
     }
     else {
         if (type == 'otpExpire') {
@@ -4857,11 +4859,13 @@ function resendOtp(type) {
 
 
                             $('#invalidOtp').modal('hide');
+                            $('#otpExpiry').modal('hide');
                             if (type != 'resend') { $('#otpPopUp').modal('show'); }
                             document.getElementById('otp').value = ''
                             otpTimer();
                         }
                         else {
+                            $('#otpExpiry').modal('hide');
                             // $('#otpPopUp').modal('hide');
                         }
 
@@ -4880,7 +4884,7 @@ function resendOtp(type) {
             }
 
         })
-        $('#otpExpiry').modal('hide');
+      
     }
 
     //api call for resend otp
