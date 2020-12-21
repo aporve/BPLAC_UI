@@ -20,7 +20,7 @@ haveBankDetails = false;
 var user_mobile;
 $('#privacy_consent_1').prop('checked', true);
 $('#privacy_consent_2').prop('checked', true);
-$('#privacy_consent_3').prop('checked', true);
+// $('#privacy_consent_3').prop('checked', true);
 
 document.getElementById('upload_waiting_btn').style.display = 'none'
 document.getElementById('account_details1_btn_waiting').style.display = 'none'
@@ -113,6 +113,8 @@ function enableDottedLoader() {
 }
 function disableDottedLoader() {
     document.getElementById('files_upload_btn').style.display = 'block'
+    document.getElementById('files_upload_btn').disabled = "false";
+    document.getElementById("files_upload_btn").style.cursor = "pointer";
     document.getElementById('upload_waiting_btn').style.display = 'none'
 
     document.getElementById('account_details1_btn').style.display = 'block'
@@ -940,7 +942,7 @@ function handleForm(event) {
             privacy_checkbox: $("#invalidCheck_privacy").is(":checked"),
             privacy_consent_1: $("#privacy_consent_1").is(":checked"),
             privacy_consent_2: $("#privacy_consent_2").is(":checked"),
-            privacy_consent_3: $("#privacy_consent_3").is(":checked"),
+            // privacy_consent_3: $("#privacy_consent_3").is(":checked"),
         };
 
         $("#err_privacy_consent").text("");
@@ -1175,7 +1177,8 @@ function preSubmitCall() {
                         // })
                     }
                     else {
-
+                        document.getElementById('returnMessage').innerHTML = event.data.returnMessage;
+                        $("#invalidReturnCode").modal("show");
                     }
                 }
                 else {
@@ -1981,6 +1984,13 @@ function handleAccountInfo(event) {
         document.getElementById("account_details_btn").style.cursor = "no-drop";
         document.getElementById("submit9").disabled = true;
         document.getElementById("submit9").style.cursor = "no-drop";
+        var nodes = document.getElementById("bank_form").getElementsByTagName('*');
+        for (var i = 0; i < nodes.length; i++) {
+            nodes[i].disabled = true;
+            nodes[i].style.cursor = 'no-drop'
+
+        }
+        document.getElementById("bank_form").style.opacity = '0.65'
         finalSubmitCall()
     }
 }
@@ -2073,6 +2083,13 @@ function handleAddBankInfo(event) {
         }
         document.getElementById("account_details1_btn").disabled = true;
         document.getElementById("account_details1_btn").style.cursor = "no-drop";
+        var nodes = document.getElementById("addbank_form").getElementsByTagName('*');
+        for (var i = 0; i < nodes.length; i++) {
+            nodes[i].disabled = true;
+            nodes[i].style.cursor = 'no-drop'
+
+        }
+        document.getElementById("addbank_form").style.opacity = '0.65'
         finalSubmitCall();
         // $("#step3_circle").addClass("md-step-step3-circle ");
         // $("#step3_span").addClass("md-step3-span");
@@ -2427,6 +2444,7 @@ function goBack() {
     $("#step2").removeClass("done");
     $('#requirements').hide();
     $('#form_wrapper').show();
+    $('#illness_data_privacy').show();
     /* $('#form_wrapper')[0].scrollIntoView(true); */
 }
 
@@ -2466,6 +2484,8 @@ function otpTimer() {
     document.getElementById('otp-invalid-btn').style.display = 'block'
     document.getElementById('otp-expiry-btn').style.display = 'block'
     document.getElementById('loader-btn').style.display = 'none'
+    document.getElementById('loader-btn-expiry').style.display = 'none'
+    document.getElementById('loader-btn-invalid').style.display = 'none'
     if (resendCount <= 5) {
         $('#otpPopUp').modal('show');
         if (remaining == 120) {
@@ -2513,7 +2533,7 @@ function resendOtp(type) {
         $('#otpPopUp').modal('hide');
         $('#invalidOtp').modal('hide');
         $('#maxResendOtp').modal('show');
-
+        $('#otpExpiry').modal('hide');
     }
     else {
         if (type == 'otpExpire') {
@@ -2559,11 +2579,13 @@ function resendOtp(type) {
                         console.log(event.data)
                         if (event.data.returnCode == '0' || event.data.retCode == '0') {
                             $('#invalidOtp').modal('hide');
+                            $('#otpExpiry').modal('hide');
                             if (type != 'resend') { $('#otpPopUp').modal('show'); }
                             document.getElementById('otp').value = ''
                             otpTimer();
                         }
                         else {
+                            $('#otpExpiry').modal('hide');
                             // $('#otpPopUp').modal('hide');
                         }
                     }
@@ -2581,7 +2603,7 @@ function resendOtp(type) {
             }
 
         })
-        $('#otpExpiry').modal('hide');
+    
     }
 
     //api call for resend otp
@@ -2686,6 +2708,7 @@ function submitOtp() {
                 if (event.event_code == 'validationResponse') { //sucess
                     console.log(event.data)
                     if (event.data.returnCode == '0' || event.data.retCode == '0') {
+                        document.getElementById("back_btn1").style.display = "none";
                         $('#otpPopUp').modal('hide');
                         $('#requirements').hide();
                         $('#payment').show();
