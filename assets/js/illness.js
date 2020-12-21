@@ -1984,6 +1984,13 @@ function handleAccountInfo(event) {
         document.getElementById("account_details_btn").style.cursor = "no-drop";
         document.getElementById("submit9").disabled = true;
         document.getElementById("submit9").style.cursor = "no-drop";
+        var nodes = document.getElementById("bank_form").getElementsByTagName('*');
+        for (var i = 0; i < nodes.length; i++) {
+            nodes[i].disabled = true;
+            nodes[i].style.cursor = 'no-drop'
+
+        }
+        document.getElementById("bank_form").style.opacity = '0.65'
         finalSubmitCall()
     }
 }
@@ -2076,6 +2083,13 @@ function handleAddBankInfo(event) {
         }
         document.getElementById("account_details1_btn").disabled = true;
         document.getElementById("account_details1_btn").style.cursor = "no-drop";
+        var nodes = document.getElementById("addbank_form").getElementsByTagName('*');
+        for (var i = 0; i < nodes.length; i++) {
+            nodes[i].disabled = true;
+            nodes[i].style.cursor = 'no-drop'
+
+        }
+        document.getElementById("addbank_form").style.opacity = '0.65'
         finalSubmitCall();
         // $("#step3_circle").addClass("md-step-step3-circle ");
         // $("#step3_span").addClass("md-step3-span");
