@@ -82,7 +82,7 @@ function captcha() {
     else if (ref_num.length != 10) {
         $("#err_field_ref_num").text('Should consist of 10 digits');
         $("#err_field_ref_num").show();
-    }else if (lenRefNo) {
+    } else if (lenRefNo) {
         $("#err_field_ref_num").text("Maximum 10 characters allowed!");
         $("#err_field_ref_num").show();
     } else if (specRefNo) {
@@ -1007,7 +1007,7 @@ function twoStepperActive() {
 function trackProgressDropDown(trackMessagesArr) {
 
     var final_progress_result = ''
-    final_progress_result = '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + progress_msges[0]['msg'] + claim_type.toLowerCase() + '</div></div></div>' +
+    final_progress_result = '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + progress_msges[0]['msg'] + claim_type.toLowerCase() + ' claim.' + '</div></div></div>' +
         '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + progress_msges[1]['msg'] + '</div></div></div>' +
         (claim_type == 'Accident' || claim_type == 'Illness' ?
             '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + 'You have chosen ' + disbursementType + ' as a preferred payout method' + '</div></div></div>' :
