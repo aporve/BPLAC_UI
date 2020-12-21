@@ -2796,7 +2796,7 @@ function submitOtp() {
           if (event.data.returnCode == '0' || event.data.retCode == '0') {
             // $('#cover-spin').hide(0)
             document.getElementById("back_btn1").style.cursor = "no-drop";
-            document.getElementById("back_btn1").style.pointerEvents = "none";
+            document.getElementById("back_btn1").disabled = true;
 
             $('#otpPopUp').modal('hide');
             $('#requirements').hide();
