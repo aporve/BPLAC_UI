@@ -257,7 +257,7 @@ function trackProgress() {
                             trackProgressDropDown() // for tracking progress dropdown
                         }
                         else {
-                            $('#noDataModal').modal('show'); //
+                            $('#refNoWarning').modal('show');
                         }
                     }
                     else if (event.data.returnCode == '1') {
@@ -265,7 +265,7 @@ function trackProgress() {
 
                     }
                     else {
-                        $('#noDataModal').modal('show'); //
+                        $('#refNoWarning').modal('show');
                     }
                 }
                 else {
