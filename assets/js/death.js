@@ -4328,6 +4328,7 @@ function goBack() {
     $("#step2").removeClass("done");
     $('#account_details').hide();
     $('#form_wrapper').show();
+    $('#death_data_privacy').show();
     /* $('#form_wrapper')[0].scrollIntoView(true); */
 }
 

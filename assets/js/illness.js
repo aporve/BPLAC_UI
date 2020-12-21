@@ -2430,6 +2430,7 @@ function goBack() {
     $("#step2").removeClass("done");
     $('#requirements').hide();
     $('#form_wrapper').show();
+    $('#illness_data_privacy').show();
     /* $('#form_wrapper')[0].scrollIntoView(true); */
 }
 
