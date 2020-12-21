@@ -41,7 +41,7 @@ var file10 = document.getElementById('file_Upload_10');
 var file11 = document.getElementById('file_Upload_11');
 var file12 = document.getElementById('file_Upload_12');
 var file13 = document.getElementById('proof_addBAO');
-
+var customName;
 let url = new URL(window.location.href);
 let referenceNumber = url.searchParams.get('refNumber');
 let uid = url.searchParams.get('sender');
@@ -1177,6 +1177,7 @@ function handleFormAddBeneficiary(event) {
             beneficiary["check1"] = dataBen.privacy_consent_beneficiary_1,
             beneficiary["check2"] = dataBen.privacy_consent_beneficiary_2
         BeneficiaryList.push(beneficiary);
+     customName=   field_BeneficiaryFirstName
         $("#customer_Name").text(`Hi ${field_BeneficiaryFirstName}. Hang in there as we process your request. Expect an SMS from us within 1 to 2 working days on the status of your request.`);
         if (buttonCount == 1) {
             data1 = dataBen;
@@ -1776,7 +1777,7 @@ function handleForm(event) {
         $('#form_wrapper').hide();
         $('#death_data_privacy').hide();
         $('#payment').show();
-        $("#customer_Name").text(`Hi ${field_BeneficiaryFirstName}. Hang in there as we process your request. Expect an SMS from us within 1 to 2 working days on the status of your request.`);
+        $("#customer_Name").text(`Hi ${customName}. Hang in there as we process your request. Expect an SMS from us within 1 to 2 working days on the status of your request.`);
         console.log('Data -> ', data)
 
     } else if ((comapareDates == false) && ((field_DOB !== '') || (field_DOID !== ''))) {
