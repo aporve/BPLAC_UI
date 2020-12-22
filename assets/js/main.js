@@ -1213,7 +1213,7 @@ function submit_survey(event) {
 
             if (eventData.data) {
              
-                console.log(event)
+                // console.log(event)
                 let event = JSON.parse(eventData.data);
                 if (event.event_code == 'surveryResponse') { //sucess
                    
