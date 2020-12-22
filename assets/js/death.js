@@ -611,7 +611,7 @@ function finalSubmitCall() {
                         $('#addBeneficiaryRequirements').hide();
                         $('#requirements').hide();
                         $("#process_confirmation").show();
-                        console.log("Data -> ", data);
+                        // console.log("Data -> ", data);
                         // });
                     }
                     else {
@@ -1170,15 +1170,15 @@ function handleFormAddBeneficiary(event) {
             beneficiary["relationship"] = field_addBeneficiaryRelationToDeceased,
             // beneficiary["documentFolder"] = `/CLAIMS/BPLAC/${referenceNumber}`,
             beneficiary["payoutOption"] = payoutOption,
-            // beneficiary["employer"] = field_addBeneficiaryEmployerName,
-            // beneficiary["governmentOfficial"] = field_addBeneficiary_relatives1,
-            // beneficiary["governmentOfficialRelative"] = field_add_Beneficiary_add_relatives2,
-            // beneficiary["occupation"] = field_addBeneficiaryOccupation,
+            beneficiary["employer"] = field_addBeneficiaryEmployerName,
+            beneficiary["governmentOfficial"] = field_addBeneficiary_relatives1,
+            beneficiary["governmentOfficialRelative"] = field_add_Beneficiary_add_relatives2,
+            beneficiary["occupation"] = field_addBeneficiaryOccupation,
             beneficiary["check1"] = dataBen.privacy_consent_beneficiary_1,
             beneficiary["check2"] = dataBen.privacy_consent_beneficiary_2
         BeneficiaryList.push(beneficiary);
-     customName=   field_BeneficiaryFirstName
-        $("#customer_Name").text(`Hi ${field_BeneficiaryFirstName}. Hang in there as we process your request. Expect an SMS from us within 1 to 2 working days on the status of your request.`);
+  
+        $("#customer_Name").text(`Hi ${customName}. Hang in there as we process your request. Expect an SMS from us within 1 to 2 WD on the status of your request.`);
         if (buttonCount == 1) {
             data1 = dataBen;
             console.log('data1', data1);
@@ -1759,10 +1759,10 @@ function handleForm(event) {
             beneficiary["relationship"] = field_BeneficiaryRelationToDeceased,
             // beneficiary["documentFolder"] = `/CLAIMS/BPLAC/${referenceNumber}`,
             beneficiary["payoutOption"] = payoutOption,
-            // beneficiary["employer"] = field_BeneficiaryEmployerName,
-            // beneficiary["governmentOfficial"] = $("select#field_Beneficiary_relatives1 option").filter(":selected").val(),
-            // beneficiary["governmentOfficialRelative"] = $("select#field_Beneficiary_relatives2 option").filter(":selected").val(),
-            // beneficiary["occupation"] = field_BenificiaryOccupation,
+            beneficiary["employer"] = field_BeneficiaryEmployerName,
+            beneficiary["governmentOfficial"] = $("select#field_Beneficiary_relatives1 option").filter(":selected").val(),
+            beneficiary["governmentOfficialRelative"] = $("select#field_Beneficiary_relatives2 option").filter(":selected").val(),
+            beneficiary["occupation"] = field_BenificiaryOccupation,
             beneficiary["check1"] = data.privacy_consent_1,
             beneficiary["check2"] = data.privacy_consent_2,
 
@@ -1777,7 +1777,8 @@ function handleForm(event) {
         $('#form_wrapper').hide();
         $('#death_data_privacy').hide();
         $('#payment').show();
-        $("#customer_Name").text(`Hi ${customName}. Hang in there as we process your request. Expect an SMS from us within 1 to 2 working days on the status of your request.`);
+        customName = field_BeneficiaryFirstName
+        $("#customer_Name").text(`Hi ${field_BeneficiaryFirstName}. Hang in there as we process your request. Expect an SMS from us within 1 to 2 WD on the status of your request.`);
         console.log('Data -> ', data)
 
     } else if ((comapareDates == false) && ((field_DOB !== '') || (field_DOID !== ''))) {
