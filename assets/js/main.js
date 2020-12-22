@@ -1214,8 +1214,9 @@ function submit_survey(event) {
             if (eventData.data) {
              
                 console.log(event)
+                let event = JSON.parse(eventData.data);
                 if (event.event_code == 'surveryResponse') { //sucess
-                    let event = JSON.parse(eventData.data);
+                   
                     console.log("receiving survey event in acc")
                     if (event.data.returnCode == '0' || event.data.retCode == '0') {
                         var nodes = document.getElementById("customer_survey").getElementsByTagName('*');
