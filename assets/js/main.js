@@ -1005,14 +1005,20 @@ function twoStepperActive() {
 /* -------functions for stepper------ */
 
 function trackProgressDropDown(trackMessagesArr) {
-
+    var disbMsg;
+    if (disbursementType.toLowerCase() == 'cta') {
+        disbMsg='Bank Transfer'
+    }
+    else if (disbursementType.toLowerCase() == 'pua') {
+        disbMsg = 'Pick Up Anywhere'
+    }
     var final_progress_result = ''
     final_progress_result = '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + progress_msges[0]['msg'] + claim_type.toLowerCase() + ' claim.' + '</div></div></div>' +
         '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + progress_msges[1]['msg'] + '</div></div></div>' +
         (claim_type == 'accident' || claim_type == 'illness' ?
-            '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + 'You have chosen ' + disbursementType + ' as a preferred payout method' + '</div></div></div>' :
+        '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + 'You have chosen ' + disbMsg + ' as a preferred payout method' + '</div></div></div>' :
             beneficiaryCount == 1 ?
-                '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + 'You have chosen ' + disbursementType + ' as a preferred payout method' + '</div></div></div>' :
+            '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + 'You have chosen ' + disbMsg + ' as a preferred payout method' + '</div></div></div>' :
                 '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + 'You have chosen your preferred payout methods.' + '</div></div></div>')
         + (claimStatus.toLowerCase() == 'received' || claimStatus.toLowerCase() == 'approved'?
             '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + progress_msges[4]['msg'] + '</div></div></div>' : '') +
@@ -1027,7 +1033,7 @@ function trackProgressDropDown(trackMessagesArr) {
         + (claimStatus == 'approved' ?
             '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + progress_msges[8]['msg'] + '</div></div></div>' + '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + progress_msges[11]['msg'] + '</div></div></div>' :
             '')
-        + (claimStatus == 'approved' && disbursementType == 'CTA' && beneficiaryCount == 1 ?
+        + (claimStatus == 'approved' && disbursementType == 'CTA' && beneficiaryCount == 1  ?
             '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + progress_msges[12]['msg'] + '</div></div></div>'
             : claimStatus == 'approved' && disbursementType == 'PUA' && beneficiaryCount == 1 ? '<div class="step step-active"><div><div class="circle " id="circle2"><i class="fa fa-check" ></i ></div ></div><div><div class="title">' + progress_msges[9]['msg'] + '</div></div></div>' : '')
     document.getElementById('progs-status').innerHTML = final_progress_result
