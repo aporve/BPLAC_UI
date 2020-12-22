@@ -611,7 +611,7 @@ function finalSubmitCall() {
                         $('#addBeneficiaryRequirements').hide();
                         $('#requirements').hide();
                         $("#process_confirmation").show();
-                        console.log("Data -> ", data);
+                        // console.log("Data -> ", data);
                         // });
                     }
                     else {
