@@ -222,7 +222,7 @@ function trackProgress() {
                             if (sourceSystem.trim().toLowerCase() != 'tips' && sourceSystem.trim().toLowerCase() != 'cms') {
                                 sourceSystem = 'cms'
                             }
-                            isFallout = event.data.isFallout;
+                            isFallout = event.data?.isFallout?.toLowerCase();
                             claimAmount = event.data.claimAmount;
                             currency = event.data.currency;
                             requirementsList = event.data.requirementsList;
@@ -239,7 +239,10 @@ function trackProgress() {
                             //for customer survey
 
                             document.getElementById('original_ref_no').innerHTML = document.getElementById('reference_number').value;
-                            document.getElementById('payment_amount').innerHTML = currency + ' ' + claimAmount;
+                            if (claimAmount != null && claimAmount != '' && claimAmount != '0.0' && claimAmount != '0.00') { document.getElementById('payment_amount').innerHTML = currency + ' ' + claimAmount; }
+                            else {
+                                document.getElementById('payment_amount').innerHTML = ''
+                            }
 
                             displayDateForClaimStatus() // date to be displayed on top
                             $("#img_claim").hide();
@@ -433,7 +436,7 @@ function setClaimProgressScreenHeader(title) {
 
 // functions to set the message for each claim status //
 function setAccidentClaimStatusMsg() {
-    if (sourceSystem.toLowerCase().trim() == 'tips') {
+    if (isFallout.toLowerCase() == 'y') {
 
         if (docsPending == 'Y') {
             var finalDocsList = '';
@@ -489,7 +492,7 @@ function setAccidentClaimStatusMsg() {
 
         }
     }
-    else if (sourceSystem.toLowerCase().trim() == 'cms') {
+    else if (isFallout.toLowerCase() == 'n') {
         if (docsPending == 'Y') {
             var finalDocsList = '';
             requirementsList.forEach(function (item) {
@@ -642,7 +645,7 @@ function setAccidentClaimStatusMsg() {
     // }
 }
 function setIllnessClaimStatusMsg() {
-    if (sourceSystem.toLowerCase().trim() == 'tips') {
+    if (isFallout.toLowerCase() == 'y') {
 
         if (docsPending == 'Y') {
 
@@ -697,7 +700,7 @@ function setIllnessClaimStatusMsg() {
             }
         }
     }
-    else if (sourceSystem.toLowerCase().trim() == 'cms') {
+    else if (isFallout.toLowerCase() == 'n') {
         if (docsPending == 'Y') {
             var finalDocsList = '';
             requirementsList.forEach(function (item) {
@@ -784,7 +787,7 @@ function setIllnessClaimStatusMsg() {
 function setDeathClaimStatusMsg() {
     if (sourceSystem.toLowerCase().trim() == 'tips') {
 
-        if (docsPending == 'Y') {
+        if (isFallout.toLowerCase() == 'y') {
             var finalDocsList = '';
             requirementsList.forEach(function (item) {
                 finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p style="padding-left:7px">' + ' ' + item.name + '</p> </div>'
@@ -853,7 +856,7 @@ function setDeathClaimStatusMsg() {
             }
         }
     }
-    else if (sourceSystem.toLowerCase().trim() == 'cms') {
+    else if (isFallout.toLowerCase() == 'n') {
         if (docsPending == 'Y') {
             var finalDocsList = '';
             requirementsList.forEach(function (item) {
@@ -1227,6 +1230,7 @@ function submit_survey(event) {
                         }
                         document.getElementById("customer_survey").style.opacity = '0.65'
                         $('#cover-spin').hide(0)
+                        $("#successfullSurvey").modal("show");
                     } else {
                         $('#cover-spin').hide(0)
                         document.getElementById('returnMessage').innerHTML = event.data.returnMessage;

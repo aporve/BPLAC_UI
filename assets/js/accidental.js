@@ -32,9 +32,9 @@ $('#privacy_consent_2').prop('checked', true);
 // $('#privacy_consent_3').prop('checked', true);
 
 document.getElementById('upload_waiting_btn').style.display = 'none'
-document.getElementById('account_details1_btn_waiting').style.display = 'none'
-document.getElementById('pick_up_btn_waiting').style.display = 'none'
-document.getElementById('submit9_waiting_btn').style.display = 'none'
+// document.getElementById('account_details1_btn_waiting').style.display = 'none'
+// document.getElementById('pick_up_btn_waiting').style.display = 'none'
+// document.getElementById('submit9_waiting_btn').style.display = 'none'
 
 var form_addBank = document.getElementById("addbank_form");
 form_addBank.addEventListener('submit', handleAddBankInfo);
@@ -81,7 +81,7 @@ function addFileToList(fileObject, fileName) {
 
 function timer(lowerVal, UpperVal) {
 
-  var random = Math.floor(Math.random() * 5) + 1
+  var random =  1
   return new Promise((resolve, reject) => {
     var i = lowerVal
     cleartime = setInterval(() => {
@@ -107,14 +107,14 @@ function enableDottedLoader() {
   document.getElementById('upload_waiting_btn').style.display = 'block'
 
   document.getElementById('account_details1_btn').style.display = 'none'
-  document.getElementById('account_details1_btn_waiting').style.display = 'block'
+  // document.getElementById('account_details1_btn_waiting').style.display = 'block'
 
 
   document.getElementById('pick_up_btn').style.display = 'none'
-  document.getElementById('pick_up_btn_waiting').style.display = 'block'
+  // document.getElementById('pick_up_btn_waiting').style.display = 'block'
 
   document.getElementById('submit9').style.display = 'none'
-  document.getElementById('submit9_waiting_btn').style.display = 'block'
+  // document.getElementById('submit9_waiting_btn').style.display = 'block'
 
 }
 function disableDottedLoader() {
@@ -124,13 +124,13 @@ function disableDottedLoader() {
   document.getElementById('upload_waiting_btn').style.display = 'none'
 
   document.getElementById('account_details1_btn').style.display = 'block'
-  document.getElementById('account_details1_btn_waiting').style.display = 'none'
+  // document.getElementById('account_details1_btn_waiting').style.display = 'none'
 
   document.getElementById('pick_up_btn').style.display = 'block'
-  document.getElementById('pick_up_btn_waiting').style.display = 'none'
+  // document.getElementById('pick_up_btn_waiting').style.display = 'none'
 
   document.getElementById('submit9').style.display = 'block'
-  document.getElementById('submit9_waiting_btn').style.display = 'none'
+  // document.getElementById('submit9_waiting_btn').style.display = 'none'
 
 }
 function renderProgress(progress) {
@@ -2317,6 +2317,15 @@ function pickUp() {
 function pickup_Bpi() {
   document.getElementById("pick_up_btn").disabled = true;
   document.getElementById("pick_up_btn").style.cursor = "no-drop";
+  document.getElementById("goback_pickup").style.display = "none";
+  var nodes = document.getElementById("pickUp").getElementsByTagName('*');
+  for (var i = 0; i < nodes.length; i++) {
+    nodes[i].disabled = true;
+    nodes[i].style.cursor = 'no-drop'
+
+  }
+  document.getElementById("pickUp").style.opacity = '0.65'
+  document.getElementById('msg').style.display = 'none'
   finalSubmitCall();
   // $("#pickUp").hide();
   // $('#process_confirmation').show();
@@ -2980,7 +2989,7 @@ function preSubmitCall() {
 }
 
 function finalSubmitCall() {
-  enableDottedLoader();
+  // enableDottedLoader();
   let filesObject = {};
   filesObject["folderName"] = `CLAIMS/BPLAC/${referenceNumber}`
   filesObject["fileList"] = filesList;
@@ -3010,15 +3019,44 @@ function finalSubmitCall() {
   });
   finalData['source'] = source;
   finalData['data'] = raw;
-  // timer(0, 50)
-  window.parent.postMessage(JSON.stringify({
-    event_code: 'ym-client-event', data: JSON.stringify({
-      event: {
-        code: "finalSubmit",
-        data: finalData
-      }
+  timer(0, 2).then(async() =>{
+    window.parent.postMessage(JSON.stringify({
+      event_code: 'ym-client-event', data: JSON.stringify({
+        event: {
+          code: "finalSubmit",
+          data: finalData
+        }
+      })
+    }), '*');
+    timer(2, 85).then(async () => {
     })
-  }), '*');
+  })
+  window.addEventListener('message', function (eventData) {
+
+    try {
+
+      if (eventData.data) {
+        let event = JSON.parse(eventData.data);
+        console.log(event)
+        if (event.event_code == 'uploadSuccess') { //sucess
+          clearTimeout(cleartime);
+          console.log('upload success event received')
+          timer(85, 95).then(async () => {
+
+
+          })
+
+
+        }
+        else {
+          // $("#popUp").modal("show");
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+
+  })
 
   window.addEventListener('message', function (eventData) {
 
@@ -3030,12 +3068,13 @@ function finalSubmitCall() {
         let event = JSON.parse(eventData.data);
         console.log(event)
         if (event.event_code == 'finalSubmitResponse') { //sucess
+          clearTimeout(cleartime);
           console.log("receiving final event in acc")
           if (event.data.returnCode == '0' || event.data.retCode == '0') {
-            disableDottedLoader();
+            // disableDottedLoader();
             myDisable()
             document.getElementById('ref_number').innerHTML = event.data?.transactionNumber
-            // timer(50, 100).then(async () => {
+            timer(95, 100).then(async () => {
             $("#step2").addClass("done");
             /*  $("#step3").addClass("active"); */
             /*   $("#step3>div").addClass("active"); */
@@ -3047,8 +3086,8 @@ function finalSubmitCall() {
             $("#account_details1").hide();
             $("#pickUp").hide();
             $("#process_confirmation").show();
-            console.log("Data -> ", data);
-            // });
+            // console.log("Data -> ", data);
+            });
           }
           else {
             document.getElementById('returnMessage').innerHTML = event.data.returnMessage;
