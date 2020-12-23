@@ -176,10 +176,10 @@ function addFileToList(fileObject, fileName) {
 
 function enableDottedLoader() {
     document.getElementById('submit9').style.display = 'none'
-    document.getElementById('submit9_waiting').style.display = 'block'
+    // document.getElementById('submit9_waiting').style.display = 'block'
 
     document.getElementById('submit10').style.display = 'none'
-    document.getElementById('submit10_waiting').style.display = 'block'
+    // document.getElementById('submit10_waiting').style.display = 'block'
 
 
     // document.getElementById('pick_up_btn').style.display = 'none'
@@ -187,10 +187,10 @@ function enableDottedLoader() {
 }
 function disableDottedLoader() {
     document.getElementById('submit9').style.display = 'block'
-    document.getElementById('submit9_waiting').style.display = 'none'
+    // document.getElementById('submit9_waiting').style.display = 'none'
 
     document.getElementById('submit10').style.display = 'block'
-    document.getElementById('submit10_waiting').style.display = 'none'
+    // document.getElementById('submit10_waiting').style.display = 'none'
 
     document.getElementById("submit9").disabled = false;
     document.getElementById("submit9").style.cursor = "pointer";
@@ -474,7 +474,7 @@ function disableFutureDatesDOB() {
 
 //to call preSubmit api
 function preSubmitCall() {
-    enableDottedLoader();
+    // enableDottedLoader();
     //Basic Information
     //Insured information
     //Beneficiary list
@@ -492,7 +492,7 @@ function preSubmitCall() {
     var preSubmitPayload = {}
     preSubmitPayload['source'] = source;
     preSubmitPayload['data'] = raw;
-    // timer(0, 25)
+    timer(0, 2).then(async () => {
     window.parent.postMessage(JSON.stringify({
         event_code: 'ym-client-event', data: JSON.stringify({
             event: {
@@ -501,7 +501,7 @@ function preSubmitCall() {
             }
         })
     }), '*');
-
+    })
     window.addEventListener('message', function (eventData) {
 
      
@@ -514,20 +514,14 @@ function preSubmitCall() {
                 if (event.event_code == 'preSubmitResponse') { //sucess
                     console.log("receiving presubmit event in death")
                     if (event.data.returnCode == '0' || event.data.retCode == '0') {
-                        disableDottedLoader();
-                        // $("#step2").addClass("active");
-                        // $("#step2>div").addClass("active");
-                        // if (otpSubmitted == false) { otpTimer(); } else {
-
-                        //   $('#requirements').hide();
-                        //   $('#payment').show();
-                        // }
-                        // timer(25, 50).then(async () => {
+                        // disableDottedLoader();
+                        clearTimeout(cleartime);
+                        timer(30, 35).then(async () => {
                         if (otpSubmitted == false) { otpTimer(); } else {
                             $('#requirements').hide();
                             $('#process_confirmation').show();
                         }
-                        // })
+                        })
 
                     }
                     else {
@@ -547,7 +541,7 @@ function preSubmitCall() {
 }
 
 function finalSubmitCall() {
-    enableDottedLoader();
+    // enableDottedLoader();
     let filesObject = {};
     filesObject["folderName"] = `CLAIMS/BPLAC/${referenceNumber}`
     filesObject["fileList"] = filesList;
@@ -577,7 +571,7 @@ function finalSubmitCall() {
     });
     finalData['source'] = source;
     finalData['data'] = raw;
-    // timer(50, 75)
+    timer(35, 75).then(async () => {
     window.parent.postMessage(JSON.stringify({
         event_code: 'ym-client-event', data: JSON.stringify({
             event: {
@@ -586,7 +580,33 @@ function finalSubmitCall() {
             }
         })
     }), '*');
+    })
+    window.addEventListener('message', function (eventData) {
 
+        try {
+
+            if (eventData.data) {
+                let event = JSON.parse(eventData.data);
+                console.log(event)
+                if (event.event_code == 'uploadSuccess') { //sucess
+                    clearTimeout(cleartime);
+                    console.log('upload success event received')
+                    timer(75, 85).then(async () => {
+
+
+                    })
+
+
+                }
+                else {
+                    // $("#popUp").modal("show");
+                }
+            }
+        } catch (error) {
+            console.log(error)
+        }
+
+    })
     window.addEventListener('message', function (eventData) {
 
      
@@ -597,12 +617,13 @@ function finalSubmitCall() {
                 let event = JSON.parse(eventData.data);
                 console.log(event)
                 if (event.event_code == 'finalSubmitResponse') { //sucess
+                    clearTimeout(cleartime);
                     console.log("receiving final event in death")
                     if (event.data.returnCode == '0' || event.data.retCode == '0') {
-                        disableDottedLoader();
+                        // disableDottedLoader();
                         document.getElementById('ref_number').innerHTML = event.data?.transactionNumber
                         // myDisable()
-                        // timer(75, 100).then(async () => {
+                        timer(85, 100).then(async () => {
                         $("#step2").addClass("done");
                         /*  $("#step3").addClass("active");
                          $("#step3>div").addClass("active"); */
@@ -615,7 +636,7 @@ function finalSubmitCall() {
                         $('#requirements').hide();
                         $("#process_confirmation").show();
                         // console.log("Data -> ", data);
-                        // });
+                        });
                     }
                     else {
                         document.getElementById('returnMessage').innerHTML = event.data.returnMessage;
