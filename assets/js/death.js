@@ -488,7 +488,7 @@ function preSubmitCall() {
         "insuredInformation": InsuredInformation,
         "beneficiaryList": BeneficiaryList,
     });
-
+//
     var preSubmitPayload = {}
     preSubmitPayload['source'] = source;
     preSubmitPayload['data'] = raw;
