@@ -54,8 +54,8 @@ $('#privacy_consent_beneficiary_1').prop('checked', true);
 $('#privacy_consent_beneficiary_2').prop('checked', true);
 // $('#privacy_consent_beneficiary_3').prop('checked', true);
 
-document.getElementById('submit9_waiting').style.display = 'none'
-document.getElementById('submit10_waiting').style.display = 'none'
+// document.getElementById('submit9_waiting').style.display = 'none'
+// document.getElementById('submit10_waiting').style.display = 'none'
 
 let basicInformation = {};
 let InsuredInformation = {};
