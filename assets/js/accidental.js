@@ -2324,7 +2324,7 @@ function pickup_Bpi() {
 
   }
   document.getElementById("pickUp").style.opacity = '0.65'
-  document.getElementById('msg').display = 'none'
+  document.getElementById('msg').style.display = 'none'
   finalSubmitCall();
   // $("#pickUp").hide();
   // $('#process_confirmation').show();
