@@ -1157,7 +1157,7 @@ function preSubmitCall() {
 
     window.addEventListener('message', function (eventData) {
 
-        console.log("receiving presubmit event in acc")
+      
         // console.log(event.data.event_code)
         try {
 
@@ -1165,6 +1165,7 @@ function preSubmitCall() {
                 let event = JSON.parse(eventData.data);
                 console.log(event)
                 if (event.event_code == 'preSubmitResponse') { //sucess
+                    console.log("receiving presubmit event in illness")
                     if (event.data.returnCode == '0' || event.data.retCode == '0') {
                         disableDottedLoader();
                         // timer(50, 100).then(async () => {
@@ -1235,7 +1236,7 @@ function finalSubmitCall() {
 
     window.addEventListener('message', function (eventData) {
 
-        console.log("receiving final event in acc")
+    
         // console.log(event.data.event_code)
         try {
 
@@ -1243,6 +1244,7 @@ function finalSubmitCall() {
                 let event = JSON.parse(eventData.data);
                 console.log(event)
                 if (event.event_code == 'finalSubmitResponse') { //sucess
+                    console.log("receiving final event in illness")
                     if (event.data.returnCode == '0' || event.data.retCode == '0') {
                         disableDottedLoader();
                         myDisable()
@@ -2129,7 +2131,7 @@ function getBankDetails() {
 
     window.addEventListener('message', function (eventData) {
 
-        console.log("receiving presubmit event in acc")
+       
         // console.log(event.data.event_code)
         try {
 
@@ -2137,6 +2139,7 @@ function getBankDetails() {
                 let event = JSON.parse(eventData.data);
                 console.log(event)
                 if (event.event_code == 'payoutDetails') { //sucess
+                    console.log("receiving payout event in illness")
                     if (event.data.returnCode == '0' || event.data.retCode == '0') {
                         $('#proof_BAO_display').hide();
                         haveBankDetails = true;
