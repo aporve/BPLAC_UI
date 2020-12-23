@@ -3019,7 +3019,7 @@ function finalSubmitCall() {
         }
       })
     }), '*');
-    timer(2, 75).then(async () => {
+    timer(2, 85).then(async () => {
     })
   })
   window.addEventListener('message', function (eventData) {
@@ -3032,7 +3032,7 @@ function finalSubmitCall() {
         if (event.event_code == 'uploadSuccess') { //sucess
           clearTimeout(cleartime);
           console.log('upload success event received')
-          timer(75, 85).then(async () => {
+          timer(85, 95).then(async () => {
 
 
           })
@@ -3065,7 +3065,7 @@ function finalSubmitCall() {
             // disableDottedLoader();
             myDisable()
             document.getElementById('ref_number').innerHTML = event.data?.transactionNumber
-            timer(85, 100).then(async () => {
+            timer(95, 100).then(async () => {
             $("#step2").addClass("done");
             /*  $("#step3").addClass("active"); */
             /*   $("#step3>div").addClass("active"); */
