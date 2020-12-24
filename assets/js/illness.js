@@ -2370,6 +2370,7 @@ function bankTranfer() {
 
 function pickUp() {
     document.getElementById('ref_number').innerHTML = referenceNumber
+    document.getElementById('spin_loader_1').style.display = 'none'
     payoutOption = 'PUA';
     let filesObject = {};
     filesObject["FolderName"] = `/CLAIMS/BPLAC/${referenceNumber}`
@@ -2411,6 +2412,7 @@ function pickup_Bpi() {
     }
     document.getElementById("pickUp").style.opacity = '0.65'
     document.getElementById('msg').style.display = 'none'
+    document.getElementById('spin_loader_1').style.display = 'block'
     finalSubmitCall()
     // $("#pickUp").hide();
     // $('#process_confirmation').show();
