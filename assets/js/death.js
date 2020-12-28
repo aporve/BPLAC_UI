@@ -4263,6 +4263,11 @@ function bankTranfer() {
     document.getElementById('ref_number').innerHTML = referenceNumber
     payoutOption = 'CTA';
     // getBankDetails();
+    let index = BeneficiaryList.findIndex(ele => ele["beneficiaryNo"] == "1")
+    let benObject = BeneficiaryList[index]
+    benObject["payoutOption"] = payoutOption;
+    BeneficiaryList[index] = benObject;
+
     trackBenificiary = 0;
     $('#payment').hide();
     $('#account_details').show();
@@ -4273,6 +4278,12 @@ function bankTranfer() {
 
 function addBeneficiarybankTranfer() {
     payoutOption = 'CTA'
+
+    let index = BeneficiaryList.findIndex(ele => ele["beneficiaryNo"] == (beneficiaryCount.toString()))
+    let benObject = BeneficiaryList[index]
+    benObject["payoutOption"] = payoutOption;
+    BeneficiaryList[index] = benObject;
+    
     trackaddBenificiary = 0;
     if (buttonCount == 1) {
         trackaddBenificiary1 = trackaddBenificiary;
@@ -4302,9 +4313,9 @@ function pickUp() {
     document.getElementById('ref_number').innerHTML = referenceNumber
     payoutOption = 'PUA';
     trackBenificiary = 1;
-    let index = BeneficiaryList.findIndex(ele => ele["BeneficiaryNo"] == "1")
+    let index = BeneficiaryList.findIndex(ele => ele["beneficiaryNo"] == "1")
     let benObject = BeneficiaryList[index]
-    // benObject["payoutOption"] = "PUA";
+    benObject["payoutOption"] = payoutOption;
     BeneficiaryList[index] = benObject;
 
 
@@ -4317,9 +4328,9 @@ function pickUp() {
 
 function addBeneficiaryPickup() {
     payoutOption = 'PUA';
-    let index = BeneficiaryList.findIndex(ele => ele["BeneficiaryNo"] == (beneficiaryCount.toString()))
+    let index = BeneficiaryList.findIndex(ele => ele["beneficiaryNo"] == (beneficiaryCount.toString()))
     let benObject = BeneficiaryList[index]
-    // benObject["payoutOption"] = "PUA";
+    benObject["payoutOption"] = payoutOption;
     BeneficiaryList[index] = benObject;
 
     trackaddBenificiary = 1;
