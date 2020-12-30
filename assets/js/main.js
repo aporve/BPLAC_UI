@@ -493,7 +493,7 @@ function setAccidentClaimStatusMsg() {
         }
     }
     else if (isFallout.toLowerCase() == 'n') {
-        if (docsPending == 'y') {
+        if (docsPending == 'y' && docsReceived == 'n') {
             var finalDocsList = '';
             requirementsList.forEach(function (item) {
                 finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p style="padding-left:7px">' + ' ' + item.name + '</p> </div>'
