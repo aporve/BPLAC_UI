@@ -438,7 +438,7 @@ function setClaimProgressScreenHeader(title) {
 function setAccidentClaimStatusMsg() {
     if (isFallout.toLowerCase() == 'y') {
 
-        if (docsPending == 'y') {
+        if (docsPending == 'y' && docsReceived == 'n') {
             var finalDocsList = '';
             requirementsList.forEach(function (item) {
                 finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p style="padding-left:7px">' + ' ' + item.name + '</p> </div>'
@@ -493,21 +493,19 @@ function setAccidentClaimStatusMsg() {
         }
     }
     else if (isFallout.toLowerCase() == 'n') {
-        console.log('Is fallout 1')
         if (docsPending == 'y' && docsReceived == 'n') {
             var finalDocsList = '';
             requirementsList.forEach(function (item) {
                 finalDocsList = finalDocsList + '<div style="display: flex;align-items: center; padding-bottom: 1px;"> <div id="outer-circle"> <div id="inner-circle"></div> </div> <p style="padding-left:7px">' + ' ' + item.name + '</p> </div>'
 
             });
-            console.log('Is fallout if')
+
             document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR OTHER CLAIMS DOCUMENTS</h3> <br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We have reviewed your initial claim request submission and need the documents listed below to proceed with the assessment: </p> <br /> <p class="font-weight-normal request-font"> <div style="padding-left: 10px;"> ' + finalDocsList + ' </div> </p> <br /> <p> Don&#39;t worry, your Bancassurance Sales Executive at your nearest BPI or BPI Family Savings Bank may assist you in the submission.You may also submit via Vibe Customer Service Center at GF BPI - Philam Makati, 6811 Ayala Ave., 1226 Makati.If you have any questions regarding your claim request, please email us at BPI - Philam_CustomerService@aia.com. </p > <br /> </div >';
             document.getElementById("turnaround-time-ref").style.display = "block";
             document.getElementById("payment-ref").style.display = "none";
             twoStepperActive();
         }
         else {
-            console.log('Is fallout else')
             if (claimStatus.toLowerCase().trim() == 'received') {
                 document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST IS BEING PROCESSED</h3> <br /> <p class="font-weight-justy request-font"> We have received your claim request and it is now in process. Kindly expect an SMS update on the status of your request in 2 working days . </p> <br /> <p class="font-weight-justy request-font"> Should additional requirements be needed, we will reach out to you immediately. </p> <br /> <p class="font-weight-normal request-font"> To check the status of your claims request, please type in your reference number ' + transactionNumber + ' <a href="main.html">here</a>. </p> </div> '
                 document.getElementById("turnaround-time-ref").style.display = "block";
@@ -515,7 +513,6 @@ function setAccidentClaimStatusMsg() {
                 twoStepperActive();
             }
             else if (claimStatus.toLowerCase().trim() == 'approved') {
-                console.log('Is fallout approved')
                 document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN APPROVED</h3> <br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. We are happy to inform you that we have approved your claim request for your BPI-Philam policy no. ' + policyNumber + '. </p> <br /> <p class="font-weight-normal request-font"> You will receive ' + currency + ' ' + claimAmount + ' through your chosen payout method. Please expect an update from us on the release of your benefit. </p> <br /> </div> '
 
                 document.getElementById("turnaround-time-ref").style.display = "none";
