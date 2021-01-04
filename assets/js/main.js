@@ -661,7 +661,7 @@ function setIllnessClaimStatusMsg() {
         }
         else {
             if (claimStatus.toLowerCase().trim() == 'received') {
-                document.getElementById('claim-msg-text').innerHTML = ' <div> <h3>YOUR REQUEST IS BEING PROCESSED</h3> <br /> <p class="font-weight-justy request-font"> Hang in there as we are now processing your request. Kindly expect an SMS update from us within 1 to 2 working days on the status of your request. </p> <br /> <p class="font-weight-normal request-font"> If we would need additional documents to support your request, we will reach out to you immediately. </p> <br /> <p class="font-weight-normal request-font"> You may also check the progress of your request <a href="main.html">here</a>. Just type in your reference number ' + transactionNumber + ' to view the status of your request. </p> </div>'
+                document.getElementById('claim-msg-text').innerHTML = ' <div> <h3>YOUR REQUEST IS BEING PROCESSED</h3> <br /> <p class="font-weight-justy request-font"> We have received your claim request and it is now in process. Kindly expect an SMS update on the status of your request in 2 working days . </p> <br /> <p class="font-weight-normal request-font"> Should additional requirements be needed, we will reach out to you immediately.</p> <br /> <p class="font-weight-normal request-font"> To check the status of your claims request, please type in your reference number ' + transactionNumber + '<a href="main.html">here</a>. </p> </div>'
                 document.getElementById("turnaround-time-ref").style.display = "block";
                 document.getElementById("payment-ref").style.display = "none";
                 twoStepperActive();
