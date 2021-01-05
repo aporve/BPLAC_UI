@@ -245,6 +245,7 @@ function trackProgress() {
                             else {
                                 document.getElementById('payment_amount').innerHTML = ''
                                 $("#payment-ref").css("background-color", "lightgray");
+                                $("#payment_text").css({"color":"#b3b1b2"});
                             }
 
                             displayDateForClaimStatus() // date to be displayed on top
