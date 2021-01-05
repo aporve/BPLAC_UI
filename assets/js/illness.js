@@ -52,6 +52,7 @@ let filesMap = {};
 var payoutOption;
 var isChangeInBankDetails = 'N';
 var isChangeInPayoutOption = 'N';
+var isOtpPopShown = false;
 let claimType, causeOfLoss, govIdFront, govIdBack, apsFile, narrationReport, officialReceipts;
 let file1Buffer, file2Buffer, file3Buffer, file4Buffer, file5Buffer, file6Buffer, file7Buffer, file8Buffer;
 basicInformation["companyName"] = "BPLAC";
@@ -1129,7 +1130,16 @@ const fileCheck = (file, button, pageid, formData, fileName) => {
     img.src = _URL.createObjectURL(file);
 
 };
-
+var timerVal = null;
+function otpTimerFunction() {
+    timerVal = setTimeout(() => {
+        if (isOtpPopShown == false) {
+            disableDottedLoader();
+            document.getElementById('fallbackMessage').innerHTML = '<p id="otp-text">Your request is taking a while to get through due to intermittent connection. Stay with us! <br> Please refresh the page and re-submit your request to continue.</p>';
+            $("#fallbackMessagePopUp").modal("show");
+        }
+    }, 60000);
+}
 //to call preSubmit api
 function preSubmitCall() {
     enableDottedLoader();
@@ -1166,21 +1176,24 @@ function preSubmitCall() {
                 let event = JSON.parse(eventData.data);
                 console.log(event)
                 if (event.event_code == 'preSubmitResponse') { //sucess
-                    console.log("receiving presubmit event in illness")
-                    if (event.data.returnCode == '0' || event.data.retCode == '0') {
-                        disableDottedLoader();
-                        // timer(50, 100).then(async () => {
-                        $("#step2").addClass("active");
-                        $("#step2>div").addClass("active");
-                        if (otpSubmitted == false) { otpTimer(); } else {
-                            $('#requirements').hide();
-                            $('#payment').show();
+                    clearTimeout(timerVal);
+                    if (isOtpPopShown == false) {
+                        console.log("receiving presubmit event in illness")
+                        if (event.data.returnCode == '0' || event.data.retCode == '0') {
+                            disableDottedLoader();
+                            // timer(50, 100).then(async () => {
+                            $("#step2").addClass("active");
+                            $("#step2>div").addClass("active");
+                            if (otpSubmitted == false) { otpTimer(); isOtpPopShown = true;} else {
+                                $('#requirements').hide();
+                                $('#payment').show();
+                            }
+                            // })
                         }
-                        // })
-                    }
-                    else {
-                        document.getElementById('returnMessage').innerHTML = event.data.returnMessage;
-                        $("#invalidReturnCode").modal("show");
+                        else {
+                            document.getElementById('returnMessage').innerHTML = event.data.returnMessage;
+                            $("#invalidReturnCode").modal("show");
+                        }
                     }
                 }
                 else {
@@ -2370,6 +2383,7 @@ function bankTranfer() {
 
 function pickUp() {
     document.getElementById('ref_number').innerHTML = referenceNumber
+    document.getElementById('spin_loader_1').style.display = 'none'
     payoutOption = 'PUA';
     let filesObject = {};
     filesObject["FolderName"] = `/CLAIMS/BPLAC/${referenceNumber}`
@@ -2411,6 +2425,7 @@ function pickup_Bpi() {
     }
     document.getElementById("pickUp").style.opacity = '0.65'
     document.getElementById('msg').style.display = 'none'
+    document.getElementById('spin_loader_1').style.display = 'block'
     finalSubmitCall()
     // $("#pickUp").hide();
     // $('#process_confirmation').show();
@@ -2638,6 +2653,8 @@ function resendOtp(type) {
                         }
                         else {
                             $('#otpExpiry').modal('hide');
+                            document.getElementById('returnMessage').innerHTML = event.data.returnMessage;
+                            $("#invalidReturnCode").modal("show");
                             // $('#otpPopUp').modal('hide');
                         }
                     }
