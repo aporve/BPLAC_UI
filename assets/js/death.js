@@ -24,6 +24,7 @@ var traverse;
 var currSeconds = 0;
 let filesMap = {};
 var otpSubmitted = false;
+var isOtpPopShown = false;
 var scanDoc = false;
 var payoutOption;
 var isChangeInBankDetails = 'N';
@@ -472,6 +473,16 @@ function disableFutureDatesDOB() {
     $('#field_DOB').attr('max', maxDate);
 }
 
+var timerVal = null;
+function otpTimerFunction() {
+    timerVal = setTimeout(() => {
+        if (isOtpPopShown == false) {
+            // disableDottedLoader();
+            document.getElementById('fallbackMessage').innerHTML = '<p id="otp-text">Your request is taking a while to get through due to intermittent connection. Stay with us! <br> Please refresh the page and re-submit your request to continue.</p>';
+            $("#fallbackMessagePopUp").modal("show");
+        }
+    }, 60000);
+}
 //to call preSubmit api
 function preSubmitCall() {
     // enableDottedLoader();
@@ -502,6 +513,7 @@ function preSubmitCall() {
         })
     }), '*');
     })
+    otpTimerFunction();
     window.addEventListener('message', function (eventData) {
 
      
@@ -512,21 +524,24 @@ function preSubmitCall() {
                 let event = JSON.parse(eventData.data);
                 console.log(event)
                 if (event.event_code == 'preSubmitResponse') { //sucess
-                    console.log("receiving presubmit event in death")
-                    if (event.data.returnCode == '0' || event.data.retCode == '0') {
-                        // disableDottedLoader();
-                        clearTimeout(cleartime);
-                        timer(30, 35).then(async () => {
-                        if (otpSubmitted == false) { otpTimer(); } else {
-                            $('#requirements').hide();
-                            $('#process_confirmation').show();
-                        }
-                        })
+                    clearTimeout(timerVal);
+                    if (isOtpPopShown == false) {
+                        console.log("receiving presubmit event in death")
+                        if (event.data.returnCode == '0' || event.data.retCode == '0') {
+                            // disableDottedLoader();
+                            clearTimeout(cleartime);
+                            timer(30, 35).then(async () => {
+                                if (otpSubmitted == false) { otpTimer(); isOtpPopShown = true;  } else {
+                                    $('#requirements').hide();
+                                    $('#process_confirmation').show();
+                                }
+                            })
 
-                    }
-                    else {
-                        document.getElementById('returnMessage').innerHTML = event.data.returnMessage;
-                        $("#invalidReturnCode").modal("show");
+                        }
+                        else {
+                            document.getElementById('returnMessage').innerHTML = event.data.returnMessage;
+                            $("#invalidReturnCode").modal("show");
+                        }
                     }
                 }
                 else {
