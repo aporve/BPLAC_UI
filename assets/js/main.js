@@ -30,6 +30,7 @@ var surveyAns2 = 0;
 var surveyQues3;
 var surveyAns3 = 0;
 var surveyObj = {};
+var org_claimType;
 var org_claimSubType;
 var org_sourceSystem = '';
 var survey_form = document.getElementById('customer_survey');
@@ -193,6 +194,7 @@ function trackProgress() {
                         if (event.data.type != null) {
                             document.getElementById('go-btn').style.display = 'block'
                             document.getElementById('loader-btn').style.display = 'none'
+                            org_claimType = event.data.type;
                             if (event.data.type.toLowerCase() == 'death') {
                                 claim_type = event.data.type.toLowerCase()
                             }
@@ -1237,17 +1239,17 @@ function selectAnswer(quesn_num, id, selectedOption) {
 function submit_survey(event) {
 
     event.preventDefault();
-    if (org_sourceSystem == '' || org_sourceSystem == null) {
-        org_sourceSystem = 'cms'
-    }
+    // if (org_sourceSystem == '' || org_sourceSystem == null) {
+    //     org_sourceSystem = 'cms'
+    // }
     var survey_data =
     {
         'companyName': 'BPLAC',
         'TIPSReferenceNumber': referenceNumber,
-        'claimType': claim_type,
+        'type': org_claimType,
         'subType': org_claimSubType,
         'policyNumber': policyNumber,
-        'sourceSystem': org_sourceSystem.trim(),
+        'sourceSystem': org_sourceSystem,
         'surveyQuestion1': surveyAns1,
         'surveyQuestion2': surveyAns2,
         'surveyQuestion3': surveyAns3
