@@ -918,7 +918,7 @@ function setDeathClaimStatusMsg() {
         }
         else {
             if (claimStatus.toLowerCase().trim() == 'received') {
-                if (beneficiaryCount < 1) {
+                if (beneficiaryCount == 1) {
                     document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST IS BEING PROCESSED</h3> <br /> <p class="font-weight-justy request-font"> Our sincerest condolences for your loss, ' + claimantFirstName + '. </p> <br /> <p class="font-weight-justy request-font"> We have received your claim request and it is now in process. Kindly expect an SMS update on the status of your request in 2 working days . </p> <br /> <p> Should additional requirements be needed, we will reach out to you immediately. </p> <br /> <p class="font-weight-normal request-font"> To check the status of your claims request, please type in your reference number ' + transactionNumber + ' <a href="main.html">here</a>. </p> </div> '
                     document.getElementById("turnaround-time-ref").style.display = "block";
                     document.getElementById("payment-ref").style.display = "none";
@@ -933,7 +933,7 @@ function setDeathClaimStatusMsg() {
                 twoStepperActive();
             }
             else if (claimStatus.toLowerCase().trim() == 'approved') {
-                if (beneficiaryCount < 1) {
+                if (beneficiaryCount == 1) {
                     document.getElementById('claim-msg-text').innerHTML = '<div > <h3>YOUR REQUEST HAS BEEN APPROVED</h3> <br /> <p class="font-weight-justy request-font"> Hi ' + claimantFirstName + '. Your claim request for BPI-Philam policy no. ' + policyNumber + ' has been approved. </p> <br /> <p class="font-weight-normal request-font"> You will receive the benefit of ' + currency + ' ' + claimAmount + ' through your chosen payout method. Please expect an update from us on the release of your benefit. </p> <br /> <p class="font-weight-normal request-font"> This information has been sent to you via SMS as well for your reference. </p> <br /> </div> '
                     document.getElementById("turnaround-time-ref").style.display = "none";
                     document.getElementById("payment-ref").style.display = "block";
