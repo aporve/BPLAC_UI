@@ -512,6 +512,8 @@ function preSubmitCall() {
             }
         })
     }), '*');
+        timer(2, 30).then(async () => {
+        })
     })
     otpTimerFunction();
     window.addEventListener('message', function (eventData) {
