@@ -99,15 +99,17 @@ function captcha() {
 
     // $('#refNoWarning').modal('hide');
     if (ref_num.length != 0 && ref_num.length == 10 && lenRefNo == false && specRefNo == false && numRefNo == true) {
-        if (grecaptcha && grecaptcha.getResponse().length > 0) {
+        // if (grecaptcha && grecaptcha.getResponse().length > 0) {
 
-            referenceNumber = document.getElementById('reference_number').value
-            if (referenceNumber != null) { trackProgress(); }
-        } else {
-            $("#err_recaptcha").text('Please verify the reCAPTCHA and tick the check box before submission');
-            $("#err_recaptcha").show();
-            // activeProcess()
-        }
+        //     referenceNumber = document.getElementById('reference_number').value
+        //     if (referenceNumber != null) { trackProgress(); }
+        // } else {
+        //     $("#err_recaptcha").text('Please verify the reCAPTCHA and tick the check box before submission');
+        //     $("#err_recaptcha").show();
+        //     // activeProcess()
+        // }
+        referenceNumber = document.getElementById('reference_number').value
+        if (referenceNumber != null) { trackProgress(); }
     } else {
         $(`#err_field_ref_num`).show();
     }
